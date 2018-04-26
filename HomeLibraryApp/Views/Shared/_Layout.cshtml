@@ -22,14 +22,20 @@
             </div>
         </nav>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - HomeLibrary</p>
-        </footer>
-    </div>
+    <main>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
 
+        </div>
+    </main>
+    <footer id="footer" class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">
+                &copy; @DateTime.Now.Year - HomeLibrary
+            </div>
+        </div>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
