@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using HomeLibraryApp.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace HomeLibraryApp.Controllers
 {
@@ -74,7 +75,10 @@ namespace HomeLibraryApp.Controllers
             }
 
             // Require the user to have a confirmed email before they can log on.
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            
+            bool isEmail = new EmailAddressAttribute().IsValid(model.EmailOrName);
+
+            var user = isEmail ? await UserManager.FindByEmailAsync(model.EmailOrName) : await UserManager.FindByNameAsync(model.EmailOrName);
             if (user != null)
             {
                 if (!await UserManager.IsEmailConfirmedAsync(user.Id))
@@ -88,7 +92,8 @@ namespace HomeLibraryApp.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            string userName = user == null ? "" : user.UserName;
+            var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
