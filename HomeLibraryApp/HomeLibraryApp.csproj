@@ -345,6 +345,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Home\Library.cshtml" />
+    <Content Include="Views\Home\_UserAuthenticatedIndex.cshtml" />
+    <Content Include="Views\Home\_UserDefaultIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
