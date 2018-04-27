@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Library";
+}
+@model HomeLibraryApp.Models.Library
+
+<h2>@Model.Name</h2>
+<a class="waves-effect waves-light btn modal-trigger" href="#modal1" >Add a member</a>
+
+  <!-- Modal Structure -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Add new member</h4>
+        <p>Enter email address of the person you want to invite to your library</p>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="email" type="email" class="validate">
+                <label for="email">Email</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Send invitation</a>
+    </div>
+</div>
+
