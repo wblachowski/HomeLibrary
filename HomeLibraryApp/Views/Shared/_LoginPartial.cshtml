@@ -1,23 +1,47 @@
 ﻿@using Microsoft.AspNet.Identity
+@using HomeLibraryApp.Models
+@model LoginViewModel
+
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="right hide-on-med-and-down">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
+        <ul class="right hide-on-med-and-down">
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
     }
 }
 else
 {
-    <ul class="right hide-on-med-and-down">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-        <li><a class="waves-effect waves-light btn">Log in</a></li>
-    </ul>
-}
+    using (Html.BeginForm("Login", "Account", new { ReturnUrl = "" }, FormMethod.Post, new { id = "loginform" }))
+    {   
+        @Html.AntiForgeryToken()
+        <ul class="right hide-on-med-and-down">
+            <li>
+                <div class="right hide-on-med-and-down">
+                    <div class="input-field card login-card">
+                        @Html.TextBoxFor(m => m.EmailOrName)
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="right hide-on-med-and-down">
+                    <div class="input-field card login-card">
+                        @Html.PasswordFor(m => m.LoginPassword)
+                    </div>
+                </div>
+            </li>
+            <li><a class="waves-effect waves-light btn" onclick="document.getElementById('loginform').submit()">Log in</a></li>
+        </ul>
+    }
+        <ul class="right hide-on-med-and-down">
+            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+        }

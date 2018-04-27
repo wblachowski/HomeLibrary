@@ -55,7 +55,7 @@ namespace HomeLibraryApp.Models
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string LoginPassword { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }

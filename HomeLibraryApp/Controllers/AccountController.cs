@@ -95,7 +95,7 @@ namespace HomeLibraryApp.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             string userName = user == null ? "" : user.UserName;
-            var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(userName, model.LoginPassword, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
