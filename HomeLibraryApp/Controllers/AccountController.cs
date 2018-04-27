@@ -64,6 +64,12 @@ namespace HomeLibraryApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult LoginPartial()
+        {
+            return PartialView("_LoginPartial");
+        }
+
         //
         // POST: /Account/Login
         [HttpPost]
