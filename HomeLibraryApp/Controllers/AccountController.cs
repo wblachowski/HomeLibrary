@@ -18,6 +18,8 @@ namespace HomeLibraryApp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
+
 
         public AccountController()
         {
@@ -207,6 +209,15 @@ namespace HomeLibraryApp.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
+
+            //Create new library for this user
+            if (result.Succeeded)
+            {
+                db.Libraries.Add(new Library { Name = "My home library", UserId = userId });
+                db.SaveChanges();
+            }
+
+
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
