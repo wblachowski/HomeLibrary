@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -14,8 +15,6 @@
             <div class="nav-wrapper">
                 @Html.ActionLink("HomeLibrary", "Index", "Home", new { area = "" }, new { @class = "brand-logo" })
                 @{Html.RenderAction("LoginPartial", "Account"); }
-
-
             </div>
         </nav>
     </div>
@@ -34,6 +33,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/materialize")
+    @Scripts.Render("~/bundles/myscripts")
     @RenderSection("scripts", required: false)
 </body>
 </html>
