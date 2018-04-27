@@ -13,12 +13,14 @@
         <nav>
             <div class="nav-wrapper">
                 @Html.ActionLink("HomeLibrary", "Index", "Home", new { area = "" }, new { @class = "brand-logo" })
+                @Html.Partial("_LoginPartial")
+                </form>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Library", "Library", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+
             </div>
         </nav>
     </div>
@@ -36,6 +38,7 @@
     </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/materialize")
     @RenderSection("scripts", required: false)
 </body>
 </html>
