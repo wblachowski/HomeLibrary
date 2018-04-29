@@ -30,3 +30,7 @@ textarea {
 #footer{
     padding-top:0px;
 }
+
+*:focus {
+    outline: none !important
+}
