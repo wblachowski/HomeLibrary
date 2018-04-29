@@ -30,16 +30,3 @@ textarea {
 #footer{
     padding-top:0px;
 }
-
-.login-card{
-    height:37px;
-    width:150px;
-    display:inline-flex ;
-    margin-left:14px !important;
-}
-
-.login-card input {
-    color: initial;
-    padding-left:8px !important;
-    font-size:1rem !important;
-}
