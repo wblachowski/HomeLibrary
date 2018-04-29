@@ -5,24 +5,22 @@
 
 @if (Request.IsAuthenticated)
 {
-
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-        <ul class="right hide-on-med-and-down">
-            <li><a class="dropdown-trigger" href="#" data-activates='dropdown1'>@User.Identity.GetUserName()<i class="material-icons right">arrow_drop_down</i></a></li>
-        </ul>
-    }
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("Library", "Index", "Library")</li>
-        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>
     <ul id="dropdown1" class="dropdown-content">
         <li>@Html.ActionLink("Your account", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
         <li class="divider"></li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("Library", "Index", "Library")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            <li><a class="dropdown-trigger" href="#" data-target="dropdown1">@User.Identity.GetUserName()<i class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
+    }
 }
 else
 {

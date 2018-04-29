@@ -1,8 +1,9 @@
 ﻿$(document).ready(function () {
     $(".dropdown-trigger").dropdown();
-    $('.modal-trigger').leanModal();
+    $('.modal').modal();
 });
 
 function onInvitationSuccess(result) {
-    console.log(result);
+    msg = result ? "The invitation has been sent" : "There was a problem while sending the invitation";
+    M.toast({ html: msg 
 }
