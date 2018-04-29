@@ -17,14 +17,6 @@ namespace HomeLibraryApp.Controllers
             return View();
         }
 
-        [Authorize]
-        public ActionResult Library()
-        {
-            var userID = User.Identity.GetUserId();
-            Library library = db.Libraries.First(x => x.UserId == userID);
-            return View(library);
-        }
-
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
