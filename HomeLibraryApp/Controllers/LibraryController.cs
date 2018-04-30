@@ -41,9 +41,14 @@ namespace HomeLibraryApp.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            List<Library> libraries = new List<Library>();
             var userID = User.Identity.GetUserId();
             Library library = db.Libraries.First(x => x.UserId == userID);
-            return View(library);
+            libraries.Add(library);
+            List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
+            foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
+
+            return View(libraries.AsEnumerable<Library>());
         }
 
         [HttpPost]
@@ -51,7 +56,7 @@ namespace HomeLibraryApp.Controllers
         {
             string sender = User.Identity.GetUserName();
             string senderId = User.Identity.GetUserId();
-            string code =await  UserManager.GenerateUserTokenAsync("ConfirmInvitation", senderId);
+            string code = await UserManager.GenerateUserTokenAsync("ConfirmInvitation", senderId);
             var callbackUrl = Url.Action("ConfirmInvitation", "Library",
              new { userId = senderId, code = code }, protocol: Request.Url.Scheme);
             try
@@ -80,7 +85,12 @@ namespace HomeLibraryApp.Controllers
             if (tokenCorrect)
             {
                 Library library = db.Libraries.First(x => x.UserId == userId);
-                
+                string callingUserId = User.Identity.GetUserId();
+                if (User.Identity.GetUserId() != userId && db.LibraryUsers.First(x=>x.UserId== callingUserId && x.LibraryId==library.Id)==null)
+                {
+                    db.LibraryUsers.Add(new LibraryUser { UserId = callingUserId, LibraryId = library.Id });
+                    await db.SaveChangesAsync();
+                }
                 return RedirectToAction("Index");
             }
             else

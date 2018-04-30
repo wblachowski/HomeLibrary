@@ -2,11 +2,18 @@
 @{
     ViewBag.Title = "Library";
 }
-@model HomeLibraryApp.Models.Library
+@model IEnumerable<HomeLibraryApp.Models.Library>
 
-<h4 class="light">@Model.Name</h4>
+<h4 class="light">@Model.First().Name</h4>
 <a class="waves-effect waves-light btn modal-trigger" href="#modal1" >Add a member</a>
-
+@for (int i=1;i<Model.Count();i++)
+{
+    if (i == 1)
+    {
+        <h2>Your other libraries:</h2>
+    }
+    <h2 class="light">@Model.ElementAt(i).Name</h2>
+}
   <!-- Modal Structure -->
 <div id="modal1" class="modal">
     @using (Ajax.BeginForm("Invite", "Library", new AjaxOptions { HttpMethod = "Post",
