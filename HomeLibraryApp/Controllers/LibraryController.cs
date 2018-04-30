@@ -49,14 +49,16 @@ namespace HomeLibraryApp.Controllers
         [HttpPost]
         public async Task<bool> Invite(string email)
         {
+            string sender = User.Identity.GetUserName();
+            string callbackUrl = "nufing";
             try
             {
                 EmailService service = new EmailService();
                 var message = new IdentityMessage
                 {
                     Destination = email,
-                    Subject = "Invitation test",
-                    Body = "This is even more advanced invitation test!"
+                    Subject = "New library invitation",
+                    Body = "You have been invited to " + sender + "'s library! To confirm the invitation click <a href=\"" + callbackUrl + "\">here</a>"
                 };
                 await service.SendAsync(message);
             }
