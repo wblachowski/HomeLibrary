@@ -50,7 +50,10 @@ namespace HomeLibraryApp.Controllers
         public async Task<bool> Invite(string email)
         {
             string sender = User.Identity.GetUserName();
-            string callbackUrl = "nufing";
+            string senderId = User.Identity.GetUserId();
+            string code =await  UserManager.GenerateUserTokenAsync("ConfirmInvitation", senderId);
+            var callbackUrl = Url.Action("ConfirmInvitation", "Library",
+             new { userId = senderId, code = code }, protocol: Request.Url.Scheme);
             try
             {
                 EmailService service = new EmailService();
@@ -67,6 +70,23 @@ namespace HomeLibraryApp.Controllers
                 return false;
             }
             return true;
+        }
+
+        // GET: /Library/ConfirmInvitation
+        [Authorize]
+        public async Task<ActionResult> ConfirmInvitation(string userId, string code)
+        {
+            var tokenCorrect = await UserManager.VerifyUserTokenAsync(userId, "ConfirmInvitation", code);
+            if (tokenCorrect)
+            {
+                Library library = db.Libraries.First(x => x.UserId == userId);
+                
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
         }
     }
 }

@@ -222,9 +222,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201804290837478_init.cs" />
-    <Compile Include="Migrations\201804290837478_init.Designer.cs">
-      <DependentUpon>201804290837478_init.cs</DependentUpon>
+    <Compile Include="Migrations\201804301237219_init.cs" />
+    <Compile Include="Migrations\201804301237219_init.Designer.cs">
+      <DependentUpon>201804301237219_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -314,7 +314,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\site.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -369,8 +371,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804290837478_init.resx">
-      <DependentUpon>201804290837478_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804301237219_init.resx">
+      <DependentUpon>201804301237219_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

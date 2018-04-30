@@ -11,10 +11,13 @@ namespace HomeLibraryApp.Models
     {
         [Key]
         public int Id { get; set; }
-        public Library Library { get; set; }
 
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
+
+        public int LibraryId { get; set; }
+        [ForeignKey("LibraryId")]
+        public Library Library { get; set; }
     }
 }
