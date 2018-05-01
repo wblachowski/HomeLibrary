@@ -3,17 +3,31 @@
     ViewBag.Title = "Library";
 }
 @model IEnumerable<HomeLibraryApp.Models.Library>
+    <div class="col xl3 l3">
+    <ul id="library-sidenav" class="sidenav sidenav-fixed">
+        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+        <li><a href="#!">Second Link</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Subheader</a></li>
+        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+    </ul>
+</div>
 
-<h4 class="light">@Model.First().Name</h4>
-<a class="waves-effect waves-light btn modal-trigger" href="#modal1" >Add a member</a>
-@for (int i=1;i<Model.Count();i++)
-{
-    if (i == 1)
+
+<div id="library-content" class="col xl9 l9 m6 s12">
+    <h4 class="light">@Model.First().Name</h4>
+    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Add a member</a>
+    @for (int i = 1; i < Model.Count(); i++)
     {
-        <h2>Your other libraries:</h2>
+        if (i == 1)
+        {
+            <h5>Your other libraries:</h5>
+        }
+        <h6 class="light">@Model.ElementAt(i).Name</h6>
     }
-    <h2 class="light">@Model.ElementAt(i).Name</h2>
-}
+
+</div>
+
   <!-- Modal Structure -->
 <div id="modal1" class="modal">
     @using (Ajax.BeginForm("Invite", "Library", new AjaxOptions { HttpMethod = "Post",

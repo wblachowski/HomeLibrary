@@ -29,6 +29,7 @@ textarea {
 
 #footer{
     padding-top:0px;
+    z-index:0;
 }
 
 *:focus {
@@ -38,4 +39,19 @@ textarea {
 #login-card{
     width:300px;
     margin:auto;
+}
+
+#library-sidenav{
+    z-index:0;
+    margin-top:-15px;
+    top:unset !important;
+}
+
+#library-content {
+    margin-left: 150px;
+}
+@media only screen and (max-width : 992px) {
+    #library-content{
+        margin-left:0px;
+    }
 }
