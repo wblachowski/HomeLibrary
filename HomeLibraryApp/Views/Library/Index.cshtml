@@ -5,11 +5,18 @@
 @model IEnumerable<HomeLibraryApp.Models.Library>
     <div class="col xl3 l3">
     <ul id="library-sidenav" class="sidenav sidenav-fixed">
-        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
-        <li><a href="#!">Second Link</a></li>
-        <li><div class="divider"></div></li>
-        <li><a class="subheader">Subheader</a></li>
-        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+        <li><div class="row"></div></li>
+        <li><a class="subheader">Your library</a></li>
+        <li>@Html.ActionLink(Model.First().Name, "", null, new { @class = "waves-effect" })</li>
+        @for (int i = 1; i < Model.Count(); i++)
+        {
+            if (i == 1)
+            {
+                <li><div class="divider"></div></li>
+                <li><a class="subheader">Other</a></li>
+            }
+            <li>@Html.ActionLink(Model.ElementAt(i).Name,"",new { id = Model.ElementAt(i).Id },new { @class = "waves-effect" })</li>
+        }
     </ul>
 </div>
 

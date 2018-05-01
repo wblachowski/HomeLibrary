@@ -45,6 +45,7 @@ textarea {
     z-index:0;
     margin-top:-15px;
     top:unset !important;
+    padding-bottom:175px;
 }
 
 #library-content {
