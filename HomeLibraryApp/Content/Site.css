@@ -56,3 +56,12 @@ textarea {
         margin-left:0px;
     }
 }
+
+#new-book-card{
+    margin:0;
+    background-color:transparent;
+}
+
+#new-book-tabs {
+    background-color: transparent;
+}

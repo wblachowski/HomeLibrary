@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     $(".dropdown-trigger").dropdown();
-    $('.modal').modal();
+    $('.tabs').tabs();
+    $('.modal').modal({ onOpenEnd: function () { $('.tabs').tabs();}});
     $('.sidenav').sidenav();
 });
 

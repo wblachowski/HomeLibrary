@@ -32,21 +32,12 @@
 
 
 <div id="library-content" class="col xl9 l9 m6 s12">
-    <h4 class="light">@Model.First().Name</h4>
-    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Add a member</a>
-    @for (int i = 1; i < Model.Count(); i++)
-    {
-        if (i == 1)
-        {
-            <h5>Your other libraries:</h5>
-        }
-        <h6 class="light">@Model.ElementAt(i).Name</h6>
-    }
-
+    <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
+    <a class="waves-effect waves-light btn modal-trigger" href="#modalBook">Add a book</a>
 </div>
 
-  <!-- Modal Structure -->
-<div id="modal1" class="modal">
+  <!-- New member modal -->
+<div id="modalMember" class="modal">
     @using (Ajax.BeginForm("Invite", "Library", new AjaxOptions { HttpMethod = "Post",
         OnComplete = "onInvitationSuccess" }))
     {
@@ -66,3 +57,27 @@
     }
 </div>
 
+<!-- New book modal-->
+<div id="modalBook" class="modal">
+  <div id="new-book-card" class="card">
+    <div  class="card-content">
+        <h4>Add a new book</h4>
+    </div>
+    <div class="card-tabs">
+      <ul id="new-book-tabs" class="tabs tabs-fixed-width">
+        <li class="tab"><a href="#test4">New book</a></li>
+        <li class="tab"><a class="active" href="#test5">Existing book</a></li>
+        <li class="tab"><a href="#test6">Google book</a></li>
+      </ul>
+    </div>
+    <div class="card-content">
+      <div id="test4">Test 1</div>
+      <div id="test5">Test 2</div>
+      <div id="test6">Test 3</div>
+    </div>
+      <div class="modal-footer">
+          <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Add" />
+      </div>
+  </div>
+
+</div>
