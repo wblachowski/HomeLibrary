@@ -65,3 +65,7 @@ textarea {
 #new-book-tabs {
     background-color: transparent;
 }
+
+.modal .datepicker-modal{
+    width:90%
+}
