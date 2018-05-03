@@ -35,19 +35,37 @@
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
     <a class="waves-effect waves-light btn modal-trigger" href="#modalBook">Add a book</a>
 
-    @foreach (HomeLibraryApp.Models.Book book in Model.BooksModel)
-    {
-        <div class="row">"@book.Title" by @book.AuthorFirstname @book.AuthorLastname</div>
-    }
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author's firstname</th>
+                <th>Author's lastname</th>
+                <th>Publisher</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (HomeLibraryApp.Models.Book book in Model.BooksModel)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.AuthorFirstname</td>
+                    <td>@book.AuthorLastname</td>
+                    <td>@book.Publisher</td>
+                </tr>
+            }
+        </tbody>
+   </table>
 
-    <div id="empty-library-container">
-        @if (Model.BooksModel.Count() == 0)
-        {
-            <i id="empty-library-icon" class="material-icons">folder_open</i>
 
-            <h5 id="empty-library-title">No books in this library</h5>
-        }
-    </div>
+        <div id="empty-library-container">
+            @if (Model.BooksModel.Count() == 0)
+            {
+                <i id="empty-library-icon" class="material-icons">folder_open</i>
+
+                <h5 id="empty-library-title">No books in this library</h5>
+            }
+        </div>
 
 </div>
 
