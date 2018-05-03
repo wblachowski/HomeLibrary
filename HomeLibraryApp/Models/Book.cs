@@ -26,7 +26,8 @@ namespace HomeLibraryApp.Models
 
         [Required]
         [Display(Name = "Publication date")]
-        public DateTime PublicationDate { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime? PublicationDate { get; set; } = null;
 
         [Required]
         [Display(Name = "Publisher")]

@@ -80,6 +80,27 @@ namespace HomeLibraryApp.Controllers
             return true;
         }
 
+        [HttpPut]
+        [Authorize]
+        public async Task<bool> AddNewBook(LibraryMain model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return false;
+            }
+
+            var libraryId = Url.RequestContext.RouteData.Values["id"];
+            if (libraryId == null)  //your home library
+            {
+
+            }
+            else
+            {
+
+            }
+            return true;
+        }
+
         // GET: /Library/ConfirmInvitation
         [Authorize]
         public async Task<ActionResult> ConfirmInvitation(string userId, string code)

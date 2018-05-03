@@ -75,39 +75,45 @@
         </div>
         <div class="card-content">
             <div id="tabNew">
+@using (Ajax.BeginForm("AddNewBook", "Library", new AjaxOptions
+{
+    HttpMethod = "Put",
+    OnComplete = "onNewBookAddedSuccess"
+}))
+{
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="title" type="text" name="title">
-                        <label for="title">Title</label>
+                        @Html.TextBoxFor(m => m.NewBookModel.Title)
+                        @Html.LabelFor(m => m.NewBookModel.Title)
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col l6 s12">
-                        <input id="firstname" type="text" name="firstname">
-                        <label for="firstname">Author's firstname</label>
+                        @Html.TextBoxFor(m => m.NewBookModel.AuthorFirstname)
+                        @Html.LabelFor(m => m.NewBookModel.AuthorFirstname)
                     </div>
                     <div class="input-field col l6 s12">
-                        <input id="lastname" type="text" name="lastname">
-                        <label for="lastname">Author's lastname</label>
+                        @Html.TextBoxFor(m => m.NewBookModel.AuthorLastname)
+                        @Html.LabelFor(m => m.NewBookModel.AuthorLastname)
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col l6 s12">
-                        <input id="publication-date" type="text" class="datepicker" name="publication">
-                        <label for="publication">Publication date</label>
+                        @Html.TextBoxFor(m => m.NewBookModel.PublicationDate, "{0: MMM dd, yyyy}", new { @class = "datepicker" })
+                        @Html.LabelFor(m => m.NewBookModel.PublicationDate)
                     </div>
                     <div class="input-field col l6 s12">
-                        <input id="publisher" type="text" name="publisher">
-                        <label for="publisher">Publisher</label>
+                        @Html.TextBoxFor(m => m.NewBookModel.Publisher)
+                        @Html.LabelFor(m => m.NewBookModel.Publisher)
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Add" />
+                </div>
+}
             </div>
             <div id="tabExisting">Test 2</div>
             <div id="tabGoogle">Test 3</div>
         </div>
-        <div class="modal-footer">
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Add" />
-        </div>
     </div>
-
 </div>
