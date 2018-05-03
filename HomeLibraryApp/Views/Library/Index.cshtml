@@ -2,18 +2,18 @@
 @{
     ViewBag.Title = "Library";
 }
-@model IEnumerable<HomeLibraryApp.Models.Library>
+@model HomeLibraryApp.Models.LibraryMain
 <div class="col xl3 l3">
     <ul id="library-sidenav" class="sidenav sidenav-fixed">
         <li><div class="row"></div></li>
         <li><a class="subheader">Your library</a></li>
         @{ string linkclass = "";}
-        @if (Url.RequestContext.RouteData.Values["id"] == null || Url.RequestContext.RouteData.Values["id"].ToString() == Model.First().Id.ToString())
+        @if (Url.RequestContext.RouteData.Values["id"] == null || Url.RequestContext.RouteData.Values["id"].ToString() == Model.LibrariesModel.First().Id.ToString())
         {
             linkclass = "active";
         }
-        <li class="@linkclass">@Html.ActionLink(Model.First().Name, "", null, new { @class = "waves-effect" })</li>
-        @for (int i = 1; i < Model.Count(); i++)
+        <li class="@linkclass">@Html.ActionLink(Model.LibrariesModel.First().Name, "", null, new { @class = "waves-effect" })</li>
+        @for (int i = 1; i < Model.LibrariesModel.Count(); i++)
         {
             if (i == 1)
             {
@@ -21,11 +21,11 @@
                 <li><a class="subheader">Other</a></li>
             }
             linkclass = "";
-            if (Url.RequestContext.RouteData.Values["id"] != null && Url.RequestContext.RouteData.Values["id"].ToString() == Model.ElementAt(i).Id.ToString())
+            if (Url.RequestContext.RouteData.Values["id"] != null && Url.RequestContext.RouteData.Values["id"].ToString() == Model.LibrariesModel.ElementAt(i).Id.ToString())
             {
                 linkclass = "active";
             }
-            <li class="@linkclass">@Html.ActionLink(Model.ElementAt(i).Name, "", new { id = Model.ElementAt(i).Id }, new { @class = "waves-effect" })</li>
+            <li class="@linkclass">@Html.ActionLink(Model.LibrariesModel.ElementAt(i).Name, "", new { id = Model.LibrariesModel.ElementAt(i).Id }, new { @class = "waves-effect" })</li>
         }
     </ul>
 </div>

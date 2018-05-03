@@ -41,6 +41,7 @@ namespace HomeLibraryApp.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            LibraryMain model = new LibraryMain();
             List<Library> libraries = new List<Library>();
             var userID = User.Identity.GetUserId();
             Library library = db.Libraries.First(x => x.UserId == userID);
@@ -48,7 +49,9 @@ namespace HomeLibraryApp.Controllers
             List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
             foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
 
-            return View(libraries.AsEnumerable<Library>());
+            model.LibrariesModel = libraries.AsEnumerable<Library>();
+
+            return View(model);
         }
 
         [HttpPost]
