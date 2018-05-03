@@ -69,3 +69,27 @@ textarea {
 .modal .datepicker-modal{
     width:90%
 }
+
+#empty-library-container {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 150px);
+    transform: translate(-50%, -50%);
+}
+@media only screen and (max-width : 992px) {
+    #empty-library-container {
+        left: 50%;
+    }
+}
+
+#empty-library-icon{
+    font-size:120px ;
+    opacity: 0.38;
+    text-align:center;
+    width:100%;
+}
+
+#empty-library-title {
+    opacity: 0.38;
+    margin-top:-10px;
+}

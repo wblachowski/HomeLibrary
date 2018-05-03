@@ -34,11 +34,22 @@
 <div id="library-content" class="col xl9 l9 m6 s12">
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
     <a class="waves-effect waves-light btn modal-trigger" href="#modalBook">Add a book</a>
+
+    @foreach (HomeLibraryApp.Models.Book book in Model.BooksModel)
+    {
+        <div class="row">"@book.Title" by @book.AuthorFirstname @book.AuthorLastname</div>
+    }
+
+    <div id="empty-library-container">
+        @if (Model.BooksModel.Count() == 0)
+        {
+            <i id="empty-library-icon" class="material-icons">folder_open</i>
+
+            <h5 id="empty-library-title">No books in this library</h5>
+        }
+    </div>
+
 </div>
-@foreach(HomeLibraryApp.Models.Book book in Model.BooksModel)
-{
-    <div class="row">"@book.Title" by @book.AuthorFirstname @book.AuthorLastname</div>
-}
 
 <!-- New member modal -->
 <div id="modalMember" class="modal">
