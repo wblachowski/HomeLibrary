@@ -39,9 +39,10 @@ namespace HomeLibraryApp.Controllers
 
         // GET: Library
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
             LibraryMain model = new LibraryMain();
+
             List<Library> libraries = new List<Library>();
             var userID = User.Identity.GetUserId();
             Library library = db.Libraries.First(x => x.UserId == userID);
@@ -49,7 +50,18 @@ namespace HomeLibraryApp.Controllers
             List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
             foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
 
+            if (String.IsNullOrEmpty(id))
+            {//your home library
+                id = library.Id.ToString();
+            }
+
+            List<Book> books = new List<Book>();
+            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == id).ToList<LibraryBook>();
+            foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
+
+
             model.LibrariesModel = libraries.AsEnumerable<Library>();
+            model.BooksModel = books.AsEnumerable<Book>();
 
             return View(model);
         }
@@ -92,7 +104,12 @@ namespace HomeLibraryApp.Controllers
             var libraryId = Url.RequestContext.RouteData.Values["id"];
             if (libraryId == null)  //your home library
             {
-
+                var userId = User.Identity.GetUserId();
+                Library library = db.Libraries.First(x => x.UserId == userId);
+                Book book = model.NewBookModel;
+                db.Books.Add(book);
+                db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
+                await db.SaveChangesAsync();
             }
             else
             {

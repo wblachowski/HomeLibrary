@@ -35,13 +35,17 @@
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
     <a class="waves-effect waves-light btn modal-trigger" href="#modalBook">Add a book</a>
 </div>
+@foreach(HomeLibraryApp.Models.Book book in Model.BooksModel)
+{
+    <div class="row">"@book.Title" by @book.AuthorFirstname @book.AuthorLastname</div>
+}
 
 <!-- New member modal -->
 <div id="modalMember" class="modal">
     @using (Ajax.BeginForm("Invite", "Library", new AjaxOptions
     {
         HttpMethod = "Post",
-        OnComplete = "onInvitationSuccess"
+        OnComplete = "onInvitationComplete"
     }))
     {
         <div class="modal-content">
@@ -78,7 +82,7 @@
 @using (Ajax.BeginForm("AddNewBook", "Library", new AjaxOptions
 {
     HttpMethod = "Put",
-    OnComplete = "onNewBookAddedSuccess"
+    OnComplete = "onNewBookAddedComplete"
 }))
 {
                 <div class="row">

@@ -8,8 +8,14 @@
     });
 });
 
-function onInvitationSuccess(result) {
+function onInvitationComplete(result) {
     msg = result ? "The invitation has been sent" : "There was a problem while sending the invitation";
+    console.log(msg);
+    M.toast({ html: msg });
+}
+
+function onNewBookAddedComplete(result) {
+    msg = result ? "New book has been added" : "There was a problem while adding the book";
     console.log(msg);
     M.toast({ html: msg });
 }
