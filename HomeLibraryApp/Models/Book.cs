@@ -11,6 +11,27 @@ namespace HomeLibraryApp.Models
     {
         [Key]
         public int Id { get; set; }
-        
+
+        [Required]
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+
+        [Required]
+        [Display(Name = "Author's firstname")]
+        public string AuthorFirstname { get; set; }
+
+        [Required]
+        [Display(Name = "Author's lastname")]
+        public string AuthorLastname { get; set; }
+
+        [Required]
+        [Display(Name = "Publication date")]
+        public DateTime PublicationDate { get; set; }
+
+        [Required]
+        [Display(Name = "Publisher")]
+        public string Publisher { get; set; }
+
+
     }
 }
