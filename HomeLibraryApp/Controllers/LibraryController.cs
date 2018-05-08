@@ -66,6 +66,21 @@ namespace HomeLibraryApp.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public ActionResult GetBooks(string id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {//your home library
+                var userID = User.Identity.GetUserId();
+                Library library = db.Libraries.First(x => x.UserId == userID);
+                id = library.Id.ToString();
+            }
+            List<Book> books = new List<Book>();
+            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == id).ToList<LibraryBook>();
+            foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
+            return PartialView("_BooksPartial", books);
+        }
+
         [HttpPost]
         public async Task<bool> Invite(string email)
         {
@@ -94,28 +109,30 @@ namespace HomeLibraryApp.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<bool> AddNewBook(LibraryMain model)
-        {
+        public  ActionResult AddNewBook(LibraryMain model)
+        {/*
             if (!ModelState.IsValid)
             {
                 return false;
-            }
+            }*/
 
             var libraryId = Url.RequestContext.RouteData.Values["id"];
+            Library library;
             if (libraryId == null)  //your home library
             {
                 var userId = User.Identity.GetUserId();
-                Library library = db.Libraries.First(x => x.UserId == userId);
+                library = db.Libraries.First(x => x.UserId == userId);
                 Book book = model.NewBookModel;
                 db.Books.Add(book);
                 db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
-                await db.SaveChangesAsync();
+                db.SaveChanges();
+                return GetBooks(library.Id.ToString());
+
             }
             else
             {
-
+                return RedirectToAction("Index");
             }
-            return true;
         }
 
         // GET: /Library/ConfirmInvitation
@@ -127,7 +144,7 @@ namespace HomeLibraryApp.Controllers
             {
                 Library library = db.Libraries.First(x => x.UserId == userId);
                 string callingUserId = User.Identity.GetUserId();
-                if (User.Identity.GetUserId() != userId && db.LibraryUsers.First(x=>x.UserId== callingUserId && x.LibraryId==library.Id)==null)
+                if (User.Identity.GetUserId() != userId && db.LibraryUsers.FirstOrDefault(x=>x.UserId== callingUserId && x.LibraryId==library.Id)==null)
                 {
                     db.LibraryUsers.Add(new LibraryUser { UserId = callingUserId, LibraryId = library.Id });
                     await db.SaveChangesAsync();

@@ -355,6 +355,7 @@
     <Content Include="Views\Library\Index.cshtml" />
     <Content Include="Views\Home\_UserAuthenticatedIndex.cshtml" />
     <Content Include="Views\Home\_UserDefaultIndex.cshtml" />
+    <Content Include="Views\Library\_BooksPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
