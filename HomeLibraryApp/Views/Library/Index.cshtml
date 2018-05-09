@@ -34,7 +34,7 @@
 <div id="library-content" class="col xl9 l9 m6 s12">
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
     <a class="waves-effect waves-light btn modal-trigger" href="#modalBook">Add a book</a>
-    @Html.Partial("_BooksPartial", Model.BooksModel);
+    @Html.Partial("_BooksPartial", Model.BooksModel)
 </div>
 
 <!-- New member modal -->
@@ -76,9 +76,9 @@
         </div>
         <div class="card-content">
             <div id="tabNew">
-@using (Ajax.BeginForm("AddNewBook", "Library", new AjaxOptions
+@using (Ajax.BeginForm("AddNewBook", "Library",new {id= Url.RequestContext.RouteData.Values["id"] }, new AjaxOptions
 {
-    HttpMethod = "Put",
+    HttpMethod = "Post",
     UpdateTargetId="books-partial"
 }))
 {

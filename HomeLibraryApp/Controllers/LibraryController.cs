@@ -107,32 +107,31 @@ namespace HomeLibraryApp.Controllers
             return true;
         }
 
-        [HttpPut]
+        [HttpPost]
         [Authorize]
-        public  ActionResult AddNewBook(LibraryMain model)
+        public ActionResult AddNewBook(LibraryMain model, string id)
         {/*
             if (!ModelState.IsValid)
             {
                 return false;
             }*/
 
-            var libraryId = Url.RequestContext.RouteData.Values["id"];
+            //var libraryId = Url.RequestContext.RouteData.Values["id"];
             Library library;
-            if (libraryId == null)  //your home library
+            if (id == null)  //your home library
             {
                 var userId = User.Identity.GetUserId();
                 library = db.Libraries.First(x => x.UserId == userId);
-                Book book = model.NewBookModel;
-                db.Books.Add(book);
-                db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
-                db.SaveChanges();
-                return GetBooks(library.Id.ToString());
-
             }
             else
             {
-                return RedirectToAction("Index");
+                library = db.Libraries.First(x => x.Id.ToString() == id.ToString());
             }
+            Book book = model.NewBookModel;
+            db.Books.Add(book);
+            db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
+            db.SaveChanges();
+            return GetBooks(library.Id.ToString());
         }
 
         // GET: /Library/ConfirmInvitation
@@ -144,7 +143,7 @@ namespace HomeLibraryApp.Controllers
             {
                 Library library = db.Libraries.First(x => x.UserId == userId);
                 string callingUserId = User.Identity.GetUserId();
-                if (User.Identity.GetUserId() != userId && db.LibraryUsers.FirstOrDefault(x=>x.UserId== callingUserId && x.LibraryId==library.Id)==null)
+                if (User.Identity.GetUserId() != userId && db.LibraryUsers.FirstOrDefault(x => x.UserId == callingUserId && x.LibraryId == library.Id) == null)
                 {
                     db.LibraryUsers.Add(new LibraryUser { UserId = callingUserId, LibraryId = library.Id });
                     await db.SaveChangesAsync();
