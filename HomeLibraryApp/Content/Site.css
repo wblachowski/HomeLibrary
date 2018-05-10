@@ -93,3 +93,7 @@ textarea {
     opacity: 0.38;
     margin-top:-10px;
 }
+
+.btn-right{
+    float:right;
+}

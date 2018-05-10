@@ -33,7 +33,7 @@
 
 <div id="library-content" class="col xl9 l9 m6 s12">
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
-    <a class="waves-effect waves-light btn modal-trigger" href="#modalBook">Add a book</a>
+    @Html.ActionLink("Add a book", "Add", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "waved-effect waves-light btn" })
     @Html.Partial("_BooksPartial", Model.BooksModel)
 </div>
 

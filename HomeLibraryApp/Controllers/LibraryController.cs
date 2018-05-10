@@ -67,6 +67,12 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult GetBooks(string id)
         {
             if (String.IsNullOrEmpty(id))
@@ -109,7 +115,7 @@ namespace HomeLibraryApp.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult AddNewBook(LibraryMain model, string id)
+        public ActionResult AddNewBook(Book model, string id)
         {/*
             if (!ModelState.IsValid)
             {
@@ -127,11 +133,11 @@ namespace HomeLibraryApp.Controllers
             {
                 library = db.Libraries.First(x => x.Id.ToString() == id.ToString());
             }
-            Book book = model.NewBookModel;
+            Book book = model;
             db.Books.Add(book);
             db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
             db.SaveChanges();
-            return GetBooks(library.Id.ToString());
+            return RedirectToAction("Index", id);
         }
 
         // GET: /Library/ConfirmInvitation
