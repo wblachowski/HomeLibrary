@@ -97,3 +97,11 @@ textarea {
 .btn-right{
     float:right;
 }
+
+#form-search-book{
+    margin-top:-10px;
+}
+
+#form-search-book label{
+    margin-right:25px;
+}

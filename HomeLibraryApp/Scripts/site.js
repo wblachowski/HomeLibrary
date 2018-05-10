@@ -19,3 +19,11 @@ function onNewBookAddedComplete(result) {
     console.log(msg);
     M.toast({ html: msg });
 }
+
+function searchForBooks() {
+    $("[name='searchGroup'").each(function (index, element) {
+        if ($(this).is(":checked")) {
+            console.log($(this).next().html());
+        }
+    });
+}

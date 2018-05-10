@@ -3,12 +3,12 @@
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
-            <li class="tab col s4"><a class="active" href="#test1">New book</a></li>
-            <li class="tab col s4"><a href="#test2">Existing book</a></li>
-            <li class="tab col s4"><a href="#test4">Google book</a></li>
+            <li class="tab col s4"><a class="active" href="#new">New book</a></li>
+            <li class="tab col s4"><a href="#existing">Existing book</a></li>
+            <li class="tab col s4"><a href="#google">Google book</a></li>
         </ul>
     </div>
-    <div id="test1" class="col s12">
+    <div id="new" class="col s12">
         @using (Html.BeginForm("AddNewBook", "Library", new { id = Url.RequestContext.RouteData.Values["id"] }))
         {
         <div class="row">
@@ -40,6 +40,29 @@
         <input type="submit" value="Add" class="btn btn-default btn-right" />
         }
     </div>
-    <div id="test2" class="col s12">Test 2</div>
-    <div id="test4" class="col s12">Test 4</div>
+    <div id="existing" class="col s12">
+        <div class="input-field">
+            <input name="Search" type="text" oninput="searchForBooks()"/>
+            <label for="Search">Search</label>
+        </div>
+        <form id="form-search-book" action="#">
+            <label for="searchAll">
+                <input onclick="searchForBooks()" id="searchAll" name="searchGroup" type="radio" checked />
+                <span>All</span>
+            </label>
+            <label for="searchTitle">
+                <input onclick="searchForBooks()" id="searchTitle" name="searchGroup" type="radio"/>
+                <span>Title</span>
+            </label>
+            <label for="searchAuthor">
+                <input onclick="searchForBooks()" id="searchAuthor" name="searchGroup" type="radio" />
+                <span>Author</span>
+            </label>
+            <label for="searchPublisher">
+                <input onclick="searchForBooks()" id="searchPublisher" name="searchGroup" type="radio" />
+                <span>Publisher</span>
+            </label>
+        </form>
+    </div>
+    <div id="google" class="col s12">Test 4</div>
 </div>
