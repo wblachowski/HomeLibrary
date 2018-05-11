@@ -105,3 +105,27 @@ textarea {
 #form-search-book label{
     margin-right:25px;
 }
+
+#topbarsearch .input-field .prefix {
+    width: 0rem !important;
+}
+
+#topbarsearch nav ul li:hover, nav ul li.active {
+    background-color: none !important;
+}
+
+.input-field .prefix ~ input, .input-field .prefix ~ textarea, .input-field .prefix ~ label, .input-field .prefix ~ .validate ~ label, .input-field .prefix ~ .autocomplete-content {
+    margin-left: 2rem !important;
+}
+
+
+#topbarsearch-input{
+    color:white;
+}
+#topbarsearch-input:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+#topbarsearch-icon{
+    top:0.2rem;
+}

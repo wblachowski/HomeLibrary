@@ -12,17 +12,33 @@
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
 
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
+
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+                <div class="center row">
+                    <div class="col s12 ">
+                        <div class="row" id="topbarsearch">
+                            <div class="input-field col s6 s12">
+                                <i id="topbarsearch-icon" class=" material-icons prefix">search</i>
+                                <input type="text" placeholder="search" id="topbarsearch-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li> 
             <li>@Html.ActionLink("Home", "Index", "Home")</li>
             <li>@Html.ActionLink("Library", "Index", "Library")</li>
             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-            <li><a class="dropdown-trigger" href="#" data-target="dropdown1">@User.Identity.GetUserName()<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li>
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                @Html.AntiForgeryToken()
+            <a class="dropdown-trigger" href="#" data-target="dropdown1">@User.Identity.GetUserName()<i class="material-icons right">arrow_drop_down</i></a>
+            }
+            </li>
         </ul>
-    }
 
+        
 }
 else
 {
