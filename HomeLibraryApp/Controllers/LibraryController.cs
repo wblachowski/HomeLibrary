@@ -87,6 +87,21 @@ namespace HomeLibraryApp.Controllers
             return PartialView("_BooksPartial", books);
         }
 
+        [Authorize]
+        public ActionResult GetSearchedBooks(string searchType, string query, int page)
+        {
+            List<Book> books = new List<Book>();
+            switch (searchType)
+            {
+                case "All": books= db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList();break;
+                case "Title": books = db.Books.Where(book => book.Title.Contains(query)).ToList();break;
+                case "Author": books = db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname).Contains(query)).ToList();break;
+                case "Publisher": books = db.Books.Where(book => book.Publisher.Contains(query)).ToList(); break;
+
+            }
+            return PartialView("_BooksPartial", books);
+        }
+
         [HttpPost]
         public async Task<bool> Invite(string email)
         {

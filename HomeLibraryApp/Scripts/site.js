@@ -21,9 +21,28 @@ function onNewBookAddedComplete(result) {
 }
 
 function searchForBooks() {
+    searchType = 'All'
+    searchQuery = '';
+    page = 0;
     $("[name='searchGroup'").each(function (index, element) {
         if ($(this).is(":checked")) {
             console.log($(this).next().html());
+            searchType = $(this).next().html();
+        }
+    });
+    searchQuery = $('#search-book-input').val();
+    console.log(searchQuery);
+
+    $.ajax({
+        url: "GetSearchedBooks",
+        data: {
+            searchType: searchType,
+            query: searchQuery,
+            page: page
+        },
+        success: function (result) {
+            console.log("Function successful");
+            $('#search-book-results').html(result);
         }
     });
 }

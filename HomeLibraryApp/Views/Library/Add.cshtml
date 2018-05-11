@@ -42,7 +42,7 @@
     </div>
     <div id="existing" class="col s12">
         <div class="input-field">
-            <input name="Search" type="text" oninput="searchForBooks()"/>
+            <input id="search-book-input" name="Search" type="text" oninput="searchForBooks()"/>
             <label for="Search">Search</label>
         </div>
         <form id="form-search-book" action="#">
@@ -63,6 +63,9 @@
                 <span>Publisher</span>
             </label>
         </form>
+        <div id="search-book-results">
+
+        </div>
     </div>
     <div id="google" class="col s12">Test 4</div>
 </div>
