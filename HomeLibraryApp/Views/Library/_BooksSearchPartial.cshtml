@@ -23,9 +23,43 @@
                 }
             </tbody>
         </table>
-    }
-    else
-    {
+
+        <input id="search-book-current-page" type="hidden" value="1"/>
+        <ul id="search-book-pagination" class="pagination">
+            @{
+                if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage-1)"><a><i class="material-icons">chevron_left</i></a></li>
+                }
+                else
+                {
+                    <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+                }
+
+                for (int i = 1; i <= ViewBag.PagesNr; i++)
+                {
+                    if (i == ViewBag.CurrentPage)
+                    {
+                        <li class="active"  onclick="searchForBooks(@i)"><a>@i</a></li>
+                    }
+                    else
+                    {
+                        <li class="waves-effect"  onclick="searchForBooks(@i)"><a>@i</a></li>
+                    }
+                }
+                if (ViewBag.currentPage == ViewBag.PagesNr)
+                {
+                    <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+                }
+                else
+                {
+                    <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage+1)"><a><i class="material-icons">chevron_right</i></a></li>
+                }            
+                }
+        </ul>
+                }
+                else
+                {
         <div>
             No results found
         </div>

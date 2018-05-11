@@ -20,18 +20,18 @@ function onNewBookAddedComplete(result) {
     M.toast({ html: msg });
 }
 
-function searchForBooks() {
+function searchForBooks(page) {
     searchType = 'All'
     searchQuery = '';
-    page = 0;
+    if (page == null) {
+        page = 1;
+    }
     $("[name='searchGroup'").each(function (index, element) {
         if ($(this).is(":checked")) {
-            console.log($(this).next().html());
             searchType = $(this).next().html();
         }
     });
     searchQuery = $('#search-book-input').val();
-    console.log(searchQuery);
 
     $.ajax({
         url: "GetSearchedBooks",
@@ -41,7 +41,6 @@ function searchForBooks() {
             page: page
         },
         success: function (result) {
-            console.log("Function successful");
             $('#search-book-results').html(result);
         }
     });

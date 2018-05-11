@@ -109,6 +109,8 @@ namespace HomeLibraryApp.Controllers
             }
 
             List<Book> books = new List<Book>();
+            int pagesNr=1;
+            int pageSize = 5;
             switch (searchType)
             {
                 case "All": books= db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList();break;
@@ -117,6 +119,12 @@ namespace HomeLibraryApp.Controllers
                 case "Publisher": books = db.Books.Where(book => book.Publisher.Contains(query)).ToList(); break;
 
             }
+
+            pagesNr = (int)Math.Ceiling(Convert.ToDouble(books.Count()) / Convert.ToDouble(pageSize));
+            books = books.OrderBy(book => book.Title).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.PagesNr = pagesNr;
+            ViewBag.CurrentPage = page;
             return PartialView("_BooksSearchPartial", books);
         }
 
