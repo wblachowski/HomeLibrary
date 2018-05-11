@@ -34,5 +34,32 @@
     @Scripts.Render("~/bundles/materialize")
     @Scripts.Render("~/bundles/myscripts")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        function searchForBooks(page) {
+            searchType = 'All'
+            searchQuery = '';
+            if (page == null) {
+                page = 1;
+            }
+            $("[name='searchGroup'").each(function (index, element) {
+                if ($(this).is(":checked")) {
+                    searchType = $(this).next().html();
+                }
+            });
+            searchQuery = $('#search-book-input').val();
+
+            $.ajax({
+                url: '@Url.Action("GetSearchedBooks","Library")',
+                data: {
+                    searchType: searchType,
+                    query: searchQuery,
+                    page: page
+                },
+                success: function (result) {
+                    $('#search-book-results').html(result);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -110,7 +110,7 @@ namespace HomeLibraryApp.Controllers
 
             List<Book> books = new List<Book>();
             int pagesNr=1;
-            int pageSize = 5;
+            int pageSize = 10;
             switch (searchType)
             {
                 case "All": books= db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList();break;

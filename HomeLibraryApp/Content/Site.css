@@ -137,3 +137,7 @@ textarea {
 #topbarsearch-li{
     height:64px;
 }
+
+#library-content th{
+    width:25%;
+}

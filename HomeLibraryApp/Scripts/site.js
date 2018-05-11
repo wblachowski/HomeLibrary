@@ -20,31 +20,7 @@ function onNewBookAddedComplete(result) {
     M.toast({ html: msg });
 }
 
-function searchForBooks(page) {
-    searchType = 'All'
-    searchQuery = '';
-    if (page == null) {
-        page = 1;
-    }
-    $("[name='searchGroup'").each(function (index, element) {
-        if ($(this).is(":checked")) {
-            searchType = $(this).next().html();
-        }
-    });
-    searchQuery = $('#search-book-input').val();
 
-    $.ajax({
-        url: "GetSearchedBooks",
-        data: {
-            searchType: searchType,
-            query: searchQuery,
-            page: page
-        },
-        success: function (result) {
-            $('#search-book-results').html(result);
-        }
-    });
-}
 
 function searchBookAddClick(id) {
     rowId = "bookRow" + id;
