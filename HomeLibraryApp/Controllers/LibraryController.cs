@@ -39,7 +39,7 @@ namespace HomeLibraryApp.Controllers
 
         // GET: Library
         [Authorize]
-        public ActionResult Index(string id)
+        public ActionResult Index(string id, string page)
         {
             LibraryMain model = new LibraryMain();
 
@@ -54,15 +54,28 @@ namespace HomeLibraryApp.Controllers
             {//your home library
                 id = library.Id.ToString();
             }
+            int pageInt;
+            int pageSize = 5;
+            int pagesNr = 1;
+            if (String.IsNullOrEmpty(page))
+            {
+                pageInt = 1;
+            }
+            else
+            {
+                pageInt = Int32.Parse(page);
+            }
 
             List<Book> books = new List<Book>();
             List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == id).ToList<LibraryBook>();
             foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
-
+            pagesNr = (int)Math.Ceiling(Convert.ToDouble(books.Count()) / Convert.ToDouble(pageSize));
+            books = books.OrderBy(book => book.Title).Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
 
             model.LibrariesModel = libraries.AsEnumerable<Library>();
             model.BooksModel = books.AsEnumerable<Book>();
 
+            ViewBag.PagesNr = pagesNr;
             return View(model);
         }
 
