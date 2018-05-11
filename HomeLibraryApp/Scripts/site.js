@@ -45,3 +45,18 @@ function searchForBooks(page) {
         }
     });
 }
+
+function searchBookAddClick(id) {
+    rowId = "bookRow" + id;
+    console.log(rowId);
+    rowData = $("#" + rowId + " td");
+    $("#modalTitle").val(rowData.eq(0).html());
+    $("#modalFirstname").val(rowData.eq(1).html());
+    $("#modalLastname").val(rowData.eq(2).html());
+    $("#modalDate").val($("#" + rowId).attr("data-date"));
+    $("#modalPublisher").val(rowData.eq(3).html());
+
+    M.updateTextFields();
+    $('#search-book-confirm-modal').modal();
+    $('#search-book-confirm-modal').modal('open');
+}

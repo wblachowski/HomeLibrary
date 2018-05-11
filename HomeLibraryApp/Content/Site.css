@@ -129,3 +129,11 @@ textarea {
 #topbarsearch-icon{
     top:0.2rem;
 }
+
+.pagination{
+    float:right;
+}
+
+#topbarsearch-li{
+    height:64px;
+}
