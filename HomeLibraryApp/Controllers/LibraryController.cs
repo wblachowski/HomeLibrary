@@ -55,7 +55,7 @@ namespace HomeLibraryApp.Controllers
                 id = library.Id.ToString();
             }
             int pageInt;
-            int pageSize = 5;
+            int pageSize = 10;
             int pagesNr = 1;
             if (String.IsNullOrEmpty(page))
             {
@@ -103,6 +103,11 @@ namespace HomeLibraryApp.Controllers
         [Authorize]
         public ActionResult GetSearchedBooks(string searchType, string query, int page)
         {
+            if (String.IsNullOrEmpty(query))
+            {
+                return new EmptyResult();
+            }
+
             List<Book> books = new List<Book>();
             switch (searchType)
             {
@@ -112,7 +117,7 @@ namespace HomeLibraryApp.Controllers
                 case "Publisher": books = db.Books.Where(book => book.Publisher.Contains(query)).ToList(); break;
 
             }
-            return PartialView("_BooksPartial", books);
+            return PartialView("_BooksSearchPartial", books);
         }
 
         [HttpPost]
@@ -165,7 +170,7 @@ namespace HomeLibraryApp.Controllers
             db.Books.Add(book);
             db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
             db.SaveChanges();
-            return RedirectToAction("Index", id);
+            return RedirectToAction("Index", new { id = id });
         }
 
         // GET: /Library/ConfirmInvitation
