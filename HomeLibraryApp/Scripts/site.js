@@ -26,6 +26,7 @@ function searchBookAddClick(id) {
     rowId = "bookRow" + id;
     console.log(rowId);
     rowData = $("#" + rowId + " td");
+    $("#modalId").val(id);
     $("#modalTitle").val(rowData.eq(0).html());
     $("#modalFirstname").val(rowData.eq(1).html());
     $("#modalLastname").val(rowData.eq(2).html());

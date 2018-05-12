@@ -48,15 +48,26 @@
             });
             searchQuery = $('#search-book-input').val();
 
-
-            $('.preloader-wrapper').show();
-            $.ajax({
-                url: '@Url.Action("GetSearchedBooks","Library")',
-                data: {
+            libraryId = $('#library-id').val();
+            data = {};
+            if (libraryId == "") {
+                data = {
                     searchType: searchType,
                     query: searchQuery,
                     page: page
-                },
+                }
+            } else {
+                data = {
+                    searchType: searchType,
+                    query: searchQuery,
+                    page: page,
+                    libraryId: libraryId
+                }
+            }
+            $('.preloader-wrapper').show();
+            $.ajax({
+                url: '@Url.Action("GetSearchedBooks","Library")',
+                data: data,
                 success: function (result) {
                     $('#search-book-results').html(result);
                     $('.preloader-wrapper').hide();

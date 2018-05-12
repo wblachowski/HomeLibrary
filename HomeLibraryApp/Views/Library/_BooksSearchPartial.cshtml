@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<HomeLibraryApp.Models.Book>
 <div id="search-book-confirm-modal" class="modal">
+    @using (Html.BeginForm("AddExistingBook", "Library",new { id = ViewBag.LibraryId }, FormMethod.Post))
+    {
     <div class="modal-content">
         <h4>Confirm</h4>
         <p>Do you really want to add this book to your library?</p>
+        <input type="hidden" name="bookId" id="modalId">
         <div class="row">
             <div class="input-field col s12">
                 <input disabled value="" type="text" id="modalTitle" >
@@ -31,9 +34,10 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Yes</a>
+        <a class="modal-close waves-effect waves-green btn-flat">No</a>
+        <input class="waves-effect waves-green btn-flat" type="submit" value="Yes" />
     </div>
+    }
 </div>
 <div>
     @if (Model.Count() > 0)
@@ -94,7 +98,7 @@
                 else
                 {
                     <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage+1)"><a><i class="material-icons">chevron_right</i></a></li>
-                }            
+                }
                 }
         </ul>
                 }
@@ -103,5 +107,5 @@
         <div>
             No results found
         </div>
-    }
+                }
 </div>

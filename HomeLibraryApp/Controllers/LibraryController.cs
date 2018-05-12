@@ -101,7 +101,7 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult GetSearchedBooks(string searchType, string query, int page)
+        public ActionResult GetSearchedBooks(string searchType, string query, int page, string libraryId)
         {
             if (String.IsNullOrEmpty(query))
             {
@@ -125,6 +125,7 @@ namespace HomeLibraryApp.Controllers
 
             ViewBag.PagesNr = pagesNr;
             ViewBag.CurrentPage = page;
+            ViewBag.LibraryId = libraryId;
             return PartialView("_BooksSearchPartial", books);
         }
 
@@ -176,6 +177,26 @@ namespace HomeLibraryApp.Controllers
             }
             Book book = model;
             db.Books.Add(book);
+            db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
+            db.SaveChanges();
+            return RedirectToAction("Index", new { id = id });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult AddExistingBook(string id, string bookId)
+        {
+            Library library;
+            if (id == null)  //your home library
+            {
+                var userId = User.Identity.GetUserId();
+                library = db.Libraries.First(x => x.UserId == userId);
+            }
+            else
+            {
+                library = db.Libraries.First(x => x.Id.ToString() == id.ToString());
+            }
+            Book book = db.Books.First(x => x.Id.ToString() == bookId);
             db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
             db.SaveChanges();
             return RedirectToAction("Index", new { id = id });
