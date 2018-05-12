@@ -142,7 +142,7 @@ textarea {
     width:25%;
 }
 
-#search-book-container {
+#search-book-container, #goodreads{
     position:relative;
 }
 
@@ -151,4 +151,19 @@ textarea {
     position: absolute;
     left: calc(50% - 32px);
     top: 100px;
+}
+
+#goodreads .preloader-wrapper {
+    display:none;
+    position: absolute;
+    left: calc(50% - 32px);
+    top: 100px;
+}
+
+#goodreads-result{
+    display:none;
+}
+
+#goodreads-error{
+    display:none;
 }
