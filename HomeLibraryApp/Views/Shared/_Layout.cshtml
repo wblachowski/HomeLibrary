@@ -48,6 +48,8 @@
             });
             searchQuery = $('#search-book-input').val();
 
+
+            $('.preloader-wrapper').show();
             $.ajax({
                 url: '@Url.Action("GetSearchedBooks","Library")',
                 data: {
@@ -57,6 +59,7 @@
                 },
                 success: function (result) {
                     $('#search-book-results').html(result);
+                    $('.preloader-wrapper').hide();
                 }
             });
         }

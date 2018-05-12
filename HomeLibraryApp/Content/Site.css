@@ -141,3 +141,14 @@ textarea {
 #library-content th{
     width:25%;
 }
+
+#search-book-container {
+    position:relative;
+}
+
+#search-book-container .preloader-wrapper {
+    display:none;
+    position: absolute;
+    left: calc(50% - 32px);
+    top: 100px;
+}
