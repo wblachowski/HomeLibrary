@@ -10,7 +10,7 @@
         </ul>
     </div>
     <div id="new" class="col s12">
-        @using (Html.BeginForm("AddNewBook", "Library", new { id = Url.RequestContext.RouteData.Values["id"] }))
+        @using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"],type="new" }))
         {
             <div class="row">
                 <div class="input-field col s12">
@@ -97,7 +97,7 @@
             </div>
         <div id="goodreads-error">An error occured while retrieving the book info. Check if you provided a valid Goodreads link.</div>
         <div id="goodreads-result">
-@using (Html.BeginForm("AddGoodreadsBook", "Library", new { id = Url.RequestContext.RouteData.Values["id"] }))
+@using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"],type="goodreads" }))
 {
             <div class="row">
                 <div class="input-field col s12">

@@ -85,6 +85,32 @@ namespace HomeLibraryApp.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult Add(LibraryAdd model, string id, string type)
+        {
+            Book book = null;
+            if (type == "new")
+            {
+                book = model.NewBookModel;
+            }
+            else if (type == "goodreads")
+            {
+                book = model.GoodreadsBookModel;
+            }
+            if (!TryValidateModel(book))
+            {
+                return View(model);
+            }
+
+            if(!AddBookToLibrary(book, id))
+            {
+                return View(model);
+            }
+
+            return RedirectToAction("Index", new { id = id });
+        }
+
         [Authorize]
         public ActionResult GetBooks(string id)
         {
@@ -109,13 +135,13 @@ namespace HomeLibraryApp.Controllers
             }
 
             List<Book> books = new List<Book>();
-            int pagesNr=1;
+            int pagesNr = 1;
             int pageSize = 10;
             switch (searchType)
             {
-                case "All": books= db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList();break;
-                case "Title": books = db.Books.Where(book => book.Title.Contains(query)).ToList();break;
-                case "Author": books = db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname).Contains(query)).ToList();break;
+                case "All": books = db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList(); break;
+                case "Title": books = db.Books.Where(book => book.Title.Contains(query)).ToList(); break;
+                case "Author": books = db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname).Contains(query)).ToList(); break;
                 case "Publisher": books = db.Books.Where(book => book.Publisher.Contains(query)).ToList(); break;
 
             }
@@ -155,32 +181,7 @@ namespace HomeLibraryApp.Controllers
             return true;
         }
 
-        [HttpPost]
-        [Authorize]
-        public ActionResult AddNewBook(LibraryAdd model, string id)
-        {/*
-            if (!ModelState.IsValid)
-            {
-                return false;
-            }*/
-
-            AddBookToLibrary(model.NewBookModel, id);
-            return RedirectToAction("Index", new { id = id });
-        }
-
-        [HttpPost]
-        [Authorize]
-        public ActionResult AddGoodreadsBook(LibraryAdd model, string lel,string id)
-        {/*
-            if (!ModelState.IsValid)
-            {
-                return false;
-            }*/
-            AddBookToLibrary(model.GoodreadsBookModel, id);
-            return RedirectToAction("Index", new { id = id });
-        }
-
-        private void AddBookToLibrary(Book book, string id)
+        private bool AddBookToLibrary(Book book, string id)
         {
             Library library;
             if (id == null)  //your home library
@@ -192,9 +193,26 @@ namespace HomeLibraryApp.Controllers
             {
                 library = db.Libraries.First(x => x.Id.ToString() == id.ToString());
             }
-            db.Books.Add(book);
-            db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
-            db.SaveChanges();
+
+            Book sameBook = db.Books.FirstOrDefault(bk => bk.Title == book.Title && bk.AuthorFirstname == book.AuthorFirstname && bk.AuthorLastname == book.AuthorLastname && bk.PublicationDate == book.PublicationDate && bk.Publisher == book.Publisher);
+            if (sameBook == null)
+            {
+                db.Books.Add(book);
+                db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                if (db.LibraryBooks.Any(lb => lb.LibraryId == library.Id && lb.BookId == sameBook.Id))
+                {
+                    return false;
+                }
+                db.LibraryBooks.Add(new LibraryBook { Book = sameBook, Library = library });
+                db.SaveChanges();
+                return true;
+            }
+
         }
 
         [HttpPost]

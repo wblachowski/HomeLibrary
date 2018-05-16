@@ -41,7 +41,7 @@ function searchBookAddClick(id) {
 function scanGoodreads() {
     $("#goodreads-error").hide();
     link = $("#goodreads-input").val();
-    if (link.trim() == "") {
+    if (link.trim() === "") {
         $('#goodreads .preloader-wrapper').hide();
         $("#goodreads-result").hide();
         return;
@@ -59,14 +59,14 @@ function scanGoodreads() {
             publisher = publicationData.substring(publicationData.lastIndexOf("by ") + 3, publicationData.length);
             publicationDate = publicationData.substring(publicationData.lastIndexOf("Published") + 10, publicationData.lastIndexOf("by ")).trim();
             publicationDate = publicationDate.split(" ");
-            if (publicationDate.length == 1) {
+            if (publicationDate.length === 1) {
                 month = "Jan"
                 day = "01"
                 year = publicationDate[0]
             } else {
                 month = publicationDate[0].substring(0, 3);
                 day = publicationDate[1].replace(/[^0-9]/g, '');
-                if (day.length == 1) day = '0' + day;
+                if (day.length === 1) day = '0' + day;
                 year = publicationDate[2];
             }
 
