@@ -1,5 +1,9 @@
 ﻿@model HomeLibraryApp.Models.LibraryAdd
 <h4>Add a book</h4>
+@if (ViewBag.ErrorMsg != null)
+{
+    <h6>@ViewBag.ErrorMsg</h6>
+}
 <input type="hidden" id="library-id" value="@Url.RequestContext.RouteData.Values["id"]" />
 <div class="row">
     <div class="col s12">

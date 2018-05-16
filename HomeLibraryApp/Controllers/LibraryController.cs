@@ -100,11 +100,13 @@ namespace HomeLibraryApp.Controllers
             }
             if (!TryValidateModel(book))
             {
+                ViewBag.ErrorMsg = "You have to fill in all fields";
                 return View(model);
             }
 
             if(!AddBookToLibrary(book, id))
             {
+                ViewBag.ErrorMsg = "The book you are trying to add is already in this library";
                 return View(model);
             }
 
