@@ -88,9 +88,12 @@
         </div>
     </div>
     <div id="goodreads" class="col s12">
+@using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"], type = "goodreads" }))
+{
         <div class="input-field">
-            <input id="goodreads-input" name="Goodreads" type="text" oninput="scanGoodreads()" />
-            <label for="Goodreads">Goodreads book link</label>
+            @Html.TextBoxFor(m => m.GoodreadsUrl, new { id = "goodreads-input", oninput = "scanGoodreads()" })
+            @Html.LabelFor(m => m.GoodreadsUrl)
+
         </div>
         <div class="preloader-wrapper big active">
                 <div class="spinner-layer spinner-blue-only">
@@ -105,11 +108,10 @@
             </div>
         <div id="goodreads-error">An error occured while retrieving the book info. Check if you provided a valid Goodreads link.</div>
         <div id="goodreads-result">
-@using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"],type="goodreads" }))
-{
+
             <div class="row">
                 <div class="input-field col s12">
-                    @Html.TextBoxFor(m => m.GoodreadsBookModel.Title, new {@readonly = "readonly"})
+                    @Html.TextBoxFor(m => m.GoodreadsBookModel.Title, new { @readonly = "readonly" })
                     @Html.LabelFor(m => m.GoodreadsBookModel.Title)
 
                 </div>
@@ -135,7 +137,7 @@
                 </div>
             </div>
             <input type="submit" value="Add" class="btn btn-default btn-right" />
-}
         </div>
+}
     </div>
 </div>
