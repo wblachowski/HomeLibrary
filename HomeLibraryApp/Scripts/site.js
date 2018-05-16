@@ -55,7 +55,7 @@ function scanGoodreads() {
             html = $.parseHTML(result);
             author = $(html).find("span[itemprop='name']").html().split(" ");
             title = $(html).find("#bookTitle").text().trim();
-            publicationData = $(html).find("div:contains('Published'):not(:has(div))").text();
+            publicationData = $(html).find("div:contains('Published'):not(:has(div))").clone().children().remove().end().text();
             publisher = publicationData.substring(publicationData.lastIndexOf("by ") + 3, publicationData.length);
             publicationDate = publicationData.substring(publicationData.lastIndexOf("Published") + 10, publicationData.lastIndexOf("by ")).trim();
             publicationDate = publicationDate.split(" ");
@@ -74,11 +74,18 @@ function scanGoodreads() {
             $('#goodreads .preloader-wrapper').hide();
             $("#goodreads-result").show();
 
-            $("#goodreadsTitle").val(title);
-            $("#goodreadsFirstname").val(author[0]);
-            $("#goodreadsLastname").val(author[1]);
-            $("#goodreadsPublisher").val(publisher);
-            $("#goodreadsDate").val(month + " " + day + ", " + year);
+            $("#GoodreadsBookModel_Title").attr('value', title);
+            $("#GoodreadsBookModel_AuthorFirstname").attr('value', author[0]);
+            $("#GoodreadsBookModel_AuthorLastname").attr('value', author[1]);
+            $("#GoodreadsBookModel_Publisher").attr('value', publisher);
+            $("#GoodreadsBookModel_PublicationDate").attr('value',month + " " + day + ", " + year);
+
+            $("#GoodreadsBookModel_Title").change();
+            $("#GoodreadsBookModel_AuthorFirstname").change();
+            $("#GoodreadsBookModel_AuthorLastname").change();
+            $("#GoodreadsBookModel_Publisher").change();
+            $("#GoodreadsBookModel_PublicationDate").change();
+
 
             M.updateTextFields();
         },

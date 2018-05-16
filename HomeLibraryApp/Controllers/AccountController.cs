@@ -219,7 +219,15 @@ namespace HomeLibraryApp.Controllers
             //Create new library for this user
             if (result.Succeeded)
             {
-                db.Libraries.Add(new Library { Name = "My home library", UserId = userId });
+                ApplicationUser user = db.Users.FirstOrDefault(usr => usr.Id == userId);
+                string libraryName = "My home library";
+                if (user != null)
+                {
+                    libraryName = user.UserName;
+                    libraryName += user.UserName.EndsWith("s") ? "'" : "'s";
+                    libraryName += " library";
+                }
+                db.Libraries.Add(new Library { Name = libraryName, UserId = userId });
                 db.SaveChanges();
             }
 

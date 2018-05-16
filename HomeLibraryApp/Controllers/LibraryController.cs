@@ -157,14 +157,31 @@ namespace HomeLibraryApp.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult AddNewBook(Book model, string id)
+        public ActionResult AddNewBook(LibraryAdd model, string id)
         {/*
             if (!ModelState.IsValid)
             {
                 return false;
             }*/
 
-            //var libraryId = Url.RequestContext.RouteData.Values["id"];
+            AddBookToLibrary(model.NewBookModel, id);
+            return RedirectToAction("Index", new { id = id });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult AddGoodreadsBook(LibraryAdd model, string lel,string id)
+        {/*
+            if (!ModelState.IsValid)
+            {
+                return false;
+            }*/
+            AddBookToLibrary(model.GoodreadsBookModel, id);
+            return RedirectToAction("Index", new { id = id });
+        }
+
+        private void AddBookToLibrary(Book book, string id)
+        {
             Library library;
             if (id == null)  //your home library
             {
@@ -175,11 +192,9 @@ namespace HomeLibraryApp.Controllers
             {
                 library = db.Libraries.First(x => x.Id.ToString() == id.ToString());
             }
-            Book book = model;
             db.Books.Add(book);
             db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
             db.SaveChanges();
-            return RedirectToAction("Index", new { id = id });
         }
 
         [HttpPost]

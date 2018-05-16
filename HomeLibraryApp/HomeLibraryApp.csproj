@@ -231,6 +231,7 @@
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Library.cs" />
+    <Compile Include="Models\LibraryAdd.cs" />
     <Compile Include="Models\LibraryBook.cs" />
     <Compile Include="Models\LibraryMain.cs" />
     <Compile Include="Models\LibraryUser.cs" />

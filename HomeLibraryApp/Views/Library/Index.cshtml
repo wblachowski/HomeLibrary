@@ -35,6 +35,8 @@
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
     @Html.ActionLink("Add a book", "Add", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "waved-effect waves-light btn" })
     @Html.Partial("_BooksPartial", Model.BooksModel)
+    @if (Model.BooksModel.Count() > 0)
+    {
     <ul class="pagination">
         @{
             int currentPage;
@@ -69,15 +71,15 @@
             if (currentPage == ViewBag.PagesNr)
             {
                 <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-                    }
-                    else
-                    {
-                        string url = Request.Url.LocalPath + "?page=" + (currentPage + 1);
+            }
+            else
+            {
+                string url = Request.Url.LocalPath + "?page=" + (currentPage + 1);
                 <li class="waves-effect"><a href="@url"><i class="material-icons">chevron_right</i></a></li>
             }
         }
     </ul>
-
+            }
 </div>
 
 <!-- New member modal -->
