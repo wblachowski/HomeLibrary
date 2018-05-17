@@ -1,18 +1,18 @@
-﻿@model IEnumerable<HomeLibraryApp.Models.Library>
+﻿@model HomeLibraryApp.Models.LibrarySearch
 @{
     ViewBag.Title = "Search";
 }
 
 <h4>Search for a book</h4>
-<div class="row">
+<div class="row nobmargin">
     <div class="input-field col xl8 l8 m6 s12">
-        <input id="search-book-input" name="Search" type="text" oninput="searchForBooks()" />
-        <label for="Search">Search</label>
+        @Html.TextBoxFor(m => m.q, new { id = "search-book-input", oninput = "searchForBooks()" })
+        @Html.LabelFor(m => m.q)
     </div>
     <div class="input-field col xl4 l4 m6 s12">
         <select>
             <option value="" selected>All libraries</option>
-            @foreach(HomeLibraryApp.Models.Library library in Model) { 
+            @foreach(HomeLibraryApp.Models.Library library in Model.UserLibraries) { 
         <option value="@library.Id">@library.Name</option>
             }
         </select>
@@ -38,5 +38,19 @@
             <span>Publisher</span>
         </label>
     </form>
+</div>
+<div id="search-book-container">
+    <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+    <div id="search-book-results"></div>
 </div>
 

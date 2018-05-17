@@ -86,7 +86,7 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult Search(string q)
+        public ActionResult Search(LibrarySearch model)
         {
             List<Library> libraries = new List<Library>();
             var userID = User.Identity.GetUserId();
@@ -94,8 +94,10 @@ namespace HomeLibraryApp.Controllers
             libraries.Add(library);
             List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
             foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
+            model.UserLibraries = libraries;
 
-            return View(libraries);
+
+            return View(model);
         }
 
         [HttpPost]

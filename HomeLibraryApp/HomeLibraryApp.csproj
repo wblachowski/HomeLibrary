@@ -234,6 +234,7 @@
     <Compile Include="Models\LibraryAdd.cs" />
     <Compile Include="Models\LibraryBook.cs" />
     <Compile Include="Models\LibraryMain.cs" />
+    <Compile Include="Models\LibrarySearch.cs" />
     <Compile Include="Models\LibraryUser.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

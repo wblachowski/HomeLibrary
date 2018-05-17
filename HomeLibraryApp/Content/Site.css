@@ -167,3 +167,7 @@ textarea {
 #goodreads-error{
     display:none;
 }
+
+.nobmargin{
+    margin-bottom:0;
+}
