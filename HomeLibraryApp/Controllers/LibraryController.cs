@@ -85,6 +85,12 @@ namespace HomeLibraryApp.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult Search(string q)
+        {
+            return View();
+        }
+
         [HttpPost]
         [Authorize]
         public ActionResult Add(LibraryAdd model, string id, string type, string bookId)

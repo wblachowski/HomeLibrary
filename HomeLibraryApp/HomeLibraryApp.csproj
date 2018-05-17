@@ -359,6 +359,7 @@
     <Content Include="Views\Library\_BooksPartial.cshtml" />
     <Content Include="Views\Library\Add.cshtml" />
     <Content Include="Views\Library\_BooksSearchPartial.cshtml" />
+    <Content Include="Views\Library\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

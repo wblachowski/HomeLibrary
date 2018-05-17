@@ -15,16 +15,19 @@
 
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li id="topbarsearch-li">
+@using (Html.BeginForm("Search", "Library",FormMethod.Get))
+{
                 <div class="center row">
                     <div class="col s12 ">
                         <div class="row" id="topbarsearch">
                             <div class="input-field col s6 s12">
                                 <i id="topbarsearch-icon" class=" material-icons prefix">search</i>
-                                <input type="text" placeholder="search" id="topbarsearch-input">
+                                <input name="q" type="text" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }" placeholder="search" id="topbarsearch-input">
                             </div>
                         </div>
                     </div>
                 </div>
+}
             </li> 
             <li>@Html.ActionLink("Home", "Index", "Home")</li>
             <li>@Html.ActionLink("Libraries", "Index", "Library")</li>
