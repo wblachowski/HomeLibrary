@@ -43,12 +43,8 @@ namespace HomeLibraryApp.Controllers
         {
             LibraryMain model = new LibraryMain();
 
-            List<Library> libraries = new List<Library>();
-            var userID = User.Identity.GetUserId();
-            Library library = db.Libraries.First(x => x.UserId == userID);
-            libraries.Add(library);
-            List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
-            foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
+            List<Library> libraries = GetUserLibraries().ToList();
+            Library library = libraries.FirstOrDefault();
 
             if (String.IsNullOrEmpty(id))
             {//your home library
@@ -80,23 +76,16 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult Add()
+        public ActionResult Add(LibraryAdd model)
         {
-            return View();
+            model.UserLibraries = GetUserLibraries();
+            return View(model);
         }
 
         [Authorize]
         public ActionResult Search(LibrarySearch model)
         {
-            List<Library> libraries = new List<Library>();
-            var userID = User.Identity.GetUserId();
-            Library library = db.Libraries.First(x => x.UserId == userID);
-            libraries.Add(library);
-            List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
-            foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
-            model.UserLibraries = libraries;
-
-
+            model.UserLibraries = GetUserLibraries();
             return View(model);
         }
 
@@ -107,9 +96,9 @@ namespace HomeLibraryApp.Controllers
             Book book = null;
             switch (type)
             {
-                case "new": book = model.NewBookModel;break;
-                case "goodreads": book = model.GoodreadsBookModel;break;
-                case "existing": book = db.Books.FirstOrDefault(bk => bk.Id.ToString() == bookId);break;
+                case "new": book = model.NewBookModel; break;
+                case "goodreads": book = model.GoodreadsBookModel; break;
+                case "existing": book = db.Books.FirstOrDefault(bk => bk.Id.ToString() == bookId); break;
             }
 
             if (!TryValidateModel(book))
@@ -118,7 +107,7 @@ namespace HomeLibraryApp.Controllers
                 return View(model);
             }
 
-            if(!AddBookToLibrary(book, id))
+            if (!AddBookToLibrary(book, id))
             {
                 ViewBag.ErrorMsg = "The book you are trying to add is already in this library";
                 return View(model);
@@ -143,7 +132,7 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult GetSearchedBooks(string searchType, string query, int page, string libraryId)
+        public ActionResult GetSearchedBooks(string searchType, string query, int page, string libraryId, string selectLibrary)
         {
             if (String.IsNullOrEmpty(query))
             {
@@ -151,14 +140,28 @@ namespace HomeLibraryApp.Controllers
             }
 
             List<Book> books = new List<Book>();
+            Library library = db.Libraries.FirstOrDefault(lb => lb.Id.ToString() == selectLibrary);
+            IEnumerable<Book> booksToScan = null;
+            if (library == null)
+            {
+                booksToScan = db.Books;
+            }
+            else
+            {
+                List<LibraryBook> libraryBooks = db.LibraryBooks.Where(lb => lb.LibraryId == library.Id).ToList();
+                List<Book> bks = new List<Book>();
+                foreach (LibraryBook libraryBook in libraryBooks) bks.Add(db.Books.FirstOrDefault(bk=>bk.Id==libraryBook.BookId));
+                booksToScan = bks;
+            }
+
             int pagesNr = 1;
             int pageSize = 10;
             switch (searchType)
             {
-                case "All": books = db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList(); break;
-                case "Title": books = db.Books.Where(book => book.Title.Contains(query)).ToList(); break;
-                case "Author": books = db.Books.Where(book => (book.AuthorFirstname + book.AuthorLastname).Contains(query)).ToList(); break;
-                case "Publisher": books = db.Books.Where(book => book.Publisher.Contains(query)).ToList(); break;
+                case "All": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList(); break;
+                case "Title": books = booksToScan.Where(book => book.Title.Contains(query)).ToList(); break;
+                case "Author": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname).Contains(query)).ToList(); break;
+                case "Publisher": books = booksToScan.Where(book => book.Publisher.Contains(query)).ToList(); break;
 
             }
 
@@ -197,6 +200,30 @@ namespace HomeLibraryApp.Controllers
             return true;
         }
 
+
+        // GET: /Library/ConfirmInvitation
+        [Authorize]
+        public async Task<ActionResult> ConfirmInvitation(string userId, string code)
+        {
+            var tokenCorrect = await UserManager.VerifyUserTokenAsync(userId, "ConfirmInvitation", code);
+            if (tokenCorrect)
+            {
+                Library library = db.Libraries.First(x => x.UserId == userId);
+                string callingUserId = User.Identity.GetUserId();
+                if (User.Identity.GetUserId() != userId && db.LibraryUsers.FirstOrDefault(x => x.UserId == callingUserId && x.LibraryId == library.Id) == null)
+                {
+                    db.LibraryUsers.Add(new LibraryUser { UserId = callingUserId, LibraryId = library.Id });
+                    await db.SaveChangesAsync();
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+        }
+
+
         private bool AddBookToLibrary(Book book, string id)
         {
             Library library;
@@ -231,26 +258,15 @@ namespace HomeLibraryApp.Controllers
 
         }
 
-        // GET: /Library/ConfirmInvitation
-        [Authorize]
-        public async Task<ActionResult> ConfirmInvitation(string userId, string code)
+        private IEnumerable<Library> GetUserLibraries()
         {
-            var tokenCorrect = await UserManager.VerifyUserTokenAsync(userId, "ConfirmInvitation", code);
-            if (tokenCorrect)
-            {
-                Library library = db.Libraries.First(x => x.UserId == userId);
-                string callingUserId = User.Identity.GetUserId();
-                if (User.Identity.GetUserId() != userId && db.LibraryUsers.FirstOrDefault(x => x.UserId == callingUserId && x.LibraryId == library.Id) == null)
-                {
-                    db.LibraryUsers.Add(new LibraryUser { UserId = callingUserId, LibraryId = library.Id });
-                    await db.SaveChangesAsync();
-                }
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            List<Library> libraries = new List<Library>();
+            var userID = User.Identity.GetUserId();
+            Library library = db.Libraries.First(x => x.UserId == userID);
+            libraries.Add(library);
+            List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
+            foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
+            return libraries;
         }
     }
 }

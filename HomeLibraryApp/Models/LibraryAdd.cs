@@ -13,5 +13,7 @@ namespace HomeLibraryApp.Models
 
         [Display(Name = "Goodreads book link")]
         public string GoodreadsUrl { get; set; }
+
+        public IEnumerable<Library> UserLibraries { get; set; }
     }
 }

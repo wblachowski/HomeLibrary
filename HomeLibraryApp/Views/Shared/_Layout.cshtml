@@ -49,17 +49,21 @@
             searchQuery = $('#search-book-input').val();
 
             libraryId = $('#library-id').val();
+            $('select').formSelect();
+            selectLibrary = $("#select-library").formSelect('getSelectedValues')[0];
             data = {};
             if (libraryId == "") {
                 data = {
                     searchType: searchType,
                     query: searchQuery,
+                    selectLibrary: selectLibrary,
                     page: page
                 }
             } else {
                 data = {
                     searchType: searchType,
                     query: searchQuery,
+                    selectLibrary: selectLibrary,
                     page: page,
                     libraryId: libraryId
                 }

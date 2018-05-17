@@ -1,7 +1,7 @@
 ﻿@model HomeLibraryApp.Models.LibraryAdd
 <h4>Add a book</h4>
-@{ 
-   string type = Request.Params["type"]!=null? Request.Params["type"].ToString() : "";
+@{
+    string type = Request.Params["type"] != null ? Request.Params["type"].ToString() : "";
 }
 @if (ViewBag.ErrorMsg != null)
 {
@@ -18,7 +18,7 @@
         </ul>
     </div>
     <div id="new" class="col s12">
-        @using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"],type="new" }))
+        @using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"], type = "new" }))
         {
             <div class="row">
                 <div class="input-field col s12">
@@ -50,9 +50,21 @@
         }
     </div>
     <div id="existing" class="col s12">
-        <div class="input-field">
-            <input id="search-book-input" name="Search" type="text" oninput="searchForBooks()" />
-            <label for="Search">Search</label>
+        <div class="row nobmargin">
+            <div class="input-field col xl8 l8 m6 s12">
+                <input id="search-book-input" name="Search" type="text" oninput="searchForBooks()" />
+                <label for="Search">Search</label>
+            </div>
+            <div class="input-field col xl4 l4 m6 s12">
+                <select id="select-library" onchange="searchForBooks()">
+                    <option value="" selected>All libraries</option>
+                    @foreach (HomeLibraryApp.Models.Library library in Model.UserLibraries)
+                    {
+                        <option value="@library.Id">@library.Name</option>
+                    }
+                </select>
+                <label>Library</label>
+            </div>
         </div>
         <form id="form-search-book" action="#">
             <label for="searchAll">
@@ -88,14 +100,14 @@
         </div>
     </div>
     <div id="goodreads" class="col s12">
-@using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"], type = "goodreads" }))
-{
-        <div class="input-field">
-            @Html.TextBoxFor(m => m.GoodreadsUrl, new { id = "goodreads-input", oninput = "scanGoodreads()" })
-            @Html.LabelFor(m => m.GoodreadsUrl)
+        @using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"], type = "goodreads" }))
+        {
+            <div class="input-field">
+                @Html.TextBoxFor(m => m.GoodreadsUrl, new { id = "goodreads-input", oninput = "scanGoodreads()" })
+                @Html.LabelFor(m => m.GoodreadsUrl)
 
-        </div>
-        <div class="preloader-wrapper big active">
+            </div>
+            <div class="preloader-wrapper big active">
                 <div class="spinner-layer spinner-blue-only">
                     <div class="circle-clipper left">
                         <div class="circle"></div>
@@ -106,38 +118,38 @@
                     </div>
                 </div>
             </div>
-        <div id="goodreads-error">An error occured while retrieving the book info. Check if you provided a valid Goodreads link.</div>
-        <div id="goodreads-result">
+            <div id="goodreads-error">An error occured while retrieving the book info. Check if you provided a valid Goodreads link.</div>
+            <div id="goodreads-result">
 
-            <div class="row">
-                <div class="input-field col s12">
-                    @Html.TextBoxFor(m => m.GoodreadsBookModel.Title, new { @readonly = "readonly" })
-                    @Html.LabelFor(m => m.GoodreadsBookModel.Title)
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(m => m.GoodreadsBookModel.Title, new { @readonly = "readonly" })
+                        @Html.LabelFor(m => m.GoodreadsBookModel.Title)
 
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        @Html.TextBoxFor(m => m.GoodreadsBookModel.AuthorFirstname, new { @readonly = "readonly" })
+                        @Html.LabelFor(m => m.GoodreadsBookModel.AuthorFirstname)
+                    </div>
+                    <div class="input-field col s6">
+                        @Html.TextBoxFor(m => m.GoodreadsBookModel.AuthorLastname, new { @readonly = "readonly" })
+                        @Html.LabelFor(m => m.GoodreadsBookModel.AuthorLastname)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        @Html.TextBoxFor(m => m.GoodreadsBookModel.PublicationDate, "{0: MMM dd, yyyy}", new { @readonly = "readonly" })
+                        @Html.LabelFor(m => m.GoodreadsBookModel.PublicationDate)
+                    </div>
+                    <div class="input-field col s6">
+                        @Html.TextBoxFor(m => m.GoodreadsBookModel.Publisher, new { @readonly = "readonly" })
+                        @Html.LabelFor(m => m.GoodreadsBookModel.Publisher)
+                    </div>
+                </div>
+                <input type="submit" value="Add" class="btn btn-default btn-right" />
             </div>
-            <div class="row">
-                <div class="input-field col s6">
-                    @Html.TextBoxFor(m => m.GoodreadsBookModel.AuthorFirstname, new { @readonly = "readonly" })
-                    @Html.LabelFor(m => m.GoodreadsBookModel.AuthorFirstname)
-                </div>
-                <div class="input-field col s6">
-                    @Html.TextBoxFor(m => m.GoodreadsBookModel.AuthorLastname, new { @readonly = "readonly" })
-                    @Html.LabelFor(m => m.GoodreadsBookModel.AuthorLastname)
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s6">
-                    @Html.TextBoxFor(m => m.GoodreadsBookModel.PublicationDate, "{0: MMM dd, yyyy}", new { @readonly = "readonly" })
-                    @Html.LabelFor(m => m.GoodreadsBookModel.PublicationDate)
-                </div>
-                <div class="input-field col s6">
-                    @Html.TextBoxFor(m => m.GoodreadsBookModel.Publisher, new { @readonly = "readonly" })
-                    @Html.LabelFor(m => m.GoodreadsBookModel.Publisher)
-                </div>
-            </div>
-            <input type="submit" value="Add" class="btn btn-default btn-right" />
-        </div>
-}
+        }
     </div>
 </div>

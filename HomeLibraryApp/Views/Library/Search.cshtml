@@ -10,7 +10,7 @@
         @Html.LabelFor(m => m.q)
     </div>
     <div class="input-field col xl4 l4 m6 s12">
-        <select>
+        <select id="select-library" onchange="searchForBooks()">
             <option value="" selected>All libraries</option>
             @foreach(HomeLibraryApp.Models.Library library in Model.UserLibraries) { 
         <option value="@library.Id">@library.Name</option>
