@@ -87,17 +87,16 @@ namespace HomeLibraryApp.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Add(LibraryAdd model, string id, string type)
+        public ActionResult Add(LibraryAdd model, string id, string type, string bookId)
         {
             Book book = null;
-            if (type == "new")
+            switch (type)
             {
-                book = model.NewBookModel;
+                case "new": book = model.NewBookModel;break;
+                case "goodreads": book = model.GoodreadsBookModel;break;
+                case "existing": book = db.Books.FirstOrDefault(bk => bk.Id.ToString() == bookId);break;
             }
-            else if (type == "goodreads")
-            {
-                book = model.GoodreadsBookModel;
-            }
+
             if (!TryValidateModel(book))
             {
                 ViewBag.ErrorMsg = "You have to fill in all fields";
@@ -215,26 +214,6 @@ namespace HomeLibraryApp.Controllers
                 return true;
             }
 
-        }
-
-        [HttpPost]
-        [Authorize]
-        public ActionResult AddExistingBook(string id, string bookId)
-        {
-            Library library;
-            if (id == null)  //your home library
-            {
-                var userId = User.Identity.GetUserId();
-                library = db.Libraries.First(x => x.UserId == userId);
-            }
-            else
-            {
-                library = db.Libraries.First(x => x.Id.ToString() == id.ToString());
-            }
-            Book book = db.Books.First(x => x.Id.ToString() == bookId);
-            db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
-            db.SaveChanges();
-            return RedirectToAction("Index", new { id = id });
         }
 
         // GET: /Library/ConfirmInvitation

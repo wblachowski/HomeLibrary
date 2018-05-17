@@ -6,7 +6,7 @@
     $('.datepicker').datepicker({
         firstDay: 1
     });
-    if ($("#goodreads-input") != null && $("#goodreads-input").val() != "") {
+    if ($("#goodreads-input") !== null && $("#goodreads-input").val() !== "") {
         $("#goodreads-result").show();
     }
 });
