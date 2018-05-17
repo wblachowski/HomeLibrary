@@ -1,7 +1,42 @@
-﻿
+﻿@model IEnumerable<HomeLibraryApp.Models.Library>
 @{
     ViewBag.Title = "Search";
 }
 
-<h2>Search</h2>
+<h4>Search for a book</h4>
+<div class="row">
+    <div class="input-field col xl8 l8 m6 s12">
+        <input id="search-book-input" name="Search" type="text" oninput="searchForBooks()" />
+        <label for="Search">Search</label>
+    </div>
+    <div class="input-field col xl4 l4 m6 s12">
+        <select>
+            <option value="" selected>All libraries</option>
+            @foreach(HomeLibraryApp.Models.Library library in Model) { 
+        <option value="@library.Id">@library.Name</option>
+            }
+        </select>
+        <label>Library</label>
+    </div>
+</div>
+<div>
+    <form id="form-search-book" action="#">
+        <label for="searchAll">
+            <input onclick="searchForBooks()" id="searchAll" name="searchGroup" type="radio" checked />
+            <span>All</span>
+        </label>
+        <label for="searchTitle">
+            <input onclick="searchForBooks()" id="searchTitle" name="searchGroup" type="radio" />
+            <span>Title</span>
+        </label>
+        <label for="searchAuthor">
+            <input onclick="searchForBooks()" id="searchAuthor" name="searchGroup" type="radio" />
+            <span>Author</span>
+        </label>
+        <label for="searchPublisher">
+            <input onclick="searchForBooks()" id="searchPublisher" name="searchGroup" type="radio" />
+            <span>Publisher</span>
+        </label>
+    </form>
+</div>
 

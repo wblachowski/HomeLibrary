@@ -88,7 +88,14 @@ namespace HomeLibraryApp.Controllers
         [Authorize]
         public ActionResult Search(string q)
         {
-            return View();
+            List<Library> libraries = new List<Library>();
+            var userID = User.Identity.GetUserId();
+            Library library = db.Libraries.First(x => x.UserId == userID);
+            libraries.Add(library);
+            List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
+            foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
+
+            return View(libraries);
         }
 
         [HttpPost]
