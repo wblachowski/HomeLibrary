@@ -104,12 +104,14 @@ namespace HomeLibraryApp.Controllers
             if (!TryValidateModel(book))
             {
                 ViewBag.ErrorMsg = "You have to fill in all fields";
+                model.UserLibraries = GetUserLibraries();
                 return View(model);
             }
 
             if (!AddBookToLibrary(book, id))
             {
                 ViewBag.ErrorMsg = "The book you are trying to add is already in this library";
+                model.UserLibraries = GetUserLibraries();
                 return View(model);
             }
 
@@ -156,12 +158,13 @@ namespace HomeLibraryApp.Controllers
 
             int pagesNr = 1;
             int pageSize = 10;
+            query = query.ToLower();
             switch (searchType)
             {
-                case "All": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).Contains(query)).ToList(); break;
-                case "Title": books = booksToScan.Where(book => book.Title.Contains(query)).ToList(); break;
-                case "Author": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname).Contains(query)).ToList(); break;
-                case "Publisher": books = booksToScan.Where(book => book.Publisher.Contains(query)).ToList(); break;
+                case "All": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).ToLower().Contains(query)).ToList(); break;
+                case "Title": books = booksToScan.Where(book => book.Title.ToLower().Contains(query)).ToList(); break;
+                case "Author": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname).ToLower().Contains(query)).ToList(); break;
+                case "Publisher": books = booksToScan.Where(book => book.Publisher.ToLower().Contains(query)).ToList(); break;
 
             }
 

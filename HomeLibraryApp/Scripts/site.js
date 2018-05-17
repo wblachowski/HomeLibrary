@@ -11,6 +11,9 @@
     if ($("#goodreads-input") !== null && $("#goodreads-input").val() !== "") {
         $("#goodreads-result").show();
     }
+    if ($("search-book-input").val() !== "") {
+        searchForBooks();
+    }
 });
 
 function onInvitationComplete(result) {
