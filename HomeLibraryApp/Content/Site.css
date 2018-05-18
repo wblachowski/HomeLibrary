@@ -138,6 +138,7 @@ textarea {
 
 .pagination{
     float:right;
+    width:unset !important;
 }
 
 #topbarsearch-li{

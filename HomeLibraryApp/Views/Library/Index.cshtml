@@ -8,7 +8,7 @@
         <li><div class="row"></div></li>
         <li><a class="subheader">Your library</a></li>
         @{ string linkclass = "";}
-        @if (Url.RequestContext.RouteData.Values["lib"] == null || Url.RequestContext.RouteData.Values["lib"].ToString() == Model.LibrariesModel.First().Id.ToString())
+        @if (Request.Params["lib"] == null || Request.Params["lib"].ToString() == Model.LibrariesModel.First().Id.ToString())
         {
             linkclass = "active";
         }
@@ -21,7 +21,7 @@
                 <li><a class="subheader">Other</a></li>
             }
             linkclass = "";
-            if (Url.RequestContext.RouteData.Values["lib"] != null && Url.RequestContext.RouteData.Values["lib"].ToString() == Model.LibrariesModel.ElementAt(i).Id.ToString())
+            if (Request.Params["lib"] != null && Request.Params["lib"].ToString() == Model.LibrariesModel.ElementAt(i).Id.ToString())
             {
                 linkclass = "active";
             }
