@@ -51,9 +51,15 @@ textarea {
 #library-content {
     margin-left: 150px;
 }
+#mobile-library-select{
+    display:none;
+}
 @media only screen and (max-width : 992px) {
     #library-content{
         margin-left:0px;
+    }
+    #mobile-library-select{
+        display:block;
     }
 }
 
@@ -170,4 +176,17 @@ textarea {
 
 .nobmargin{
     margin-bottom:0;
+}
+
+
+
+#sidenav-overlay {
+    z-index: 1;
+}
+ .navbar-fixed {
+    z-index: 999;
+}
+
+ .navbar-fixed {
+    z-index: 998;
 }

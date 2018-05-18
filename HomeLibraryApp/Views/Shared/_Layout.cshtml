@@ -14,9 +14,12 @@
         <nav>
             <div class="nav-wrapper">
                 @Html.ActionLink("HomeLibrary", "Index", "Home", new { area = "" }, new { @class = "brand-logo" })
+                <a href="#" data-target="sidenav-overlay" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 @{Html.RenderAction("LoginPartial", "Account"); }
             </div>
         </nav>
+            @{Html.RenderPartial("_SideNavPartial"); }
+
     </div>
     <main>
         <div class="container body-content">

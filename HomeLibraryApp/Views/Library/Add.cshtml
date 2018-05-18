@@ -8,7 +8,7 @@
     <h6>@ViewBag.ErrorMsg</h6>
 
 }
-<input type="hidden" id="library-id" value="@Url.RequestContext.RouteData.Values["id"]" />
+<input type="hidden" id="library-id" value="@Request.Params["lib"]" />
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
@@ -18,7 +18,7 @@
         </ul>
     </div>
     <div id="new" class="col s12">
-        @using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"], type = "new" }))
+        @using (Html.BeginForm("Add", "Library", new { lib = Request.Params["lib"], type = "new" }))
         {
             <div class="row">
                 <div class="input-field col s12">
@@ -100,7 +100,7 @@
         </div>
     </div>
     <div id="goodreads" class="col s12">
-        @using (Html.BeginForm("Add", "Library", new { id = Url.RequestContext.RouteData.Values["id"], type = "goodreads" }))
+        @using (Html.BeginForm("Add", "Library", new { lib = Request.Params["lib"], type = "goodreads" }))
         {
             <div class="input-field">
                 @Html.TextBoxFor(m => m.GoodreadsUrl, new { id = "goodreads-input", oninput = "scanGoodreads()" })

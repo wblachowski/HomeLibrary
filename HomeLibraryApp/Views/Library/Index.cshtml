@@ -8,7 +8,7 @@
         <li><div class="row"></div></li>
         <li><a class="subheader">Your library</a></li>
         @{ string linkclass = "";}
-        @if (Url.RequestContext.RouteData.Values["id"] == null || Url.RequestContext.RouteData.Values["id"].ToString() == Model.LibrariesModel.First().Id.ToString())
+        @if (Url.RequestContext.RouteData.Values["lib"] == null || Url.RequestContext.RouteData.Values["lib"].ToString() == Model.LibrariesModel.First().Id.ToString())
         {
             linkclass = "active";
         }
@@ -21,65 +21,89 @@
                 <li><a class="subheader">Other</a></li>
             }
             linkclass = "";
-            if (Url.RequestContext.RouteData.Values["id"] != null && Url.RequestContext.RouteData.Values["id"].ToString() == Model.LibrariesModel.ElementAt(i).Id.ToString())
+            if (Url.RequestContext.RouteData.Values["lib"] != null && Url.RequestContext.RouteData.Values["lib"].ToString() == Model.LibrariesModel.ElementAt(i).Id.ToString())
             {
                 linkclass = "active";
             }
-            <li class="@linkclass">@Html.ActionLink(Model.LibrariesModel.ElementAt(i).Name, "", new { id = Model.LibrariesModel.ElementAt(i).Id }, new { @class = "waves-effect" })</li>
+            <li class="@linkclass">@Html.ActionLink(Model.LibrariesModel.ElementAt(i).Name, "", new { lib = Model.LibrariesModel.ElementAt(i).Id }, new { @class = "waves-effect" })</li>
         }
     </ul>
 </div>
 
+<div id="mobile-library-select">
+    @{ string curr = Request.Params["lib"] == null ? " " : Request.Params["lib"].ToString();}
+    @using (Html.BeginForm("Index", "Library", FormMethod.Get))
+    {
+        <div class="input-field col s12">
+            <select name="lib" onchange="this.form.submit()">
+                <optgroup label="Your library">
+                    <option value="@Model.LibrariesModel.First().Id" @((curr == "" || curr == Model.LibrariesModel.First().Id.ToString()) ? "selected" : "")> @Model.LibrariesModel.First().Name</option>
+                </optgroup>
+                @if (Model.LibrariesModel.Count() > 1)
+                {
+                    <optgroup label="Other">
+                        @for (int i = 1; i < Model.LibrariesModel.Count(); i++)
+                        {
+                            <option value="@Model.LibrariesModel.ElementAt(i).Id" @(curr == Model.LibrariesModel.ElementAt(i).Id.ToString() ? "selected" : "")>@Model.LibrariesModel.ElementAt(i).Name</option>
 
+                        }
+                    </optgroup>
+                }
+
+            </select>
+            <label>Library select</label>
+        </div>
+    }
+</div>
 <div id="library-content" class="col xl9 l9 m6 s12">
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
-    @Html.ActionLink("Add a book", "Add", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "waved-effect waves-light btn" })
+    @Html.ActionLink("Add a book", "Add", new { lib = Request.Params["lib"] }, new { @class = "waved-effect waves-light btn" })
     @Html.Partial("_BooksPartial", Model.BooksModel)
     @if (Model.BooksModel.Count() > 0)
     {
-    <ul class="pagination">
-        @{
-            int currentPage;
-            if (Request.Params["page"] == null)
-            {
-                currentPage = 1;
-            }
-            else
-            {
-                currentPage = Convert.ToInt32(Request.Params["page"].ToString());
-            }
-            if (currentPage > 1)
-            {
-                string url = Request.Url.LocalPath + "?page=" + (currentPage - 1);
-                <li class="waves-effect"><a href="@url"><i class="material-icons">chevron_left</i></a></li>
-            }
-            else
-            {
-                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
-            }
-            for (int i = 1; i <= ViewBag.PagesNr; i++)
-            {
-                if (i == currentPage)
+        <ul class="pagination">
+            @{
+                int currentPage;
+                if (Request.Params["page"] == null)
                 {
-                    <li class="active">@Html.ActionLink(i.ToString(), null, new { page = i })</li>
+                    currentPage = 1;
                 }
                 else
                 {
-                    <li class="waves-effect">@Html.ActionLink(i.ToString(), null, new { page = i })</li>
+                    currentPage = Convert.ToInt32(Request.Params["page"].ToString());
+                }
+                if (currentPage > 1)
+                {
+                    string url = Request.Url.LocalPath + (Request.Params["lib"] != null ? "?lib=" + Request.Params["lib"] + "&" : "?") + "page=" + (currentPage - 1);
+                    <li class="waves-effect"><a href="@url"><i class="material-icons">chevron_left</i></a></li>
+                }
+                else
+                {
+                    <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+                }
+                for (int i = 1; i <= ViewBag.PagesNr; i++)
+                {
+                    if (i == currentPage)
+                    {
+                        <li class="active">@Html.ActionLink(i.ToString(), null, new { lib = Request.Params["lib"], page = i })</li>
+                    }
+                    else
+                    {
+                        <li class="waves-effect">@Html.ActionLink(i.ToString(), null, new { lib = Request.Params["lib"], page = i })</li>
+                    }
+                }
+                if (currentPage == ViewBag.PagesNr)
+                {
+                    <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+                }
+                else
+                {
+                    string url = Request.Url.LocalPath + (Request.Params["lib"] != null ? "?lib=" + Request.Params["lib"] + "&" : "?") + "page=" + (currentPage + 1);
+                    <li class="waves-effect"><a href="@url"><i class="material-icons">chevron_right</i></a></li>
                 }
             }
-            if (currentPage == ViewBag.PagesNr)
-            {
-                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-            }
-            else
-            {
-                string url = Request.Url.LocalPath + "?page=" + (currentPage + 1);
-                <li class="waves-effect"><a href="@url"><i class="material-icons">chevron_right</i></a></li>
-            }
-        }
-    </ul>
-            }
+        </ul>
+                }
 </div>
 
 <!-- New member modal -->
@@ -104,62 +128,4 @@
             <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Send invitation" />
         </div>
     }
-</div>
-
-<!-- New book modal-->
-<div id="modalBook" class="modal">
-    <div id="new-book-card" class="card">
-        <div class="card-content">
-            <h4>Add a new book</h4>
-        </div>
-        <div class="card-tabs">
-            <ul id="new-book-tabs" class="tabs tabs-fixed-width">
-                <li class="tab"><a class="active" href="#tabNew">New book</a></li>
-                <li class="tab"><a href="#tabExisting">Existing book</a></li>
-                <li class="tab"><a href="#tabGoogle">Google book</a></li>
-            </ul>
-        </div>
-        <div class="card-content">
-            <div id="tabNew">
-                @using (Ajax.BeginForm("AddNewBook", "Library", new { id = Url.RequestContext.RouteData.Values["id"] }, new AjaxOptions
-                {
-                    HttpMethod = "Post",
-                    UpdateTargetId = "books-partial"
-                }))
-                {
-                    <div class="row">
-                        <div class="input-field col s12">
-                            @Html.TextBoxFor(m => m.NewBookModel.Title)
-                            @Html.LabelFor(m => m.NewBookModel.Title)
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col l6 s12">
-                            @Html.TextBoxFor(m => m.NewBookModel.AuthorFirstname)
-                            @Html.LabelFor(m => m.NewBookModel.AuthorFirstname)
-                        </div>
-                        <div class="input-field col l6 s12">
-                            @Html.TextBoxFor(m => m.NewBookModel.AuthorLastname)
-                            @Html.LabelFor(m => m.NewBookModel.AuthorLastname)
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col l6 s12">
-                            @Html.TextBoxFor(m => m.NewBookModel.PublicationDate, "{0: MMM dd, yyyy}", new { @class = "datepicker" })
-                            @Html.LabelFor(m => m.NewBookModel.PublicationDate)
-                        </div>
-                        <div class="input-field col l6 s12">
-                            @Html.TextBoxFor(m => m.NewBookModel.Publisher)
-                            @Html.LabelFor(m => m.NewBookModel.Publisher)
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Add" />
-                    </div>
-                }
-            </div>
-            <div id="tabExisting">Test 2</div>
-            <div id="tabGoogle">Test 3</div>
-        </div>
-    </div>
 </div>

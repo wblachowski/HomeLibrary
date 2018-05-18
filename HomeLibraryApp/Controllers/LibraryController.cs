@@ -37,18 +37,19 @@ namespace HomeLibraryApp.Controllers
             }
         }
 
+
         // GET: Library
         [Authorize]
-        public ActionResult Index(string id, string page)
+        public ActionResult Index(string lib, string page)
         {
             LibraryMain model = new LibraryMain();
 
             List<Library> libraries = GetUserLibraries().ToList();
             Library library = libraries.FirstOrDefault();
 
-            if (String.IsNullOrEmpty(id))
+            if (String.IsNullOrEmpty(lib))
             {//your home library
-                id = library.Id.ToString();
+                lib = library.Id.ToString();
             }
             int pageInt;
             int pageSize = 10;
@@ -63,7 +64,7 @@ namespace HomeLibraryApp.Controllers
             }
 
             List<Book> books = new List<Book>();
-            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == id).ToList<LibraryBook>();
+            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == lib).ToList<LibraryBook>();
             foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
             pagesNr = (int)Math.Ceiling(Convert.ToDouble(books.Count()) / Convert.ToDouble(pageSize));
             books = books.OrderBy(book => book.Title).Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
@@ -91,7 +92,7 @@ namespace HomeLibraryApp.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Add(LibraryAdd model, string id, string type, string bookId)
+        public ActionResult Add(LibraryAdd model, string lib, string type, string bookId)
         {
             Book book = null;
             switch (type)
@@ -108,14 +109,14 @@ namespace HomeLibraryApp.Controllers
                 return View(model);
             }
 
-            if (!AddBookToLibrary(book, id))
+            if (!AddBookToLibrary(book, lib))
             {
                 ViewBag.ErrorMsg = "The book you are trying to add is already in this library";
                 model.UserLibraries = GetUserLibraries();
                 return View(model);
             }
 
-            return RedirectToAction("Index", new { id = id });
+            return RedirectToAction("Index", new { lib = lib });
         }
 
         [Authorize]
