@@ -1,0 +1,22 @@
+﻿@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+        Html.AntiForgeryToken();
+    }
+    <ul class="sidenav" id="sidenav-overlay">
+
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("Libraries", "Index", "Library")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+        <li>@Html.ActionLink("Search", "Search", "Library")</li>
+        <li>@Html.ActionLink("Your account", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+}
+else
+{
+    <ul class="sidenav" id="sidenav-overlay">
+        <li>@Html.ActionLink("Sign in", "Login", "Account")</li>
+    </ul>
+}

@@ -8,6 +8,10 @@
     });
     $('select').formSelect();
 
+    $(".clickable-row").click(function () {
+        window.location = $(this).data("href");
+    });
+
     if ($("#goodreads-input") !== null && $("#goodreads-input").val() !== "") {
         $("#goodreads-result").show();
     }
@@ -62,7 +66,7 @@ function scanGoodreads() {
         success: function (result) {
             html = $.parseHTML(result);
             author = $(html).find("span[itemprop='name']").html().split(" ");
-            title = $(html).find("#bookTitle").text().trim();
+            title = $(html).find("#bookTitle").clone().children().remove().end().text().trim();
             publicationData = $(html).find("div:contains('Published'):not(:has(div))").clone().children().remove().end().text();
             publisher = publicationData.substring(publicationData.lastIndexOf("by ") + 3, publicationData.length);
             publicationDate = publicationData.substring(publicationData.lastIndexOf("Published") + 10, publicationData.lastIndexOf("by ")).trim();

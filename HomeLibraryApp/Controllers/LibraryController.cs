@@ -84,6 +84,12 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
+        public ActionResult Book()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Search(LibrarySearch model)
         {
             model.UserLibraries = GetUserLibraries();
@@ -131,6 +137,8 @@ namespace HomeLibraryApp.Controllers
             List<Book> books = new List<Book>();
             List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == id).ToList<LibraryBook>();
             foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
+
+            ViewBag.libraryId = id;
             return PartialView("_BooksPartial", books);
         }
 

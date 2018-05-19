@@ -14,7 +14,7 @@
             <tbody>
                 @foreach (HomeLibraryApp.Models.Book book in Model)
                 {
-                    <tr>
+                    <tr class="clickable-row" data-href=@("/Library/Book?lib="+ViewBag.libraryId + "&bk="+book.Id.ToString())>
                         <td>@book.Title</td>
                         <td>@book.AuthorFirstname</td>
                         <td>@book.AuthorLastname</td>
