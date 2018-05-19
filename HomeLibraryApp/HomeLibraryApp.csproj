@@ -222,9 +222,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805191346575_init.cs" />
-    <Compile Include="Migrations\201805191346575_init.Designer.cs">
-      <DependentUpon>201805191346575_init.cs</DependentUpon>
+    <Compile Include="Migrations\201805191442380_init.cs" />
+    <Compile Include="Migrations\201805191442380_init.Designer.cs">
+      <DependentUpon>201805191442380_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -233,6 +233,7 @@
     <Compile Include="Models\Library.cs" />
     <Compile Include="Models\LibraryAdd.cs" />
     <Compile Include="Models\LibraryBook.cs" />
+    <Compile Include="Models\LibraryBookDetails.cs" />
     <Compile Include="Models\LibraryComment.cs" />
     <Compile Include="Models\LibraryMain.cs" />
     <Compile Include="Models\LibrarySearch.cs" />
@@ -382,8 +383,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805191346575_init.resx">
-      <DependentUpon>201805191346575_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805191442380_init.resx">
+      <DependentUpon>201805191442380_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

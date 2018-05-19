@@ -1,7 +1,12 @@
-﻿
+﻿@model HomeLibraryApp.Models.LibraryBookDetails
 @{
     ViewBag.Title = "Book";
 }
 
 <h2>Book</h2>
-
+<h6>@Model.Book.Title</h6>
+<h6>Comments:</h6>
+@foreach(HomeLibraryApp.Models.LibraryComment comment in Model.Comments)
+{
+    <div class="row">@comment.Comment</div>
+}

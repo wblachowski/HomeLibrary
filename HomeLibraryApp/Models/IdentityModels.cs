@@ -28,6 +28,7 @@ namespace HomeLibraryApp.Models
         public DbSet<Library> Libraries { get; set; }
         public DbSet<LibraryBook> LibraryBooks { get; set; }
         public DbSet<LibraryUser> LibraryUsers { get; set; }
+        public DbSet<LibraryComment> LibraryComments { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

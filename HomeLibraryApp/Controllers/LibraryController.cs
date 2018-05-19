@@ -84,9 +84,15 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult Book()
+        public ActionResult Book(LibraryBookDetails model, string lib, string bk)
         {
-            return View();
+            Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
+            LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
+            List<LibraryComment> comments = db.LibraryComments.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
+
+            model.Book = book;
+            model.Comments = comments;
+            return View(model);
         }
 
         [Authorize]
