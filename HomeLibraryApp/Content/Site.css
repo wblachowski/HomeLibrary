@@ -191,3 +191,7 @@ textarea {
  .navbar-fixed {
     z-index: 998;
 }
+
+.highlight tr {
+    cursor: pointer;
+}
