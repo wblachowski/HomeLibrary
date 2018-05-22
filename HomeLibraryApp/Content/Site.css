@@ -195,3 +195,7 @@ textarea {
 .highlight tr {
     cursor: pointer;
 }
+
+.comment b{
+    font-size:10pt;
+}

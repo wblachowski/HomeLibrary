@@ -5,8 +5,7 @@
 
 <h2>Book</h2>
 <h6>@Model.Book.Title</h6>
+<h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
+<h6>Published @Model.Book.PublicationDate by @Model.Book.Publisher</h6>
 <h6>Comments:</h6>
-@foreach(HomeLibraryApp.Models.LibraryComment comment in Model.Comments)
-{
-    <div class="row">@comment.Comment</div>
-}
+@Html.Partial("_CommentsPartial", Model.Comments)

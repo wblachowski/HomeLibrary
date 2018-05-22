@@ -1,0 +1,11 @@
+﻿@model IEnumerable<HomeLibraryApp.Models.LibraryComment>
+
+@foreach (HomeLibraryApp.Models.LibraryComment comment in Model)
+{
+    <div class="row comment">
+        <div ><b>@comment.User.UserName</b></div>
+        <div >@comment.Comment</div>
+    </div>
+
+}
+

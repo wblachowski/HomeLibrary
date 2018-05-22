@@ -90,6 +90,14 @@ namespace HomeLibraryApp.Controllers
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
             List<LibraryComment> comments = db.LibraryComments.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
 
+            List<LibraryComment> modelComments = new List<LibraryComment>();
+            var q = (from lc in comments join us in db.Users on lc.UserId equals us.Id
+                     select new {lc=lc.Comment,us});
+            foreach(var t in q)
+            {
+                modelComments.Add(new LibraryComment() { Comment = t.lc, User = t.us });
+            }
+
             model.Book = book;
             model.Comments = comments;
             return View(model);
