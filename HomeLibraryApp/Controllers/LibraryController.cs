@@ -88,8 +88,9 @@ namespace HomeLibraryApp.Controllers
         {
             Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
-            List<LibraryComment> comments = db.LibraryComments.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
 
+            //comments
+            List<LibraryComment> comments = db.LibraryComments.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
             List<LibraryComment> modelComments = new List<LibraryComment>();
             var q = (from lc in comments join us in db.Users on lc.UserId equals us.Id
                      select new {lc=lc.Comment,us});
@@ -98,8 +99,19 @@ namespace HomeLibraryApp.Controllers
                 modelComments.Add(new LibraryComment() { Comment = t.lc, User = t.us });
             }
 
+            //reading state
+            int readingState = 0;
+            string userId = User.Identity.GetUserId();
+            UserReading userReading= db.UserReadings.FirstOrDefault(x => x.UserId == userId && x.BookId.ToString() == bk);
+            if (userReading!=null)
+            {
+                if (userReading.StartDate != null && userReading.EndDate == null) readingState = 1;
+                else if (userReading.StartDate != null && userReading.EndDate != null) readingState = 2;
+            }
+
             model.Book = book;
             model.Comments = comments;
+            model.ReadingState = readingState;
             return View(model);
         }
 
@@ -258,6 +270,34 @@ namespace HomeLibraryApp.Controllers
             db.LibraryComments.Add(libraryComment);
             db.SaveChanges();
             return RedirectToAction("Book",new { lib = lib,bk = bk});
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AddReadingState(string state, string lib,string bk)
+        {
+            string userId = User.Identity.GetUserId();
+            UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userId && x.BookId.ToString() == bk);
+            if (userReading == null)
+            {
+                int bookId = Convert.ToInt32(bk);
+                userReading = new UserReading() { BookId = bookId, UserId = userId };
+                db.UserReadings.Add(userReading);
+            }
+            if (state == "0")
+            {
+                db.UserReadings.Remove(userReading);
+            }else if (state == "1")
+            {
+                userReading.StartDate = DateTime.Now;
+                userReading.EndDate = null;
+            }else if (state == "2")
+            {
+                userReading.StartDate = userReading.StartDate == null ? DateTime.Now : userReading.StartDate;
+                userReading.EndDate = DateTime.Now;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Book", new { lib = lib, bk = bk });
         }
 
 

@@ -13,5 +13,7 @@ namespace HomeLibraryApp.Models
 
         [Display(Name = "Comment")]
         public String YourComment { get; set; }
+
+        public int ReadingState { get; set; }
     }
 }
