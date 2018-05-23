@@ -9,3 +9,15 @@
 <h6>Published @Model.Book.PublicationDate by @Model.Book.Publisher</h6>
 <h6>Comments:</h6>
 @Html.Partial("_CommentsPartial", Model.Comments)
+<h6>Write a new comment:</h6>
+@using (Html.BeginForm("AddComment", "Library", new { lib = Request.Params["lib"],bk=Request.Params["bk"] }))
+{<div class="row">
+        <div class="row">
+            <div class="input-field col s12">
+                @Html.TextAreaFor(m => m.YourComment, new { @class = "materialize-textarea" })
+                @Html.LabelFor(m => m.YourComment)
+            </div>
+        </div>
+</div>
+    <input type="submit" class="btn btn-default" value="Add" />
+}

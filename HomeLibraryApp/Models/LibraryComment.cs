@@ -22,5 +22,6 @@ namespace HomeLibraryApp.Models
         public ApplicationUser User { get; set; }
 
         public string Comment { get; set; }
+        public DateTime Date { get; set; }
     }
 }

@@ -249,6 +249,17 @@ namespace HomeLibraryApp.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult AddComment(LibraryBookDetails model,string lib, string bk)
+        {
+            LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.LibraryId.ToString() == lib && x.BookId.ToString() == bk);
+            LibraryComment libraryComment = new LibraryComment() { LibraryBookId = libraryBook.Id, Comment = model.YourComment, Date = DateTime.Now, UserId = User.Identity.GetUserId() };
+            db.LibraryComments.Add(libraryComment);
+            db.SaveChanges();
+            return RedirectToAction("Book",new { lib = lib,bk = bk});
+        }
+
 
         private bool AddBookToLibrary(Book book, string id)
         {
