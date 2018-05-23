@@ -7,20 +7,24 @@
 <h6>@Model.Book.Title</h6>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @Model.Book.PublicationDate by @Model.Book.Publisher</h6>
-<h6>Reading state:@Model.ReadingState</h6>
+<h6>Reading state:</h6>
 @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
 {
-    if (Model.ReadingState == 0)
+    int state = 0;
+    if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate == null) {state = 1;}
+    if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate != null) { state = 2; }
+
+    if (state == 0)
     {
         <button name="state" value="1">Mark as being read</button>
         <button name="state" value="2">Mark as read</button>
     }
-    else if (Model.ReadingState == 1)
+    else if (state == 1)
     {
         <button name="state" value="0">Delete from being read</button>
         <button name="state" value="2">Mark as read</button>
     }
-    else if (Model.ReadingState == 2)
+    else if (state == 2)
     {
         <button name="state" value="0">Delete from read</button>
         <button name="state" value="1">Mark as being read</button>

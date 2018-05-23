@@ -196,6 +196,10 @@ textarea {
     cursor: pointer;
 }
 
+.comment{
+    word-wrap:break-word;
+}
+
 .comment b{
     font-size:10pt;
 }

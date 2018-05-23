@@ -99,19 +99,13 @@ namespace HomeLibraryApp.Controllers
                 modelComments.Add(new LibraryComment() { Comment = t.lc, User = t.us });
             }
 
-            //reading state
-            int readingState = 0;
-            string userId = User.Identity.GetUserId();
-            UserReading userReading= db.UserReadings.FirstOrDefault(x => x.UserId == userId && x.BookId.ToString() == bk);
-            if (userReading!=null)
-            {
-                if (userReading.StartDate != null && userReading.EndDate == null) readingState = 1;
-                else if (userReading.StartDate != null && userReading.EndDate != null) readingState = 2;
-            }
+            //userreading
+            var userID = User.Identity.GetUserId();
+            UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userID && x.BookId.ToString()==bk);
 
             model.Book = book;
             model.Comments = comments;
-            model.ReadingState = readingState;
+            model.UserReading = userReading;
             return View(model);
         }
 
