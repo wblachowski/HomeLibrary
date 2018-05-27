@@ -203,3 +203,8 @@ textarea {
 .comment b{
     font-size:10pt;
 }
+
+.comment-date{
+    font-size:9pt;
+    color:dimgrey;
+}
