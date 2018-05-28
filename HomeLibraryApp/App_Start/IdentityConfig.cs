@@ -15,6 +15,7 @@ using SendGrid;
 using System.Net;
 using System.Configuration;
 using System.Diagnostics;
+using HomeLibraryApp.App_Start;
 
 namespace HomeLibraryApp
 {
@@ -22,7 +23,21 @@ namespace HomeLibraryApp
     {
         public async Task SendAsync(IdentityMessage message)
         {
-            await configSendGridasync(message);
+            //await configSendGridasync(message);
+            configSendGmail(message);
+        }
+
+        private  void configSendGmail(IdentityMessage message)
+        {
+            GMailer.GmailUsername = ConfigurationManager.AppSettings["mailAccount"];
+            GMailer.GmailPassword = ConfigurationManager.AppSettings["mailPassword"];
+
+            GMailer mailer = new GMailer();
+            mailer.ToEmail = message.Destination;
+            mailer.Subject = message.Subject;
+            mailer.Body = message.Body;
+            mailer.IsHtml = true;
+            mailer.Send();
         }
 
         // Use NuGet to install SendGrid (Basic C# client lib) 

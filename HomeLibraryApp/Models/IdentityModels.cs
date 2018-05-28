@@ -30,6 +30,7 @@ namespace HomeLibraryApp.Models
         public DbSet<LibraryUser> LibraryUsers { get; set; }
         public DbSet<LibraryComment> LibraryComments { get; set; }
         public DbSet<UserReading> UserReadings { get; set; }
+        public DbSet<LibraryLending> LibraryLendings { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
