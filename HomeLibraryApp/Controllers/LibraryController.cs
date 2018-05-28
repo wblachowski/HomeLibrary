@@ -68,6 +68,16 @@ namespace HomeLibraryApp.Controllers
             List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == lib).ToList<LibraryBook>();
             foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
             pagesNr = (int)Math.Ceiling(Convert.ToDouble(books.Count()) / Convert.ToDouble(pageSize));
+
+            //borrowed books
+            string userId = User.Identity.GetUserId();
+            List<LibraryLending> libraryLendings = db.LibraryLendings.Where(ll => ll.UserId == userId).ToList();
+            foreach (LibraryLending ll in libraryLendings)
+            {
+                LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == ll.LibraryBookId);
+                books.AddRange(db.Books.Where(x => x.Id == lb.BookId));
+            }
+
             books = books.OrderBy(book => book.Title).Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
 
             model.LibrariesModel = libraries.AsEnumerable<Library>();
@@ -163,23 +173,6 @@ namespace HomeLibraryApp.Controllers
             }
 
             return RedirectToAction("Index", new { lib = lib });
-        }
-
-        [Authorize]
-        public ActionResult GetBooks(string id)
-        {
-            if (String.IsNullOrEmpty(id))
-            {//your home library
-                var userID = User.Identity.GetUserId();
-                Library library = db.Libraries.First(x => x.UserId == userID);
-                id = library.Id.ToString();
-            }
-            List<Book> books = new List<Book>();
-            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == id).ToList<LibraryBook>();
-            foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
-
-            ViewBag.libraryId = id;
-            return PartialView("_BooksPartial", books);
         }
 
         [Authorize]
