@@ -6,6 +6,12 @@
 <h2>@Model.Book.Title</h2>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
+@if (ViewBag.Lending == null) {
+<button class="btn waves-effect waves-light modal-trigger"  href="#modalLend">Lend to a user</button>
+}else if (ViewBag.Lending == "out")
+{
+    <h6>Lent to @ViewBag.LendingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+}
 <h6>Reading state:</h6>
 @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
 {
@@ -15,18 +21,18 @@
 
     if (state == 0)
     {
-        <button name="state" value="1">Mark as being read</button>
-        <button name="state" value="2">Mark as read</button>
+        <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
+        <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
     }
     else if (state == 1)
     {
-        <button name="state" value="0">Delete from being read</button>
-        <button name="state" value="2">Mark as read</button>
+        <button class="btn waves-effect waves-light" name="state" value="0">Delete from being read</button>
+        <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
     }
     else if (state == 2)
     {
-        <button name="state" value="0">Delete from read</button>
-        <button name="state" value="1">Mark as being read</button>
+        <button class="btn waves-effect waves-light" name="state" value="0">Delete from read</button>
+        <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
     }
 }
 <h6>Comments:</h6>
@@ -43,3 +49,23 @@
 </div>
     <input type="submit" class="btn btn-default" value="Add" />
 }
+
+<!-- Lend modal -->
+<div id="modalLend" class="modal">
+    @using (Html.BeginForm("LendBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+    {
+        <div class="modal-content">
+            <h4>Lend to a user</h4>
+            <p>Enter username or email address of the person you want to lend this book to</p>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="userOrEmail" type="text" name="userOrEmail">
+                    <label for="userOrEmail">Username or email</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+        </div>
+    }
+</div>

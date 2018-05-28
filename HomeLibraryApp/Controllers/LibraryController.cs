@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -103,9 +104,28 @@ namespace HomeLibraryApp.Controllers
             var userID = User.Identity.GetUserId();
             UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userID && x.BookId.ToString()==bk);
 
+            //libraryLending
+            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == libraryBook.Id);
+
+            
+            if (libraryLending != null)
+            {
+                ApplicationUser lendUser = db.Users.FirstOrDefault(usr => usr.Id == libraryLending.UserId);
+                ViewBag.LendingUser = lendUser;
+            }
+            if ( libraryLending!=null && libraryLending.UserId == User.Identity.GetUserId())
+            {
+                ViewBag.Lending = "in";
+            }
+            else
+            {
+                ViewBag.Lending = "out";
+            }
+            
             model.Book = book;
             model.Comments = comments;
             model.UserReading = userReading;
+            model.LibraryLending = libraryLending;
             return View(model);
         }
 
@@ -230,6 +250,22 @@ namespace HomeLibraryApp.Controllers
                 return false;
             }
             return true;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult LendBook(string userOrEmail, string lib, string bk)
+        {
+            LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
+            bool isEmail = new EmailAddressAttribute().IsValid(userOrEmail);
+
+            ApplicationUser user = isEmail ? UserManager.FindByEmail(userOrEmail) : UserManager.FindByName(userOrEmail);
+            if (user != null && user.Id!=User.Identity.GetUserId())
+            {
+                db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id, UserId = user.Id, StartDate = DateTime.Now });
+                db.SaveChanges();
+            }
+            return RedirectToAction("Book", new { lib = lib,bk=bk });
         }
 
 

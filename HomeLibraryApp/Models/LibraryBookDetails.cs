@@ -18,5 +18,9 @@ namespace HomeLibraryApp.Models
         public int UserReadingId { get; set; }
         [ForeignKey("UserReadingId")]
         public UserReading UserReading { get; set; }
+
+        public int LibraryLendingId { get; set; }
+        [ForeignKey("LibraryLendingId")]
+        public LibraryLending LibraryLending { get; set; }
     }
 }
