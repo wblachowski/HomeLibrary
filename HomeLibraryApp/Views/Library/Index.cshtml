@@ -58,9 +58,9 @@
 <div id="library-content" class="col xl9 l9 m6 s12">
     <a class="waves-effect waves-light btn modal-trigger" href="#modalMember">Add a member</a>
     @Html.ActionLink("Add a book", "Add", new { lib = Request.Params["lib"] }, new { @class = "waved-effect waves-light btn" })
-    @Html.Partial("_BooksPartial",Model.BooksModel)
+    @Html.Partial("_BooksPartial",Model.LibraryBooksWithStates)
 
-    @if (Model.BooksModel.Count() > 0)
+    @if (Model.LibraryBooksWithStates.BooksModel.Count() > 0)
     {
         <ul class="pagination">
             @{

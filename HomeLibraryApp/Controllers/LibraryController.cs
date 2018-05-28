@@ -64,9 +64,16 @@ namespace HomeLibraryApp.Controllers
                 pageInt = Int32.Parse(page);
             }
 
+            List<string> booksStates = new List<string>();
             List<Book> books = new List<Book>();
             List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == lib).ToList<LibraryBook>();
-            foreach (LibraryBook libraryBook in libraryBooks) books.AddRange(db.Books.Where(x => x.Id == libraryBook.BookId));
+            foreach (LibraryBook libraryBook in libraryBooks)
+            {
+                Book book = db.Books.FirstOrDefault(x => x.Id == libraryBook.BookId);
+                if (book == null) continue;
+                books.Add(book);
+                booksStates.Add("your");
+            }
             pagesNr = (int)Math.Ceiling(Convert.ToDouble(books.Count()) / Convert.ToDouble(pageSize));
 
             //borrowed books
@@ -75,14 +82,18 @@ namespace HomeLibraryApp.Controllers
             foreach (LibraryLending ll in libraryLendings)
             {
                 LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == ll.LibraryBookId);
-                books.AddRange(db.Books.Where(x => x.Id == lb.BookId));
+                Book book = db.Books.FirstOrDefault(x => x.Id == lb.BookId);
+                if (book == null) continue;
+                books.Add(book);
+                booksStates.Add("out");
             }
 
-            books = books.OrderBy(book => book.Title).Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
+            books = books.Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
 
             model.LibrariesModel = libraries.AsEnumerable<Library>();
-            model.BooksModel = books.AsEnumerable<Book>();
-
+            model.LibraryBooksWithStates = new LibraryBooksWithStates();
+            model.LibraryBooksWithStates.BooksModel = books.AsEnumerable<Book>();
+            model.LibraryBooksWithStates.BooksStates = booksStates.AsEnumerable<string>();
             ViewBag.PagesNr = pagesNr;
             return View(model);
         }

@@ -1,6 +1,6 @@
-﻿@model IEnumerable<HomeLibraryApp.Models.Book>
+﻿@model HomeLibraryApp.Models.LibraryBooksWithStates
     <div id="books-partial">
-    @if (Model.Count() > 0)
+    @if (Model.BooksModel.Count() > 0)
     {
         <table class="highlight">
             <thead>
@@ -9,16 +9,18 @@
                     <th>Author's firstname</th>
                     <th>Author's lastname</th>
                     <th>Publisher</th>
+                    <th>Description</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (HomeLibraryApp.Models.Book book in Model)
+                @for(int i=0;i<Model.BooksModel.Count();i++)
                 {
-                    <tr class="clickable-row" data-href=@("/Library/Book?lib="+ViewBag.libraryId + "&bk="+book.Id.ToString())>
-                        <td>@book.Title</td>
-                        <td>@book.AuthorFirstname</td>
-                        <td>@book.AuthorLastname</td>
-                        <td>@book.Publisher</td>
+                    <tr class="clickable-row" data-href=@("/Library/Book?lib="+ViewBag.libraryId + "&bk="+ Model.BooksModel.ElementAt(i).Id.ToString())>
+                        <td>@Model.BooksModel.ElementAt(i).Title</td>
+                        <td>@Model.BooksModel.ElementAt(i).AuthorFirstname</td>
+                        <td>@Model.BooksModel.ElementAt(i).AuthorLastname</td>
+                        <td>@Model.BooksModel.ElementAt(i).Publisher</td>
+                        <td>@Model.BooksStates.ElementAt(i)</td>
                     </tr>
                 }
             </tbody>

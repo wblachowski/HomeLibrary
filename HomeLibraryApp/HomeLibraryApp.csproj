@@ -235,6 +235,7 @@
     <Compile Include="Models\LibraryAdd.cs" />
     <Compile Include="Models\LibraryBook.cs" />
     <Compile Include="Models\LibraryBookDetails.cs" />
+    <Compile Include="Models\LibraryBooksWithStates.cs" />
     <Compile Include="Models\LibraryComment.cs" />
     <Compile Include="Models\LibraryLending.cs" />
     <Compile Include="Models\LibraryMain.cs" />

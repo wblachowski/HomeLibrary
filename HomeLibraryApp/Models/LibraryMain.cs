@@ -9,6 +9,6 @@ namespace HomeLibraryApp.Models
     {
         public Book NewBookModel { get; set; }
         public IEnumerable<Library> LibrariesModel { get; set; }
-        public IEnumerable<Book> BooksModel { get; set; }
+        public LibraryBooksWithStates LibraryBooksWithStates { get; set; }
     }
 }
