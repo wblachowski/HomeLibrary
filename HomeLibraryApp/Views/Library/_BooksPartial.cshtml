@@ -15,8 +15,14 @@
             <tbody>
                 @for(int i=0;i<Model.BooksModel.Count();i++)
                 {
-                    <tr class="clickable-row" data-href=@("/Library/Book?lib="+ViewBag.libraryId + "&bk="+ Model.BooksModel.ElementAt(i).Id.ToString())>
-                        <td>@Model.BooksModel.ElementAt(i).Title</td>
+                    string possessionClass = Model.BooksStates.ElementAt(i) + "-row";
+                    <tr class="clickable-row @possessionClass" data-href=@("/Library/Book?lib="+Model.LibId + "&bk="+ Model.BooksModel.ElementAt(i).Id.ToString())>
+                        <td>
+                        @if (possessionClass == "out-row")
+                        {
+                            <i class="material-icons">schedule</i>
+                        }
+                            <span>@Model.BooksModel.ElementAt(i).Title</span></td>
                         <td>@Model.BooksModel.ElementAt(i).AuthorFirstname</td>
                         <td>@Model.BooksModel.ElementAt(i).AuthorLastname</td>
                         <td>@Model.BooksModel.ElementAt(i).Publisher</td>

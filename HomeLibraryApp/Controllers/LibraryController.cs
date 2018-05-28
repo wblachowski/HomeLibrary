@@ -89,11 +89,13 @@ namespace HomeLibraryApp.Controllers
             }
 
             books = books.Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
+            booksStates = booksStates.Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
 
             model.LibrariesModel = libraries.AsEnumerable<Library>();
             model.LibraryBooksWithStates = new LibraryBooksWithStates();
             model.LibraryBooksWithStates.BooksModel = books.AsEnumerable<Book>();
             model.LibraryBooksWithStates.BooksStates = booksStates.AsEnumerable<string>();
+            model.LibraryBooksWithStates.LibId = lib;
             ViewBag.PagesNr = pagesNr;
             return View(model);
         }
@@ -138,7 +140,7 @@ namespace HomeLibraryApp.Controllers
             {
                 ViewBag.Lending = "in";
             }
-            else
+            else if(libraryLending != null && libraryLending.UserId != User.Identity.GetUserId())
             {
                 ViewBag.Lending = "out";
             }
