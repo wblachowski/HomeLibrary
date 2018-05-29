@@ -219,7 +219,7 @@ namespace HomeLibraryApp.Controllers
 
             int pagesNr = 1;
             int pageSize = 10;
-            query = query.ToLower();
+            query = query.ToLower().Trim();
             switch (searchType)
             {
                 case "All": books = booksToScan.Where(book => (book.AuthorFirstname + book.AuthorLastname + book.Title + book.Publisher).ToLower().Contains(query)).ToList(); break;
