@@ -26,11 +26,6 @@ namespace HomeLibraryApp.Models
         [ForeignKey("CopyLibraryBookId")]
         public LibraryBook CopyLibraryBook { get; set; }
 
-        //to whom
-        public string UserId { get; set; }
-        [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
-
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }

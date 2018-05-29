@@ -14,6 +14,7 @@
 }else if (ViewBag.Lending == "in")
 {
     <h6>Borrowed from @ViewBag.LendingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+    <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
 }
 <h6>Reading state:</h6>
 @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
@@ -69,6 +70,21 @@
         </div>
         <div class="modal-footer">
             <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+        </div>
+    }
+</div>
+
+<!-- Return modal -->
+<div id="modalReturn" class="modal">
+    @using (Html.BeginForm("ReturnBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+    {
+        <div class="modal-content">
+            <h4>Cofirm return</h4>
+            <p>Are you sure you want to return this book to its owner? This action cannot be reversed.</p>
+        </div>
+        <div class="modal-footer">
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
         </div>
     }
 </div>
