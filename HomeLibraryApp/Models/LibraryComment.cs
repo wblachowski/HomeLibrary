@@ -12,7 +12,8 @@ namespace HomeLibraryApp.Models
         [Key]
         public int Id { get; set; }
 
-        public int? LibraryBookId { get; set; }
+        [Required]
+        public int LibraryBookId { get; set; }
         [ForeignKey("LibraryBookId")]
         public LibraryBook LibraryBook { get; set; }
 
