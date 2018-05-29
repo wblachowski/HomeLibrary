@@ -146,6 +146,10 @@ namespace HomeLibraryApp.Controllers
                 ViewBag.LendingUser = lendUser;
             }
 
+            //Are you an owner?
+            Library libraryOwner = db.Libraries.FirstOrDefault(l => l.Id == libraryBook.LibraryId);
+            ViewBag.Owner = userID == libraryOwner.UserId ? true : false;
+
             
             model.Book = book;
             model.Comments = comments;

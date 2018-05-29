@@ -6,7 +6,7 @@
 <h2>@Model.Book.Title</h2>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
-@if (ViewBag.Lending == "ok") {
+@if (ViewBag.Lending == "ok" && ViewBag.Owner) {
 <button class="btn waves-effect waves-light modal-trigger"  href="#modalLend">Lend to a user</button>
 }else if (ViewBag.Lending == "out")
 {
@@ -14,7 +14,10 @@
 }else if (ViewBag.Lending == "in")
 {
     <h6>Borrowed from @ViewBag.LendingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+    if (ViewBag.Owner)
+    {
     <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
+    }
 }
 <h6>Reading state:</h6>
 @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
