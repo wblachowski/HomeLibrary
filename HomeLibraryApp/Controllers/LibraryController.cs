@@ -67,26 +67,17 @@ namespace HomeLibraryApp.Controllers
             List<string> booksStates = new List<string>();
             List<Book> books = new List<Book>();
             List<LibraryBook> libraryBooks = db.LibraryBooks.Where(x => x.LibraryId.ToString() == lib).ToList<LibraryBook>();
+
+
             foreach (LibraryBook libraryBook in libraryBooks)
             {
                 Book book = db.Books.FirstOrDefault(x => x.Id == libraryBook.BookId);
                 if (book == null) continue;
                 books.Add(book);
-                booksStates.Add("your");
+                //determine state
+                booksStates.Add(GetBookState(book, lib));
             }
             pagesNr = (int)Math.Ceiling(Convert.ToDouble(books.Count()) / Convert.ToDouble(pageSize));
-
-            //borrowed books
-            string userId = User.Identity.GetUserId();
-            List<LibraryLending> libraryLendings = db.LibraryLendings.Where(ll => ll.UserId == userId).ToList();
-            foreach (LibraryLending ll in libraryLendings)
-            {
-                LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == ll.LibraryBookId);
-                Book book = db.Books.FirstOrDefault(x => x.Id == lb.BookId);
-                if (book == null) continue;
-                books.Add(book);
-                booksStates.Add("out");
-            }
 
             books = books.Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
             booksStates = booksStates.Skip((pageInt - 1) * pageSize).Take(pageSize).ToList();
@@ -98,6 +89,16 @@ namespace HomeLibraryApp.Controllers
             model.LibraryBooksWithStates.LibId = lib;
             ViewBag.PagesNr = pagesNr;
             return View(model);
+        }
+
+        private string GetBookState(Book book, string lib)
+        {
+            LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.BookId == book.Id && x.LibraryId.ToString() == lib);
+            LibraryLending llIn = db.LibraryLendings.FirstOrDefault(ll => ll.CopyLibraryBookId == lb.Id && ll.EndDate == null);
+            LibraryLending llOut = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == lb.Id && ll.EndDate == null);
+            if (llIn != null) return "in";
+            if (llOut != null) return "out";
+            return "ok";
         }
 
         [Authorize]
@@ -268,7 +269,13 @@ namespace HomeLibraryApp.Controllers
             ApplicationUser user = isEmail ? UserManager.FindByEmail(userOrEmail) : UserManager.FindByName(userOrEmail);
             if (user != null && user.Id!=User.Identity.GetUserId())
             {
-                db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id, UserId = user.Id, StartDate = DateTime.Now });
+                //user library
+                Library newUserLibrary = db.Libraries.FirstOrDefault(lb => lb.UserId == user.Id);
+                //Copy book to new user library
+                LibraryBook copyLibraryBook =new LibraryBook() {BookId=Convert.ToInt32(bk),LibraryId=newUserLibrary.Id };
+                db.LibraryBooks.Add(copyLibraryBook);
+                db.SaveChanges();
+                db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id, CopyLibraryBookId=copyLibraryBook.Id, UserId = user.Id, StartDate = DateTime.Now });
                 db.SaveChanges();
             }
             return RedirectToAction("Book", new { lib = lib,bk=bk });

@@ -9,7 +9,7 @@
                     <th>Author's firstname</th>
                     <th>Author's lastname</th>
                     <th>Publisher</th>
-                    <th>Description</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,7 +18,7 @@
                     string possessionClass = Model.BooksStates.ElementAt(i) + "-row";
                     <tr class="clickable-row @possessionClass" data-href=@("/Library/Book?lib="+Model.LibId + "&bk="+ Model.BooksModel.ElementAt(i).Id.ToString())>
                         <td>
-                        @if (possessionClass == "out-row")
+                        @if (possessionClass == "in-row")
                         {
                             <i class="material-icons">schedule</i>
                         }

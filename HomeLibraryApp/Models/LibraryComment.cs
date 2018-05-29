@@ -12,10 +12,9 @@ namespace HomeLibraryApp.Models
         [Key]
         public int Id { get; set; }
 
-        public int LibraryBookId { get; set; }
+        public int? LibraryBookId { get; set; }
         [ForeignKey("LibraryBookId")]
         public LibraryBook LibraryBook { get; set; }
-
 
         public string UserId { get; set; }
         [ForeignKey("UserId")]

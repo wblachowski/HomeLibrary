@@ -22,6 +22,11 @@ namespace HomeLibraryApp.Models
         public LibraryBook LibraryBook { get; set; }
 
         //to whom
+        public int? CopyLibraryBookId { get; set; }
+        [ForeignKey("CopyLibraryBookId")]
+        public LibraryBook CopyLibraryBook { get; set; }
+
+        //to whom
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
