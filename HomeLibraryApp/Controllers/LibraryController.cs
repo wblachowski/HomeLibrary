@@ -129,22 +129,20 @@ namespace HomeLibraryApp.Controllers
             UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userID && x.BookId.ToString()==bk);
 
             //libraryLending
-            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == libraryBook.Id);
+            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.EndDate==null && (ll.LibraryBookId == libraryBook.Id || ll.CopyLibraryBookId==libraryBook.Id));
 
-            
-            if (libraryLending != null)
+            ViewBag.Lending = GetBookState(book, lib);
+            if (ViewBag.Lending=="out")
             {
-                ApplicationUser lendUser = db.Users.FirstOrDefault(usr => usr.Id == libraryLending.UserId);
+                ApplicationUser borrowUser = db.Users.FirstOrDefault(usr => usr.Id == libraryLending.UserId);
+                ViewBag.BorrowingUser = borrowUser;
+            }else if (ViewBag.Lending == "in")
+            {
+                string userId = db.Libraries.FirstOrDefault(library => library.Id.ToString() == lib).UserId;
+                ApplicationUser lendUser = db.Users.FirstOrDefault(usr => usr.Id == userId);
                 ViewBag.LendingUser = lendUser;
             }
-            if ( libraryLending!=null && libraryLending.UserId == User.Identity.GetUserId())
-            {
-                ViewBag.Lending = "in";
-            }
-            else if(libraryLending != null && libraryLending.UserId != User.Identity.GetUserId())
-            {
-                ViewBag.Lending = "out";
-            }
+
             
             model.Book = book;
             model.Comments = comments;
