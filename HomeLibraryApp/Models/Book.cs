@@ -17,11 +17,11 @@ namespace HomeLibraryApp.Models
         public string Title { get; set; }
 
         [Required]
-        [Display(Name = "Author's firstname")]
+        [Display(Name = "Author's first name")]
         public string AuthorFirstname { get; set; }
 
         [Required]
-        [Display(Name = "Author's lastname")]
+        [Display(Name = "Author's last name")]
         public string AuthorLastname { get; set; }
 
         [Required]

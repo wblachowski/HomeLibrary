@@ -15,5 +15,8 @@ namespace HomeLibraryApp.Models
         public string GoodreadsUrl { get; set; }
 
         public IEnumerable<Library> UserLibraries { get; set; }
+
+        public string LenderFirstname { get; set; }
+        public string LenderLastname { get; set; }
     }
 }

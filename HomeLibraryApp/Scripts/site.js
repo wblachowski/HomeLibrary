@@ -18,6 +18,14 @@
     if ($("search-book-input").val() !== "") {
         searchForBooks();
     }
+
+    $('#borrowedCheckbox').change(function () {
+        if($(this).is(":checked")) {
+            $("#borrowedData").slideDown("fast");
+        } else {
+            $("#borrowedData").slideUp("fast");
+        }
+    });
 });
 
 function onInvitationComplete(result) {

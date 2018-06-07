@@ -212,3 +212,7 @@ textarea {
 .out-row{
     color:grey;
 }
+
+#borrowedData{
+    display:none;
+}

@@ -9,6 +9,24 @@
 
 }
 <input type="hidden" id="library-id" value="@Request.Params["lib"]" />
+<p>
+    <label id="borrowedLabel">
+        <input id="borrowedCheckbox" type="checkbox" class="filled-in"/>
+        <span>Borrowed</span>
+    </label>
+</p>
+<div id="borrowedData">
+    <div class="row">
+        <div class="input-field col s12 m6">
+            <input id="LenderFirstname" type="text" name="LenderFirstname">
+            <label for="LenderFirstname">First name</label>
+        </div>
+        <div class="input-field col s12 m6">
+            <input id="LenderFirstname" type="text" name="LenderFirstname">
+            <label for="LenderFirstname">Last name</label>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
@@ -27,21 +45,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col l6 s12">
+                <div class="input-field col m6 s12">
                     @Html.TextBoxFor(m => m.NewBookModel.AuthorFirstname)
                     @Html.LabelFor(m => m.NewBookModel.AuthorFirstname)
                 </div>
-                <div class="input-field col l6 s12">
+                <div class="input-field col m6 s12">
                     @Html.TextBoxFor(m => m.NewBookModel.AuthorLastname)
                     @Html.LabelFor(m => m.NewBookModel.AuthorLastname)
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col l6 s12">
+                <div class="input-field col m6 s12">
                     @Html.TextBoxFor(m => m.NewBookModel.PublicationDate, "{0: MMM dd, yyyy}", new { @class = "datepicker" })
                     @Html.LabelFor(m => m.NewBookModel.PublicationDate)
                 </div>
-                <div class="input-field col l6 s12">
+                <div class="input-field col m6 s12">
                     @Html.TextBoxFor(m => m.NewBookModel.Publisher)
                     @Html.LabelFor(m => m.NewBookModel.Publisher)
                 </div>
