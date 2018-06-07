@@ -135,10 +135,17 @@ namespace HomeLibraryApp.Controllers
             if (ViewBag.Lending=="out")
             {
                 LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == libraryLending.CopyLibraryBookId);
+                if (lb != null) { 
                 Library library = db.Libraries.FirstOrDefault(l => l.Id == lb.LibraryId);
                 ApplicationUser borrowUser = db.Users.FirstOrDefault(usr => usr.Id == library.UserId);
                 ViewBag.BorrowingUser = borrowUser;
-            }else if (ViewBag.Lending == "in")
+                }
+                else
+                {
+                    ViewBag.BorrowingUserExternal = libraryLending.ExternalPerson;
+                }
+            }
+            else if (ViewBag.Lending == "in")
             {
                 LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == libraryLending.LibraryBookId);
                 Library library = db.Libraries.FirstOrDefault(l => l.Id == lb.LibraryId);
@@ -288,6 +295,16 @@ namespace HomeLibraryApp.Controllers
 
         [Authorize]
         [HttpPost]
+        public ActionResult LendBookExternal(string firstname,string lastname, string lib, string bk)
+        {
+            LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
+            db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id,ExternalPerson=firstname+" "+lastname, StartDate = DateTime.Now });
+            db.SaveChanges();
+            return RedirectToAction("Book", new { lib = lib, bk = bk });
+        }
+
+        [Authorize]
+        [HttpPost]
         public ActionResult ReturnBook(string lib, string bk)
         {
             LibraryBook libraryBook = db.LibraryBooks.First(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
@@ -298,6 +315,19 @@ namespace HomeLibraryApp.Controllers
             return RedirectToAction("Index", new { lib = lib});
 
         }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ReturnBookByExternal(string lib, string bk)
+        {
+            LibraryBook libraryBook = db.LibraryBooks.First(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
+            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == libraryBook.Id && ll.EndDate==null);
+            libraryLending.EndDate = DateTime.Now;
+            db.SaveChanges();
+            return RedirectToAction("Book", new { lib = lib, bk = bk });
+
+        }
+
         // GET: /Library/ConfirmInvitation
         [Authorize]
         public async Task<ActionResult> ConfirmInvitation(string userId, string code)

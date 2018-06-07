@@ -6,24 +6,37 @@
 <h2>@Model.Book.Title</h2>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
-@if (ViewBag.Lending == "ok" && ViewBag.Owner) {
-<button class="btn waves-effect waves-light modal-trigger"  href="#modalLend">Lend to a user</button>
-}else if (ViewBag.Lending == "out")
+@if (ViewBag.Lending == "ok" && ViewBag.Owner)
 {
+    <button class="btn waves-effect waves-light modal-trigger" href="#modalLend">Lend to a user</button>
+}
+else if (ViewBag.Lending == "out")
+{
+    if (ViewBag.BorrowingUser != null) { 
     <h6>Lent to @ViewBag.BorrowingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
-}else if (ViewBag.Lending == "in")
+    }
+    else if (ViewBag.BorrowingUserExternal != null)
+    {
+        <h6>Lent to @ViewBag.BorrowingUserExternal on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+        if (ViewBag.Owner)
+        {
+            <button class="btn waves-effect waves-light modal-trigger" href="#modalReturnExternal">Mark as returned</button>
+        }
+    }
+}
+else if (ViewBag.Lending == "in")
 {
     <h6>Borrowed from @ViewBag.LendingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
     if (ViewBag.Owner)
     {
-    <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
+        <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
     }
 }
 <h6>Reading state:</h6>
 @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
 {
     int state = 0;
-    if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate == null) {state = 1;}
+    if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate == null) { state = 1; }
     if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate != null) { state = 2; }
 
     if (state == 0)
@@ -45,7 +58,7 @@
 <h6>Comments:</h6>
 @Html.Partial("_CommentsPartial", Model.Comments)
 <h6>Write a new comment:</h6>
-@using (Html.BeginForm("AddComment", "Library", new { lib = Request.Params["lib"],bk=Request.Params["bk"] }))
+@using (Html.BeginForm("AddComment", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
 {<div class="row">
         <div class="row">
             <div class="input-field col s12">
@@ -53,28 +66,60 @@
                 @Html.LabelFor(m => m.YourComment)
             </div>
         </div>
-</div>
+    </div>
     <input type="submit" class="btn btn-default" value="Add" />
 }
 
 <!-- Lend modal -->
 <div id="modalLend" class="modal">
-    @using (Html.BeginForm("LendBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
-    {
+    <div class="modal-content">
+        <h4>Lend to a user</h4>
+    </div>
+    <div class="col s12">
+        <ul class="tabs">
+            <li class="tab col s4"><a class="active" href="#internal">HomeLibrary user</a></li>
+            <li class="tab col s4"><a class="" href="#external">Other</a></li>
+        </ul>
+    </div>
+
+    <div id="internal">
+        @using (Html.BeginForm("LendBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+            {
+            <div class="modal-content">
+                <p>Enter username or email address of the person you want to lend this book to</p>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="userOrEmail" type="text" name="userOrEmail">
+                        <label for="userOrEmail">Username or email</label>
+                    </div>
+                </div>
+            </div>
+                <div class="modal-footer">
+                    <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+                </div>
+        }
+    </div>
+    <div id="external">
+@using (Html.BeginForm("LendBookExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+{
         <div class="modal-content">
-            <h4>Lend to a user</h4>
-            <p>Enter username or email address of the person you want to lend this book to</p>
+            <p>Personal info</p>
             <div class="row">
-                <div class="input-field col s12">
-                    <input id="userOrEmail" type="text" name="userOrEmail">
-                    <label for="userOrEmail">Username or email</label>
+                <div class="input-field col s12 m6">
+                    <input id="firstname" type="text" name="firstname">
+                    <label for="firstname">First name</label>
+                </div>
+                <div class="input-field col s12 m6">
+                    <input id="lastname" type="text" name="lastname">
+                    <label for="lastname">Last name</label>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
             <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
         </div>
-    }
+}
+    </div>
 </div>
 
 <!-- Return modal -->
@@ -84,6 +129,21 @@
         <div class="modal-content">
             <h4>Cofirm return</h4>
             <p>Are you sure you want to return this book to its owner? This action cannot be reversed.</p>
+        </div>
+        <div class="modal-footer">
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
+        </div>
+    }
+</div>
+
+<!-- External mark as returned modal -->
+<div id="modalReturnExternal" class="modal">
+    @using (Html.BeginForm("ReturnBookByExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+    {
+        <div class="modal-content">
+            <h4>Cofirm return</h4>
+            <p>Are you sure that @ViewBag.BorrowingUserExternal has returned this book?</p>
         </div>
         <div class="modal-footer">
             <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
