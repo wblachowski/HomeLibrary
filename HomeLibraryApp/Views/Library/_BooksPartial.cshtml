@@ -17,7 +17,7 @@
                 {
                     string possessionClass = Model.BooksStates.ElementAt(i) + "-row";
                     <tr class="clickable-row @possessionClass" data-href=@("/Library/Book?lib="+Model.LibId + "&bk="+ Model.BooksModel.ElementAt(i).Id.ToString())>
-                        <td>
+                        <td class="book-title">
                         @if (possessionClass == "in-row")
                         {
                             <i class="material-icons">schedule</i>

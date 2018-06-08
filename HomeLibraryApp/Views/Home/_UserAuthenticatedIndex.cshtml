@@ -1,29 +1,142 @@
 ﻿@model HomeLibraryApp.Models.Home
 <div>
-    <h6>Books per month: @Model.Stats</h6>
-    @if (Model.LastBook != null) { 
-        <h6>Last book read: @Model.LastBook.Title</h6>
-    }
-    <h6>Currently being read:</h6>
-    <ul>
-        @foreach (HomeLibraryApp.Models.Book book in Model.CurrentBooks)
-        {
-            <li>@book.Title</li>
-        }
-    </ul>
-    <h6>Borrowed books:</h6>
-    <ul>
-        @foreach(HomeLibraryApp.Models.Book book in Model.BorrowedBooks)
-        {
-            <li>@book.Title</li>
-        }
-    </ul>
-    <h6>Lent books:</h6>
-    <ul>
-        @foreach(HomeLibraryApp.Models.Book book in Model.LentBooks)
-        {
-            <li>@book.Title</li>
-        }
-    </ul>
-</div>
+    <div class="row">
+        <div class=" col s12 m6 l4 xl3">
+            <div id="stats-card" class="card">
+                <div class="card-content">
+                    <span class="card-title">Stats</span>
+                    <p>You read on average</p>
+                    <h4 id="stats-paragraph">
+                        @Model.Stats
+                    </h4>
+                    <p>
+                        @if (Model.Stats == 1)
+                        {<span>book</span>}
+                        else
+                        {<span>books</span>} a month
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l8 xl9">
+            <div id="last-book-card" class="card">
+                <div class="card-content">
+                    <span class="card-title">Last book read</span>
+                    @if (Model.LastBook != null)
+            {
+                        <p class="book-title">
+                            @Model.LastBook.Title
+                        </p>
+                        <p>by @Model.LastBook.AuthorFirstname @Model.LastBook.AuthorLastname</p>
+                        <p>Published @(((DateTime)Model.LastBook.PublicationDate).ToString("MMM dd, yyyy")) by @Model.LastBook.Publisher</p>
+                        <p id="last-book-reading-time">Reading time: @(((DateTime)Model.LastBookReading.StartDate).ToString("MMM dd, yyyy")) -  @(((DateTime)Model.LastBookReading.EndDate).ToString("MMM dd, yyyy"))</p>
+                    }
+                    else
+                    {
+                        <p>You haven't read any book yet! How so?</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.CurrentBooks.Count() > 0)
+    {
+        <div class="row">
+            <div class="col s12">
 
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Currently reading</span>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:60%">Title</th>
+                                    <th style="width:20%">Author</th>
+                                    <th style="width:20%">Publisher</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.CurrentBooks.Count(); i++)
+                                {
+                                    <tr>
+                                        <td class="book-title">@Model.CurrentBooks.ElementAt(i).Title</td>
+                                        <td>@(Model.CurrentBooks.ElementAt(i).AuthorFirstname + " " + Model.CurrentBooks.ElementAt(i).AuthorLastname)</td>
+                                        <td>@Model.CurrentBooks.ElementAt(i).Publisher</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.BorrowedBooks.Count() > 0)
+    {
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Borrowed books</span>
+                        <table class="highlight">
+                            <thead>
+                                <tr>
+                                    <th style="width:40%">Title</th>
+                                    <th style="width:20%">Author</th>
+                                    <th style="width:20%">Publisher</th>
+                                    <th style="width:20%">Borrower</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.BorrowedBooks.Count(); i++)
+                                {
+                                    <tr class="clickable-row" data-href=@("/Library/Book?lib=" + Model.BorrowedLibraryBooks.ElementAt(i).LibraryId + "&bk=" + Model.BorrowedBooks.ElementAt(i).Id.ToString())>
+                                        <td class="book-title">@Model.BorrowedBooks.ElementAt(i).Title</td>
+                                        <td>@(Model.BorrowedBooks.ElementAt(i).AuthorFirstname + " " + Model.BorrowedBooks.ElementAt(i).AuthorLastname)</td>
+                                        <td>@Model.BorrowedBooks.ElementAt(i).Publisher</td>
+                                        <td>@Model.BorrowedNames.ElementAt(i)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.LentBooks.Count() > 0)
+    {
+        <div class="row">
+            <div class="col s12">
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Lent books</span>
+                        <table class="highlight">
+                            <thead>
+                                <tr>
+                                    <th style="width:40%">Title</th>
+                                    <th style="width:20%">Author</th>
+                                    <th style="width:20%">Publisher</th>
+                                    <th style="width:20%">Lender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.LentBooks.Count(); i++)
+                                {
+                                    <tr class="clickable-row" data-href=@("/Library/Book?lib=" + Model.LentLibraryBooks.ElementAt(i).LibraryId + "&bk=" + Model.LentBooks.ElementAt(i).Id.ToString())>
+                                        <td class="book-title">@Model.LentBooks.ElementAt(i).Title</td>
+                                        <td>@(Model.LentBooks.ElementAt(i).AuthorFirstname + " " + Model.LentBooks.ElementAt(i).AuthorLastname)</td>
+                                        <td>@Model.LentBooks.ElementAt(i).Publisher</td>
+                                        <td>@Model.LentNames.ElementAt(i)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

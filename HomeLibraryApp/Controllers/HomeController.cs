@@ -18,12 +18,15 @@ namespace HomeLibraryApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 home.Stats = GetReadingStats();
-                home.LastBook = GetLastBook();
+                home.LastBookReading = GetLastUserReading();
+                home.LastBook = GetLastBook(home.LastBookReading);
                 home.CurrentBooks = GetCurrentBooks();
                 home.BorrowedLibraryBooks = GetBorrowedLibraryBooks();
                 home.BorrowedBooks = GetBooksDetails(home.BorrowedLibraryBooks);
+                home.BorrowedNames = GetNames(home.BorrowedLibraryBooks,"borrowed");
                 home.LentLibraryBooks = GetLentLibraryBooks();
                 home.LentBooks = GetBooksDetails(home.LentLibraryBooks);
+                home.LentNames = GetNames(home.LentLibraryBooks, "lent");
             }
             else
             {
@@ -57,11 +60,8 @@ namespace HomeLibraryApp.Controllers
             return noOfBooks / noOfMonths;
         }
 
-        private Book GetLastBook()
+        private Book GetLastBook(UserReading userReading)
         {
-            string userId = User.Identity.GetUserId();
-            UserReading userReading = db.UserReadings.Where(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate != null)
-                .OrderByDescending(ur => ur.EndDate).FirstOrDefault();
             if (userReading == null)
             {
                 return null;
@@ -71,6 +71,13 @@ namespace HomeLibraryApp.Controllers
                 Book book = db.Books.FirstOrDefault(bk => bk.Id == userReading.BookId);
                 return book;
             }
+        }
+
+        private UserReading GetLastUserReading()
+        {
+            string userId = User.Identity.GetUserId();
+            return db.UserReadings.Where(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate != null)
+                .OrderByDescending(ur => ur.EndDate).FirstOrDefault();
         }
 
         private IEnumerable<Book> GetCurrentBooks()
@@ -100,6 +107,40 @@ namespace HomeLibraryApp.Controllers
                 }
             }
             return borrowedLibraryBooks;
+        }
+
+        private IEnumerable<string> GetNames(IEnumerable<LibraryBook> libraryBooks, string type)
+        {
+            List<string> names = new List<string>();
+            foreach(LibraryBook lb in libraryBooks)
+            {
+                LibraryLending lending = null;
+                switch (type) {
+                    case "borrowed": lending= db.LibraryLendings.FirstOrDefault(ll => ll.CopyLibraryBookId == lb.Id);break;
+                    case "lent": lending = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == lb.Id); break;
+                } 
+                if(!String.IsNullOrEmpty(lending.ExternalBorrower) || !String.IsNullOrEmpty(lending.ExternalLender))
+                {
+                    switch (type)
+                    {
+                        case "borrowed":names.Add(lending.ExternalLender);break;
+                        case "lent": names.Add(lending.ExternalBorrower); break;
+                    }
+                }
+                else
+                {
+                    Library library = null;
+                    switch (type)
+                    {
+                        case "borrowed": library = db.Libraries.FirstOrDefault(x => x.Id == lending.LibraryBookId);break;
+                        case "lent": library = db.Libraries.FirstOrDefault(x => x.Id == lending.CopyLibraryBookId); break;
+                    }
+                    ApplicationUser user = db.Users.FirstOrDefault(usr => usr.Id == library.UserId);
+                    names.Add(user.UserName);
+                }
+                
+            }
+            return names;
         }
 
         private IEnumerable<Book> GetBooksDetails(IEnumerable<LibraryBook> libraryBooks)

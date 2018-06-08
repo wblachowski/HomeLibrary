@@ -114,7 +114,7 @@
                     string rowId = "bookRow" + book.Id.ToString();
                     string date = book.PublicationDate.HasValue ? book.PublicationDate.Value.ToString("MMM dd, yyyy") : "";
                     <tr id="@rowId" data-date="@date">
-                        <td>@book.Title</td>
+                        <td class="book-title">@book.Title</td>
                         <td>@book.AuthorFirstname</td>
                         <td>@book.AuthorLastname</td>
                         <td>@book.Publisher</td>

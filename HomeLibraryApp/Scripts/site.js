@@ -15,17 +15,33 @@
     if ($("#goodreads-input") !== null && $("#goodreads-input").val() !== "") {
         $("#goodreads-result").show();
     }
-    if ($("search-book-input").val() !== "") {
+    if ($("#search-book-input").length > 0 && $("#search-book-input").val() !== "") {
         searchForBooks(1, 'search');
     }
-    $('#borrowedCheckbox').change(function () {   
+    $('#borrowedCheckbox').change(function () {
         if ($(this).is(":checked")) {
             $("#borrowedData").slideDown("fast");
         } else {
             $("#borrowedData").slideUp("fast");
         }
     });
-});
+    if (window.innerWidth >= 600) {
+        setCardsHeight();
+    }
+    window.addEventListener('resize', function (event) {
+        if (window.innerWidth >= 600) {
+            setCardsHeight();
+        } else {
+            $("#last-book-card").css('min-height', '');
+            $("#stats-card").css('min-height', '');
+        }
+    });});
+
+function setCardsHeight() {
+    var cardsHeight = Math.max($("#last-book-card").height(), $("#stats-card").height())
+    $("#last-book-card").css('min-height',cardsHeight);
+    $("#stats-card").css('min-height',cardsHeight);
+}
 
 function addFormSubmit(source) {
     if ($('#borrowedCheckbox').is(":checked")) {

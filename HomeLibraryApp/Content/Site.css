@@ -220,3 +220,17 @@ textarea {
 #borrowedData{
     display:none;
 }
+
+#stats-paragraph{
+    text-align:center;
+    margin:1rem;
+}
+
+.book-title{
+    font-weight:500;
+}
+
+#last-book-reading-time{
+
+    padding-top:26px;
+}
