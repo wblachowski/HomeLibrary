@@ -135,6 +135,10 @@ textarea {
 #topbarsearch-icon{
     top:0.2rem;
 }
+#topbarsearch-icon:hover{
+    cursor: pointer;
+}
+
 
 .pagination{
     float:right;

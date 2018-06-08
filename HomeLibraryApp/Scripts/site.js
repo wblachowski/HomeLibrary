@@ -124,3 +124,13 @@ function scanGoodreads() {
         }
     });
 }
+
+function onClickSearchTopbar() {
+    var query = $("#topbarsearch-input").val();
+    var url = '/Library/Search';
+    if (query !== "") {
+        window.location = url + '?q=' + query;
+    } else {
+        window.location = url;
+    }
+}
