@@ -11,5 +11,12 @@
             <li>@book.Title</li>
         }
     </ul>
+    <h6>Borrowed books:</h6>
+    <ul>
+        @foreach(HomeLibraryApp.Models.Book book in Model.BorrowedBooks)
+        {
+            <li>@book.Title</li>
+        }
+    </ul>
 </div>
 

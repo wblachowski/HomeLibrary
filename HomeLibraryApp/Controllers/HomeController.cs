@@ -20,6 +20,8 @@ namespace HomeLibraryApp.Controllers
                 home.Stats = GetReadingStats();
                 home.LastBook = GetLastBook();
                 home.CurrentBooks = GetCurrentBooks();
+                home.BorrowedLibraryBooks = GetBorrowedLibraryBooks();
+                home.BorrowedBooks = GetBorrowedBooks(home.BorrowedLibraryBooks);
             }
             else
             {
@@ -79,6 +81,35 @@ namespace HomeLibraryApp.Controllers
                 books.Add(db.Books.FirstOrDefault(bk => bk.Id == ur.BookId));
             }
             return books;
+        }
+
+        private IEnumerable<LibraryBook> GetBorrowedLibraryBooks()
+        {
+            string userId = User.Identity.GetUserId();
+            //user library
+            Library library = db.Libraries.FirstOrDefault(l => l.UserId == userId);
+            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(lb => lb.LibraryId == library.Id).ToList<LibraryBook>();
+            List<LibraryBook> borrowedLibraryBooks = new List<LibraryBook>();
+            foreach(LibraryBook lb in libraryBooks)
+            {
+                if(db.LibraryLendings.FirstOrDefault(ll=>ll.CopyLibraryBookId==lb.BookId && ll.StartDate!=null && ll.EndDate == null) != null)
+                {
+                    borrowedLibraryBooks.Add(lb);
+                }
+            }
+            return borrowedLibraryBooks;
+        }
+
+        private IEnumerable<Book> GetBorrowedBooks(IEnumerable<LibraryBook> libraryBooks)
+        {
+            string userId = User.Identity.GetUserId();
+            List<Book> borrowedBooks = new List<Book>();
+            foreach(LibraryBook lb in libraryBooks)
+            {
+                Book book = db.Books.FirstOrDefault(bk => bk.Id == lb.BookId);
+                if (book != null) borrowedBooks.Add(book);
+            }
+            return borrowedBooks;
         }
     }
 }
