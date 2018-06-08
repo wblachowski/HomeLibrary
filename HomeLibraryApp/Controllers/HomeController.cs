@@ -19,6 +19,7 @@ namespace HomeLibraryApp.Controllers
             {
                 home.Stats = GetReadingStats();
                 home.LastBook = GetLastBook();
+                home.CurrentBooks = GetCurrentBooks();
             }
             else
             {
@@ -65,6 +66,18 @@ namespace HomeLibraryApp.Controllers
                 Book book = db.Books.FirstOrDefault(bk => bk.Id == userReading.BookId);
                 return book;
             }
+        }
+
+        private IEnumerable<Book> GetCurrentBooks()
+        {
+            string userId = User.Identity.GetUserId();
+            List<UserReading> userReadings = db.UserReadings.Where(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate == null).OrderByDescending(ur => ur.StartDate).ToList<UserReading>();
+            List<Book> books = new List<Book>();
+            foreach(UserReading ur in userReadings)
+            {
+                books.Add(db.Books.FirstOrDefault(bk => bk.Id == ur.BookId));
+            }
+            return books;
         }
     }
 }

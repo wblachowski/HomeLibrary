@@ -1,8 +1,15 @@
 ﻿@model HomeLibraryApp.Models.Home
 <div>
-    <h1>Books per month: @Model.Stats</h1>
+    <h6>Books per month: @Model.Stats</h6>
     @if (Model.LastBook != null) { 
-        <h1>Last book read: @Model.LastBook.Title</h1>
+        <h6>Last book read: @Model.LastBook.Title</h6>
     }
+    <h6>Currently being read:</h6>
+    <ul>
+        @foreach (HomeLibraryApp.Models.Book book in Model.CurrentBooks)
+        {
+            <li>@book.Title</li>
+        }
+    </ul>
 </div>
 
