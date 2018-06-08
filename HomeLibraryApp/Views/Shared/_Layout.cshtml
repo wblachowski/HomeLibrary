@@ -13,7 +13,7 @@
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper">
-                @Html.ActionLink("HomeLibrary", "Index", "Home", new { area = "" }, new { @class = "brand-logo" })
+                <a class="brand-logo" href="/"><span class="logo-pt1">Home</span><span class="logo-pt2">Library</span></a>
                 <a href="#" data-target="sidenav-overlay" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 @{Html.RenderAction("LoginPartial", "Account"); }
             </div>

@@ -4,6 +4,23 @@
     flex-direction: column;
 }
 
+.brand-logo {
+    margin-left:20px;
+}
+@media only screen and (max-width : 992px) {
+    .brand-logo {
+        margin-left: 0px;
+    }
+}
+
+.logo-pt1{
+    font-weight:500;
+}
+.logo-pt2{
+    font-weight:300;
+}
+
+
 main {
     flex: 1 0 auto;
 }
