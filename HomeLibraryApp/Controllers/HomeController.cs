@@ -17,7 +17,8 @@ namespace HomeLibraryApp.Controllers
             Home home = new Home();
             if (User.Identity.IsAuthenticated)
             {
-                home.Stats = getReadingStats();
+                home.Stats = GetReadingStats();
+                home.LastBook = GetLastBook();
             }
             else
             {
@@ -41,13 +42,29 @@ namespace HomeLibraryApp.Controllers
             return View();
         }
 
-        private double getReadingStats()
+        private double GetReadingStats()
         {
             string userId = User.Identity.GetUserId();
             ApplicationUser user = db.Users.FirstOrDefault(us => us.Id.ToString() == userId);
             double noOfBooks = db.UserReadings.Where(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate != null).Count();
             double noOfMonths = Math.Ceiling((DateTime.Now - user.Created).TotalDays / 30.0);
             return noOfBooks / noOfMonths;
+        }
+
+        private Book GetLastBook()
+        {
+            string userId = User.Identity.GetUserId();
+            UserReading userReading = db.UserReadings.Where(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate != null)
+                .OrderByDescending(ur => ur.EndDate).FirstOrDefault();
+            if (userReading == null)
+            {
+                return null;
+            }
+            else
+            {
+                Book book = db.Books.FirstOrDefault(bk => bk.Id == userReading.BookId);
+                return book;
+            }
         }
     }
 }

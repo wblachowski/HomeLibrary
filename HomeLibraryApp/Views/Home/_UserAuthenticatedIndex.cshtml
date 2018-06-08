@@ -1,5 +1,8 @@
 ﻿@model HomeLibraryApp.Models.Home
 <div>
-    <h1>hallo @Model.Stats</h1>
+    <h1>Books per month: @Model.Stats</h1>
+    @if (Model.LastBook != null) { 
+        <h1>Last book read: @Model.LastBook.Title</h1>
+    }
 </div>
 
