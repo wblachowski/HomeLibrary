@@ -38,7 +38,6 @@
         </div>
         <div class="modal-footer">
             <a class="modal-close waves-effect waves-green btn-flat">No</a>
-            <!--<input class="waves-effect waves-green btn-flat" type="submit" value="Yes" />-->
             <button type="button" onclick="addFormSubmit(this)" class="waves-effect waves-green btn-flat">Yes</button>
         </div>
     }
@@ -102,8 +101,7 @@
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Author's firstname</th>
-                    <th>Author's lastname</th>
+                    <th>Author</th>
                     <th>Publisher</th>
                     <th></th>
                 </tr>
@@ -115,8 +113,7 @@
                     string date = book.PublicationDate.HasValue ? book.PublicationDate.Value.ToString("MMM dd, yyyy") : "";
                     <tr id="@rowId" data-date="@date">
                         <td class="book-title">@book.Title</td>
-                        <td>@book.AuthorFirstname</td>
-                        <td>@book.AuthorLastname</td>
+                        <td>@(book.AuthorFirstname+" "+book.AuthorLastname)</td>
                         <td>@book.Publisher</td>
                         <td><input type="submit" value="Add" class="btn btn-default btn-right" onclick="searchBookAddClick(@book.Id,'@ViewBag.SourceView')" /></td>
                     </tr>

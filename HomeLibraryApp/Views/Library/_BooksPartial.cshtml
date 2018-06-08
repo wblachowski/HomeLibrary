@@ -6,8 +6,7 @@
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Author's firstname</th>
-                    <th>Author's lastname</th>
+                    <th>Author</th>
                     <th>Publisher</th>
                     <th>Status</th>
                 </tr>
@@ -23,8 +22,7 @@
                             <i class="material-icons">schedule</i>
                         }
                             <span>@Model.BooksModel.ElementAt(i).Title</span></td>
-                        <td>@Model.BooksModel.ElementAt(i).AuthorFirstname</td>
-                        <td>@Model.BooksModel.ElementAt(i).AuthorLastname</td>
+                        <td>@(Model.BooksModel.ElementAt(i).AuthorFirstname+" "+Model.BooksModel.ElementAt(i).AuthorLastname)</td>
                         <td>@Model.BooksModel.ElementAt(i).Publisher</td>
                         <td>@Model.BooksStates.ElementAt(i)</td>
                     </tr>

@@ -45,6 +45,7 @@ function setCardsHeight() {
 }
 
 function addFormSubmit(source) {
+    console.log(source);
     if ($('#borrowedCheckbox').is(":checked")) {
         $(source.form).find("[name='LenderFirstname']").val($("#LenderFirstname").val());
         $(source.form).find("[name='LenderLastname']").val($("#LenderLastname").val());
@@ -172,10 +173,10 @@ function searchAddBookNext() {
     rowData = $("#" + rowId + " td");
     $("#modalId").val(id);
     $("#modalTitle").val(rowData.eq(0).html());
-    $("#modalFirstname").val(rowData.eq(1).html());
-    $("#modalLastname").val(rowData.eq(2).html());
+    $("#modalFirstname").val(rowData.eq(1).html().split(" ")[0]);
+    $("#modalLastname").val(rowData.eq(1).html().split(" ")[1]);
     $("#modalDate").val($("#" + rowId).attr("data-date"));
-    $("#modalPublisher").val(rowData.eq(3).html());
+    $("#modalPublisher").val(rowData.eq(2).html());
 
     M.updateTextFields();
     $('#search-book-confirm-modal').modal();

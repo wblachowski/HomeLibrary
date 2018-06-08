@@ -280,10 +280,7 @@ namespace HomeLibraryApp.Controllers
             ViewBag.LibraryId = libraryId;
             ViewBag.SourceView = sourceView;
             LibrarySearchedBooks model = new LibrarySearchedBooks() { Books = books };
-            if (sourceView == "search")
-            {
-                model.Libraries = GetUserLibraries();
-            }
+            model.Libraries = GetUserLibraries();
             return PartialView("_BooksSearchPartial", model);
         }
 
