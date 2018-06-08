@@ -97,8 +97,17 @@ namespace HomeLibraryApp.Controllers
             LibraryLending llIn = db.LibraryLendings.FirstOrDefault(ll => ll.CopyLibraryBookId == lb.Id && ll.EndDate == null);
             LibraryLending llOut = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == lb.Id && ll.EndDate == null);
             if (llIn != null) return "in";
-            if (llOut != null) return "out";
-            return "ok";
+            if (llOut != null)
+            {
+                if (llOut.CopyLibraryBookId != null && String.IsNullOrEmpty(llOut.ExternalPerson))
+                {
+                    return "out";
+                }else if(llOut.CopyLibraryBookId==null && !String.IsNullOrEmpty(llOut.ExternalPerson))
+                {
+                    return "out-ext";
+                }
+            }
+                return "ok";
         }
 
         [Authorize]
@@ -135,15 +144,12 @@ namespace HomeLibraryApp.Controllers
             if (ViewBag.Lending=="out")
             {
                 LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == libraryLending.CopyLibraryBookId);
-                if (lb != null) { 
                 Library library = db.Libraries.FirstOrDefault(l => l.Id == lb.LibraryId);
                 ApplicationUser borrowUser = db.Users.FirstOrDefault(usr => usr.Id == library.UserId);
                 ViewBag.BorrowingUser = borrowUser;
-                }
-                else
-                {
-                    ViewBag.BorrowingUserExternal = libraryLending.ExternalPerson;
-                }
+            }else if (ViewBag.Lending == "out-ext")
+            {
+                ViewBag.BorrowingUserExternal = libraryLending.ExternalPerson;
             }
             else if (ViewBag.Lending == "in")
             {

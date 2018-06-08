@@ -22,8 +22,8 @@
             <label for="LenderFirstname">First name</label>
         </div>
         <div class="input-field col s12 m6">
-            <input id="LenderFirstname" type="text" name="LenderFirstname">
-            <label for="LenderFirstname">Last name</label>
+            <input id="LenderLastname" type="text" name="LenderLastname">
+            <label for="LenderLastname">Last name</label>
         </div>
     </div>
 </div>
@@ -38,6 +38,8 @@
     <div id="new" class="col s12">
         @using (Html.BeginForm("Add", "Library", new { lib = Request.Params["lib"], type = "new" }))
         {
+            <input type="hidden" name="LenderFirstname">
+            <input type="hidden" name="LenderLastname">
             <div class="row">
                 <div class="input-field col s12">
                     @Html.TextBoxFor(m => m.NewBookModel.Title)
@@ -64,7 +66,7 @@
                     @Html.LabelFor(m => m.NewBookModel.Publisher)
                 </div>
             </div>
-            <input type="submit" value="Add" class="btn btn-default btn-right" />
+            <button type="button" onclick="addFormSubmit(this)" class="btn btn-default btn-right" >Add</button>
         }
     </div>
     <div id="existing" class="col s12">
@@ -120,6 +122,8 @@
     <div id="goodreads" class="col s12">
         @using (Html.BeginForm("Add", "Library", new { lib = Request.Params["lib"], type = "goodreads" }))
         {
+            <input type="hidden" name="LenderFirstname">
+            <input type="hidden" name="LenderLastname">
             <div class="input-field">
                 @Html.TextBoxFor(m => m.GoodreadsUrl, new { id = "goodreads-input", oninput = "scanGoodreads()" })
                 @Html.LabelFor(m => m.GoodreadsUrl)
@@ -166,7 +170,7 @@
                         @Html.LabelFor(m => m.GoodreadsBookModel.Publisher)
                     </div>
                 </div>
-                <input type="submit" value="Add" class="btn btn-default btn-right" />
+                <button type="button" onclick="addFormSubmit(this)" class="btn btn-default btn-right">Add</button>
             </div>
         }
     </div>

@@ -12,23 +12,20 @@
 }
 else if (ViewBag.Lending == "out")
 {
-    if (ViewBag.BorrowingUser != null) { 
     <h6>Lent to @ViewBag.BorrowingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
-    }
-    else if (ViewBag.BorrowingUserExternal != null)
-    {
-        <h6>Lent to @ViewBag.BorrowingUserExternal on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+}else if (ViewBag.Lending == "out-ext")
+{
+<h6>Lent to @ViewBag.BorrowingUserExternal on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
         if (ViewBag.Owner)
         {
-            <button class="btn waves-effect waves-light modal-trigger" href="#modalReturnExternal">Mark as returned</button>
+<button class="btn waves-effect waves-light modal-trigger" href="#modalReturnExternal">Mark as returned</button>
         }
-    }
 }
 else if (ViewBag.Lending == "in")
 {
     <h6>Borrowed from @ViewBag.LendingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
-    if (ViewBag.Owner)
-    {
+                if (ViewBag.Owner)
+                {
         <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
     }
 }
