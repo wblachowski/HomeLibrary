@@ -18,5 +18,12 @@
             <li>@book.Title</li>
         }
     </ul>
+    <h6>Lent books:</h6>
+    <ul>
+        @foreach(HomeLibraryApp.Models.Book book in Model.LentBooks)
+        {
+            <li>@book.Title</li>
+        }
+    </ul>
 </div>
 

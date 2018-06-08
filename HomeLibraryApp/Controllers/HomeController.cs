@@ -21,7 +21,9 @@ namespace HomeLibraryApp.Controllers
                 home.LastBook = GetLastBook();
                 home.CurrentBooks = GetCurrentBooks();
                 home.BorrowedLibraryBooks = GetBorrowedLibraryBooks();
-                home.BorrowedBooks = GetBorrowedBooks(home.BorrowedLibraryBooks);
+                home.BorrowedBooks = GetBooksDetails(home.BorrowedLibraryBooks);
+                home.LentLibraryBooks = GetLentLibraryBooks();
+                home.LentBooks = GetBooksDetails(home.LentLibraryBooks);
             }
             else
             {
@@ -100,16 +102,33 @@ namespace HomeLibraryApp.Controllers
             return borrowedLibraryBooks;
         }
 
-        private IEnumerable<Book> GetBorrowedBooks(IEnumerable<LibraryBook> libraryBooks)
+        private IEnumerable<Book> GetBooksDetails(IEnumerable<LibraryBook> libraryBooks)
         {
             string userId = User.Identity.GetUserId();
-            List<Book> borrowedBooks = new List<Book>();
+            List<Book> books = new List<Book>();
             foreach(LibraryBook lb in libraryBooks)
             {
                 Book book = db.Books.FirstOrDefault(bk => bk.Id == lb.BookId);
-                if (book != null) borrowedBooks.Add(book);
+                if (book != null) books.Add(book);
             }
-            return borrowedBooks;
+            return books;
+        }
+
+        private IEnumerable<LibraryBook> GetLentLibraryBooks()
+        {
+            string userId = User.Identity.GetUserId();
+            //user library
+            Library library = db.Libraries.FirstOrDefault(l => l.UserId == userId);
+            List<LibraryBook> libraryBooks = db.LibraryBooks.Where(lb => lb.LibraryId == library.Id).ToList<LibraryBook>();
+            List<LibraryBook> lentLibraryBooks = new List<LibraryBook>();
+            foreach (LibraryBook lb in libraryBooks)
+            {
+                if (db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == lb.BookId && ll.StartDate != null && ll.EndDate == null) != null)
+                {
+                    lentLibraryBooks.Add(lb);
+                }
+            }
+            return lentLibraryBooks;
         }
     }
 }
