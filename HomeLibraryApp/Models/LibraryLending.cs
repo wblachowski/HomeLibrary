@@ -12,12 +12,7 @@ namespace HomeLibraryApp.Models
         [Key]
         public int Id { get; set; }
 
-        //which book - external
-        public int? OutBookId { get; set; }
-        [ForeignKey("OutBookId")]
-        public Book OutBook { get; set; }
-
-        //which book - internal
+        //which book         
         public int? LibraryBookId { get; set; }
         [ForeignKey("LibraryBookId")]
         public LibraryBook LibraryBook { get; set; }
@@ -27,8 +22,11 @@ namespace HomeLibraryApp.Models
         [ForeignKey("CopyLibraryBookId")]
         public LibraryBook CopyLibraryBook { get; set; }
 
+        //from whom - if external
+        public string ExternalLender { get; set; }
+
         //to whom - if external
-        public string ExternalPerson { get; set; }
+        public string ExternalBorrower { get; set; }
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

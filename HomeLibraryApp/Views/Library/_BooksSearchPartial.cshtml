@@ -1,42 +1,45 @@
 ﻿@model IEnumerable<HomeLibraryApp.Models.Book>
 <div id="search-book-confirm-modal" class="modal">
-    @using (Html.BeginForm("Add", "Library",new { lib = ViewBag.LibraryId,type="existing" }, FormMethod.Post))
+    @using (Html.BeginForm("Add", "Library", new { lib = ViewBag.LibraryId, type = "existing" }, FormMethod.Post))
     {
-    <div class="modal-content">
-        <h4>Confirm</h4>
-        <p>Do you really want to add this book to your library?</p>
-        <input type="hidden" name="bookId" id="modalId">
-        <div class="row">
-            <div class="input-field col s12">
-                <input disabled value="" type="text" id="modalTitle" >
-                <label for="modalTitle">Title</label>
+        <input type="hidden" name="LenderFirstname">
+        <input type="hidden" name="LenderLastname">
+        <div class="modal-content">
+            <h4>Confirm</h4>
+            <p>Do you really want to add this book to your library?</p>
+            <input type="hidden" name="bookId" id="modalId">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input disabled value="" type="text" id="modalTitle">
+                    <label for="modalTitle">Title</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input disabled value="" type="text" id="modalFirstname">
+                    <label for="modalFirstname">Author's firstname</label>
+                </div>
+                <div class="input-field col s6">
+                    <input disabled value="" type="text" id="modalLastname">
+                    <label for="modalLastname">Author's lastname</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input disabled value="" type="text" id="modalDate">
+                    <label for="modalDate">Publication date</label>
+                </div>
+                <div class="input-field col s6">
+                    <input disabled value="" type="text" id="modalPublisher">
+                    <label for="modalPublisher">Publisher</label>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <input disabled value="" type="text" id="modalFirstname">
-                <label for="modalFirstname">Author's firstname</label>
-            </div>
-            <div class="input-field col s6">
-                <input disabled value="" type="text" id="modalLastname">
-                <label for="modalLastname">Author's lastname</label>
-            </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">No</a>
+            <!--<input class="waves-effect waves-green btn-flat" type="submit" value="Yes" />-->
+            <button type="button" onclick="addFormSubmit(this)" class="waves-effect waves-green btn-flat">Yes</button>
         </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <input disabled value="" type="text" id="modalDate">
-                <label for="modalDate">Publication date</label>
-            </div>
-            <div class="input-field col s6">
-                <input disabled value="" type="text" id="modalPublisher">
-                <label for="modalPublisher">Publisher</label>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <a class="modal-close waves-effect waves-green btn-flat">No</a>
-        <input class="waves-effect waves-green btn-flat" type="submit" value="Yes" />
-    </div>
     }
 </div>
 <div>
@@ -62,13 +65,13 @@
                         <td>@book.AuthorFirstname</td>
                         <td>@book.AuthorLastname</td>
                         <td>@book.Publisher</td>
-                        <td><input type="submit" value="Add" class="btn btn-default btn-right" onclick="searchBookAddClick(@book.Id)"/></td>
+                        <td><input type="submit" value="Add" class="btn btn-default btn-right" onclick="searchBookAddClick(@book.Id)" /></td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <input id="search-book-current-page" type="hidden" value="1"/>
+        <input id="search-book-current-page" type="hidden" value="1" />
         <ul id="search-book-pagination" class="pagination">
             @{
                 if (ViewBag.CurrentPage > 1)
@@ -84,11 +87,11 @@
                 {
                     if (i == ViewBag.CurrentPage)
                     {
-                        <li class="active"  onclick="searchForBooks(@i)"><a>@i</a></li>
+                        <li class="active" onclick="searchForBooks(@i)"><a>@i</a></li>
                     }
                     else
                     {
-                        <li class="waves-effect"  onclick="searchForBooks(@i)"><a>@i</a></li>
+                        <li class="waves-effect" onclick="searchForBooks(@i)"><a>@i</a></li>
                     }
                 }
                 if (ViewBag.currentPage == ViewBag.PagesNr)
@@ -99,13 +102,13 @@
                 {
                     <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage+1)"><a><i class="material-icons">chevron_right</i></a></li>
                 }
-                }
+            }
         </ul>
                 }
                 else
                 {
-        <div>
-            No results found
-        </div>
+                    <div>
+                        No results found
+                    </div>
                 }
 </div>

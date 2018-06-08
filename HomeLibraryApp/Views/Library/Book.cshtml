@@ -29,6 +29,14 @@ else if (ViewBag.Lending == "in")
         <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
     }
 }
+else if (ViewBag.Lending == "in-ext")
+{
+    <h6>Borrowed from @ViewBag.LendingUserExternal on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+    if (ViewBag.Owner)
+    {
+        <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
+    }
+}
 <h6>Reading state:</h6>
 @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
 {

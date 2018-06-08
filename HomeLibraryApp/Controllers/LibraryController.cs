@@ -96,13 +96,23 @@ namespace HomeLibraryApp.Controllers
             LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.BookId == book.Id && x.LibraryId.ToString() == lib);
             LibraryLending llIn = db.LibraryLendings.FirstOrDefault(ll => ll.CopyLibraryBookId == lb.Id && ll.EndDate == null);
             LibraryLending llOut = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == lb.Id && ll.EndDate == null);
-            if (llIn != null) return "in";
+            if (llIn != null)
+            {
+                if (llIn.LibraryBookId != null && String.IsNullOrEmpty(llIn.ExternalLender))
+                {
+                    return "in";
+                }
+                else if (llIn.LibraryBookId == null && !String.IsNullOrEmpty(llIn.ExternalLender))
+                {
+                    return "in-ext";
+                }
+            }
             if (llOut != null)
             {
-                if (llOut.CopyLibraryBookId != null && String.IsNullOrEmpty(llOut.ExternalPerson))
+                if (llOut.CopyLibraryBookId != null && String.IsNullOrEmpty(llOut.ExternalBorrower))
                 {
                     return "out";
-                }else if(llOut.CopyLibraryBookId==null && !String.IsNullOrEmpty(llOut.ExternalPerson))
+                }else if(llOut.CopyLibraryBookId==null && !String.IsNullOrEmpty(llOut.ExternalBorrower))
                 {
                     return "out-ext";
                 }
@@ -149,7 +159,7 @@ namespace HomeLibraryApp.Controllers
                 ViewBag.BorrowingUser = borrowUser;
             }else if (ViewBag.Lending == "out-ext")
             {
-                ViewBag.BorrowingUserExternal = libraryLending.ExternalPerson;
+                ViewBag.BorrowingUserExternal = libraryLending.ExternalBorrower;
             }
             else if (ViewBag.Lending == "in")
             {
@@ -157,6 +167,9 @@ namespace HomeLibraryApp.Controllers
                 Library library = db.Libraries.FirstOrDefault(l => l.Id == lb.LibraryId);
                 ApplicationUser lendUser = db.Users.FirstOrDefault(usr => usr.Id == library.UserId);
                 ViewBag.LendingUser = lendUser;
+            }else if (ViewBag.Lending == "in-ext")
+            {
+                ViewBag.LendingUserExternal = libraryLending.ExternalLender;
             }
 
             //Are you an owner?
@@ -197,7 +210,7 @@ namespace HomeLibraryApp.Controllers
                 return View(model);
             }
 
-            if (!AddBookToLibrary(book, lib))
+            if (!AddBookToLibrary(book, lib,model.LenderFirstname,model.LenderLastname))
             {
                 ViewBag.ErrorMsg = "The book you are trying to add is already in this library";
                 model.UserLibraries = GetUserLibraries();
@@ -304,7 +317,7 @@ namespace HomeLibraryApp.Controllers
         public ActionResult LendBookExternal(string firstname,string lastname, string lib, string bk)
         {
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
-            db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id,ExternalPerson=firstname+" "+lastname, StartDate = DateTime.Now });
+            db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id,ExternalBorrower=firstname+" "+lastname, StartDate = DateTime.Now });
             db.SaveChanges();
             return RedirectToAction("Book", new { lib = lib, bk = bk });
         }
@@ -396,8 +409,9 @@ namespace HomeLibraryApp.Controllers
         }
 
 
-        private bool AddBookToLibrary(Book book, string id)
+        private bool AddBookToLibrary(Book book, string id,string lenderFirstname,string lenderLastname)
         {
+            string lender = lenderFirstname + " " + lenderLastname;
             Library library;
             if (id == null)  //your home library
             {
@@ -413,7 +427,13 @@ namespace HomeLibraryApp.Controllers
             if (sameBook == null)
             {
                 db.Books.Add(book);
-                db.LibraryBooks.Add(new LibraryBook { Book = book, Library = library });
+                LibraryBook libraryBook = new LibraryBook { Book = book, Library = library };
+                db.LibraryBooks.Add(libraryBook);
+                //borrowed
+                if (!String.IsNullOrEmpty(lender))
+                {
+                    db.LibraryLendings.Add(new LibraryLending { CopyLibraryBookId = libraryBook.Id, ExternalLender = lender, StartDate = DateTime.Now });
+                }
                 db.SaveChanges();
                 return true;
             }
@@ -423,7 +443,13 @@ namespace HomeLibraryApp.Controllers
                 {
                     return false;
                 }
-                db.LibraryBooks.Add(new LibraryBook { Book = sameBook, Library = library });
+                LibraryBook libraryBook = new LibraryBook { Book = sameBook, Library = library };
+                db.LibraryBooks.Add(libraryBook);
+                //borrowed
+                if (!String.IsNullOrEmpty(lender))
+                {
+                    db.LibraryLendings.Add(new LibraryLending { CopyLibraryBookId = libraryBook.Id, ExternalLender = lender, StartDate = DateTime.Now });
+                }
                 db.SaveChanges();
                 return true;
             }
