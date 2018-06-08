@@ -221,7 +221,7 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult GetSearchedBooks(string searchType, string query, int page, string libraryId, string selectLibrary)
+        public ActionResult GetSearchedBooks(string searchType, string query, int page, string libraryId, string selectLibrary, string sourceView)
         {
             if (String.IsNullOrEmpty(query))
             {
@@ -261,7 +261,9 @@ namespace HomeLibraryApp.Controllers
             ViewBag.PagesNr = pagesNr;
             ViewBag.CurrentPage = page;
             ViewBag.LibraryId = libraryId;
-            return PartialView("_BooksSearchPartial", books);
+            ViewBag.SourceView = sourceView;
+            LibrarySearchedBooks model = new LibrarySearchedBooks() { Books = books };
+            return PartialView("_BooksSearchPartial", model);
         }
 
         [HttpPost]

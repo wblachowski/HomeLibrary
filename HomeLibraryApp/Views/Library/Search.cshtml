@@ -6,11 +6,11 @@
 <h4>Search for a book</h4>
 <div class="row nobmargin">
     <div class="input-field col xl8 l8 m6 s12">
-        @Html.TextBoxFor(m => m.q, new { id = "search-book-input", oninput = "searchForBooks()" })
+        @Html.TextBoxFor(m => m.q, new { id = "search-book-input", oninput = "searchForBooks(1,'search')" })
         @Html.LabelFor(m => m.q)
     </div>
     <div class="input-field col xl4 l4 m6 s12">
-        <select id="select-library" onchange="searchForBooks()">
+        <select id="select-library" onchange="searchForBooks(1,'search')">
             <option value="" selected>All libraries</option>
             @foreach(HomeLibraryApp.Models.Library library in Model.UserLibraries) { 
         <option value="@library.Id">@library.Name</option>
@@ -22,19 +22,19 @@
 <div>
     <form id="form-search-book" action="#">
         <label for="searchAll">
-            <input onclick="searchForBooks()" id="searchAll" name="searchGroup" type="radio" checked />
+            <input onclick="searchForBooks(1,'search')" id="searchAll" name="searchGroup" type="radio" checked />
             <span>All</span>
         </label>
         <label for="searchTitle">
-            <input onclick="searchForBooks()" id="searchTitle" name="searchGroup" type="radio" />
+            <input onclick="searchForBooks(1,'search')" id="searchTitle" name="searchGroup" type="radio" />
             <span>Title</span>
         </label>
         <label for="searchAuthor">
-            <input onclick="searchForBooks()" id="searchAuthor" name="searchGroup" type="radio" />
+            <input onclick="searchForBooks(1,'search')" id="searchAuthor" name="searchGroup" type="radio" />
             <span>Author</span>
         </label>
         <label for="searchPublisher">
-            <input onclick="searchForBooks()" id="searchPublisher" name="searchGroup" type="radio" />
+            <input onclick="searchForBooks(1,'search')" id="searchPublisher" name="searchGroup" type="radio" />
             <span>Publisher</span>
         </label>
     </form>

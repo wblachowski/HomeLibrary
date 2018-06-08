@@ -241,6 +241,7 @@
     <Compile Include="Models\LibraryLending.cs" />
     <Compile Include="Models\LibraryMain.cs" />
     <Compile Include="Models\LibrarySearch.cs" />
+    <Compile Include="Models\LibrarySearchedBooks.cs" />
     <Compile Include="Models\LibraryUser.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\UserReading.cs" />

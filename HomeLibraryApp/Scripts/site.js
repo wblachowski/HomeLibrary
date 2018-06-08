@@ -16,7 +16,7 @@
         $("#goodreads-result").show();
     }
     if ($("search-book-input").val() !== "") {
-        searchForBooks();
+        searchForBooks(1,'search');
     }
 
     $('#borrowedCheckbox').change(function () {

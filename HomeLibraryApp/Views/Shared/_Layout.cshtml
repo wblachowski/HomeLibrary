@@ -38,7 +38,7 @@
     @Scripts.Render("~/bundles/myscripts")
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
-        function searchForBooks(page) {
+        function searchForBooks(page, sourceView) {
             searchType = 'All'
             searchQuery = '';
             if (page == null) {
@@ -60,7 +60,8 @@
                     searchType: searchType,
                     query: searchQuery,
                     selectLibrary: selectLibrary,
-                    page: page
+                    page: page,
+                    sourceView: sourceView
                 }
             } else {
                 data = {
@@ -68,7 +69,8 @@
                     query: searchQuery,
                     selectLibrary: selectLibrary,
                     page: page,
-                    libraryId: libraryId
+                    libraryId: libraryId,
+                    sourceView: sourceView
                 }
             }
             $('#search-book-container .preloader-wrapper').show();

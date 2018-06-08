@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HomeLibraryApp.Models.Book>
+﻿@model HomeLibraryApp.Models.LibrarySearchedBooks
 <div id="search-book-confirm-modal" class="modal">
     @using (Html.BeginForm("Add", "Library", new { lib = ViewBag.LibraryId, type = "existing" }, FormMethod.Post))
     {
@@ -43,7 +43,7 @@
     }
 </div>
 <div>
-    @if (Model.Count() > 0)
+    @if (Model.Books.Count() > 0)
     {
         <table>
             <thead>
@@ -56,7 +56,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (HomeLibraryApp.Models.Book book in Model)
+                @foreach (HomeLibraryApp.Models.Book book in Model.Books)
                 {
                     string rowId = "bookRow" + book.Id.ToString();
                     string date = book.PublicationDate.HasValue ? book.PublicationDate.Value.ToString("MMM dd, yyyy") : "";
@@ -76,7 +76,7 @@
             @{
                 if (ViewBag.CurrentPage > 1)
                 {
-                    <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage-1)"><a><i class="material-icons">chevron_left</i></a></li>
+                    <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage-1,'@ViewBag.SourceView')"><a><i class="material-icons">chevron_left</i></a></li>
                 }
                 else
                 {
@@ -87,11 +87,11 @@
                 {
                     if (i == ViewBag.CurrentPage)
                     {
-                        <li class="active" onclick="searchForBooks(@i)"><a>@i</a></li>
+                        <li class="active" onclick="searchForBooks(@i,'@ViewBag.SourceView')"><a>@i</a></li>
                     }
                     else
                     {
-                        <li class="waves-effect" onclick="searchForBooks(@i)"><a>@i</a></li>
+                        <li class="waves-effect" onclick="searchForBooks(@i,'@ViewBag.SourceView')"><a>@i</a></li>
                     }
                 }
                 if (ViewBag.currentPage == ViewBag.PagesNr)
@@ -100,7 +100,7 @@
                 }
                 else
                 {
-                    <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage+1)"><a><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect" onclick="searchForBooks(@ViewBag.CurrentPage+1,'@ViewBag.SourceView')"><a><i class="material-icons">chevron_right</i></a></li>
                 }
             }
         </ul>
