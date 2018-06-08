@@ -35,12 +35,13 @@
             $("#last-book-card").css('min-height', '');
             $("#stats-card").css('min-height', '');
         }
-    });});
+    });
+});
 
 function setCardsHeight() {
     var cardsHeight = Math.max($("#last-book-card").height(), $("#stats-card").height())
-    $("#last-book-card").css('min-height',cardsHeight);
-    $("#stats-card").css('min-height',cardsHeight);
+    $("#last-book-card").css('min-height', cardsHeight);
+    $("#stats-card").css('min-height', cardsHeight);
 }
 
 function addFormSubmit(source) {
@@ -160,7 +161,7 @@ function onClickSearchTopbar() {
 
 function searchAddBookNext() {
     var lib = $("#library-select").children().find("option:selected").attr("value");
-    $("#confirm-form").attr("action","/Library/Add?type=existing&lib="+lib+"&source=search")
+    $("#confirm-form").attr("action", "/Library/Add?type=existing&lib=" + lib + "&source=search")
     if ($('#borrowedCheckbox').is(":checked")) {
         $("[name='LenderFirstname']").val($("#LenderFirstname").val());
         $("[name='LenderLastname']").val($("#LenderLastname").val());
