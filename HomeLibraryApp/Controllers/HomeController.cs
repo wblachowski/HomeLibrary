@@ -47,6 +47,7 @@ namespace HomeLibraryApp.Controllers
         {
             string userId = User.Identity.GetUserId();
             ApplicationUser user = db.Users.FirstOrDefault(us => us.Id.ToString() == userId);
+            if (user == null) return 0;
             double noOfBooks = db.UserReadings.Where(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate != null).Count();
             double noOfMonths = Math.Ceiling((DateTime.Now - user.Created).TotalDays / 30.0);
             return noOfBooks / noOfMonths;

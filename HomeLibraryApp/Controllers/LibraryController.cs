@@ -411,7 +411,7 @@ namespace HomeLibraryApp.Controllers
 
         private bool AddBookToLibrary(Book book, string id,string lenderFirstname,string lenderLastname)
         {
-            string lender = lenderFirstname + " " + lenderLastname;
+            string lender = (lenderFirstname + " " + lenderLastname).Trim();
             Library library;
             if (id == null)  //your home library
             {

@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $(".dropdown-trigger").dropdown();
     $('.tabs').tabs();
-    $('.modal').modal({ onOpenEnd: function () { $('.tabs').tabs();}});
+    $('.modal').modal({ onOpenEnd: function () { $('.tabs').tabs(); } });
     $('.sidenav').sidenav();
     $('.datepicker').datepicker({
         firstDay: 1
@@ -20,7 +20,7 @@
     }
 
     $('#borrowedCheckbox').change(function () {
-        if($(this).is(":checked")) {
+        if ($(this).is(":checked")) {
             $("#borrowedData").slideDown("fast");
         } else {
             $("#borrowedData").slideUp("fast");
@@ -29,8 +29,10 @@
 });
 
 function addFormSubmit(source) {
-    $(source.form).find("[name='LenderFirstname']").val($("#LenderFirstname").val());
-    $(source.form).find("[name='LenderLastname']").val($("#LenderLastname").val());
+    if ($('#borrowedCheckbox').is(":checked")) {
+        $(source.form).find("[name='LenderFirstname']").val($("#LenderFirstname").val());
+        $(source.form).find("[name='LenderLastname']").val($("#LenderLastname").val());
+    }
     source.form.submit();
 }
 
@@ -76,7 +78,7 @@ function scanGoodreads() {
     $('#goodreads .preloader-wrapper').show();
     $("#goodreads-result").hide();
     $.ajax({
-        url: "https://cors.io/?"+link,
+        url: "https://cors.io/?" + link,
         success: function (result) {
             html = $.parseHTML(result);
             author = $(html).find("span[itemprop='name']").html().split(" ");
@@ -104,7 +106,7 @@ function scanGoodreads() {
             $("#GoodreadsBookModel_AuthorFirstname").attr('value', author[0]);
             $("#GoodreadsBookModel_AuthorLastname").attr('value', author[1]);
             $("#GoodreadsBookModel_Publisher").attr('value', publisher);
-            $("#GoodreadsBookModel_PublicationDate").attr('value',month + " " + day + ", " + year);
+            $("#GoodreadsBookModel_PublicationDate").attr('value', month + " " + day + ", " + year);
 
             $("#GoodreadsBookModel_Title").change();
             $("#GoodreadsBookModel_AuthorFirstname").change();
