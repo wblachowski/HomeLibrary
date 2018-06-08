@@ -213,7 +213,7 @@ namespace HomeLibraryApp.Controllers
                 model.UserLibraries = GetUserLibraries();
                 if (source == "search")
                 {
-                    return View("Search");
+                    return RedirectToAction("Search");
                 }
                 else
                 {
@@ -227,7 +227,7 @@ namespace HomeLibraryApp.Controllers
                 model.UserLibraries = GetUserLibraries();
                 if (source == "search")
                 {
-                    return View("Search");
+                    return RedirectToAction("Search");
                 }
                 else
                 {
