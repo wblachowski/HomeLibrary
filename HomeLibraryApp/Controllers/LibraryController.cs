@@ -112,12 +112,13 @@ namespace HomeLibraryApp.Controllers
                 if (llOut.CopyLibraryBookId != null && String.IsNullOrEmpty(llOut.ExternalBorrower))
                 {
                     return "out";
-                }else if(llOut.CopyLibraryBookId==null && !String.IsNullOrEmpty(llOut.ExternalBorrower))
+                }
+                else if (llOut.CopyLibraryBookId == null && !String.IsNullOrEmpty(llOut.ExternalBorrower))
                 {
                     return "out-ext";
                 }
             }
-                return "ok";
+            return "ok";
         }
 
         [Authorize]
@@ -136,28 +137,30 @@ namespace HomeLibraryApp.Controllers
             //comments
             List<LibraryComment> comments = db.LibraryComments.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
             List<LibraryComment> modelComments = new List<LibraryComment>();
-            var q = (from lc in comments join us in db.Users on lc.UserId equals us.Id
-                     select new {lc=lc.Comment,us});
-            foreach(var t in q)
+            var q = (from lc in comments
+                     join us in db.Users on lc.UserId equals us.Id
+                     select new { lc = lc.Comment, us });
+            foreach (var t in q)
             {
                 modelComments.Add(new LibraryComment() { Comment = t.lc, User = t.us });
             }
 
             //userreading
             var userID = User.Identity.GetUserId();
-            UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userID && x.BookId.ToString()==bk);
+            UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userID && x.BookId.ToString() == bk);
 
             //libraryLending
-            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.EndDate==null && (ll.LibraryBookId == libraryBook.Id || ll.CopyLibraryBookId==libraryBook.Id));
+            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.EndDate == null && (ll.LibraryBookId == libraryBook.Id || ll.CopyLibraryBookId == libraryBook.Id));
 
             ViewBag.Lending = GetBookState(book, lib);
-            if (ViewBag.Lending=="out")
+            if (ViewBag.Lending == "out")
             {
                 LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == libraryLending.CopyLibraryBookId);
                 Library library = db.Libraries.FirstOrDefault(l => l.Id == lb.LibraryId);
                 ApplicationUser borrowUser = db.Users.FirstOrDefault(usr => usr.Id == library.UserId);
                 ViewBag.BorrowingUser = borrowUser;
-            }else if (ViewBag.Lending == "out-ext")
+            }
+            else if (ViewBag.Lending == "out-ext")
             {
                 ViewBag.BorrowingUserExternal = libraryLending.ExternalBorrower;
             }
@@ -167,7 +170,8 @@ namespace HomeLibraryApp.Controllers
                 Library library = db.Libraries.FirstOrDefault(l => l.Id == lb.LibraryId);
                 ApplicationUser lendUser = db.Users.FirstOrDefault(usr => usr.Id == library.UserId);
                 ViewBag.LendingUser = lendUser;
-            }else if (ViewBag.Lending == "in-ext")
+            }
+            else if (ViewBag.Lending == "in-ext")
             {
                 ViewBag.LendingUserExternal = libraryLending.ExternalLender;
             }
@@ -176,7 +180,7 @@ namespace HomeLibraryApp.Controllers
             Library libraryOwner = db.Libraries.FirstOrDefault(l => l.Id == libraryBook.LibraryId);
             ViewBag.Owner = userID == libraryOwner.UserId ? true : false;
 
-            
+
             model.Book = book;
             model.Comments = comments;
             model.UserReading = userReading;
@@ -193,7 +197,7 @@ namespace HomeLibraryApp.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Add(LibraryAdd model, string lib, string type, string bookId)
+        public ActionResult Add(LibraryAdd model, string lib, string type, string bookId, string source)
         {
             Book book = null;
             switch (type)
@@ -207,16 +211,29 @@ namespace HomeLibraryApp.Controllers
             {
                 ViewBag.ErrorMsg = "You have to fill in all fields";
                 model.UserLibraries = GetUserLibraries();
-                return View(model);
+                if (source == "search")
+                {
+                    return View("Search");
+                }
+                else
+                {
+                    return View(model);
+                }
             }
 
-            if (!AddBookToLibrary(book, lib,model.LenderFirstname,model.LenderLastname))
+            if (!AddBookToLibrary(book, lib, model.LenderFirstname, model.LenderLastname))
             {
                 ViewBag.ErrorMsg = "The book you are trying to add is already in this library";
                 model.UserLibraries = GetUserLibraries();
-                return View(model);
+                if (source == "search")
+                {
+                    return View("Search");
+                }
+                else
+                {
+                    return View(model);
+                }
             }
-
             return RedirectToAction("Index", new { lib = lib });
         }
 
@@ -239,7 +256,7 @@ namespace HomeLibraryApp.Controllers
             {
                 List<LibraryBook> libraryBooks = db.LibraryBooks.Where(lb => lb.LibraryId == library.Id).ToList();
                 List<Book> bks = new List<Book>();
-                foreach (LibraryBook libraryBook in libraryBooks) bks.Add(db.Books.FirstOrDefault(bk=>bk.Id==libraryBook.BookId));
+                foreach (LibraryBook libraryBook in libraryBooks) bks.Add(db.Books.FirstOrDefault(bk => bk.Id == libraryBook.BookId));
                 booksToScan = bks;
             }
 
@@ -263,6 +280,10 @@ namespace HomeLibraryApp.Controllers
             ViewBag.LibraryId = libraryId;
             ViewBag.SourceView = sourceView;
             LibrarySearchedBooks model = new LibrarySearchedBooks() { Books = books };
+            if (sourceView == "search")
+            {
+                model.Libraries = GetUserLibraries();
+            }
             return PartialView("_BooksSearchPartial", model);
         }
 
@@ -300,26 +321,26 @@ namespace HomeLibraryApp.Controllers
             bool isEmail = new EmailAddressAttribute().IsValid(userOrEmail);
 
             ApplicationUser user = isEmail ? UserManager.FindByEmail(userOrEmail) : UserManager.FindByName(userOrEmail);
-            if (user != null && user.Id!=User.Identity.GetUserId())
+            if (user != null && user.Id != User.Identity.GetUserId())
             {
                 //user library
                 Library newUserLibrary = db.Libraries.FirstOrDefault(lb => lb.UserId == user.Id);
                 //Copy book to new user library
-                LibraryBook copyLibraryBook =new LibraryBook() {BookId=Convert.ToInt32(bk),LibraryId=newUserLibrary.Id };
+                LibraryBook copyLibraryBook = new LibraryBook() { BookId = Convert.ToInt32(bk), LibraryId = newUserLibrary.Id };
                 db.LibraryBooks.Add(copyLibraryBook);
                 db.SaveChanges();
-                db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id, CopyLibraryBookId=copyLibraryBook.Id, StartDate = DateTime.Now });
+                db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id, CopyLibraryBookId = copyLibraryBook.Id, StartDate = DateTime.Now });
                 db.SaveChanges();
             }
-            return RedirectToAction("Book", new { lib = lib,bk=bk });
+            return RedirectToAction("Book", new { lib = lib, bk = bk });
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult LendBookExternal(string firstname,string lastname, string lib, string bk)
+        public ActionResult LendBookExternal(string firstname, string lastname, string lib, string bk)
         {
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
-            db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id,ExternalBorrower=firstname+" "+lastname, StartDate = DateTime.Now });
+            db.LibraryLendings.Add(new LibraryLending() { LibraryBookId = libraryBook.Id, ExternalBorrower = firstname + " " + lastname, StartDate = DateTime.Now });
             db.SaveChanges();
             return RedirectToAction("Book", new { lib = lib, bk = bk });
         }
@@ -333,7 +354,7 @@ namespace HomeLibraryApp.Controllers
             libraryLending.EndDate = DateTime.Now;
             db.LibraryBooks.Remove(libraryBook);
             db.SaveChanges();
-            return RedirectToAction("Index", new { lib = lib});
+            return RedirectToAction("Index", new { lib = lib });
 
         }
 
@@ -342,7 +363,7 @@ namespace HomeLibraryApp.Controllers
         public ActionResult ReturnBookByExternal(string lib, string bk)
         {
             LibraryBook libraryBook = db.LibraryBooks.First(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
-            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == libraryBook.Id && ll.EndDate==null);
+            LibraryLending libraryLending = db.LibraryLendings.FirstOrDefault(ll => ll.LibraryBookId == libraryBook.Id && ll.EndDate == null);
             libraryLending.EndDate = DateTime.Now;
             db.SaveChanges();
             return RedirectToAction("Book", new { lib = lib, bk = bk });
@@ -373,18 +394,18 @@ namespace HomeLibraryApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult AddComment(LibraryBookDetails model,string lib, string bk)
+        public ActionResult AddComment(LibraryBookDetails model, string lib, string bk)
         {
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.LibraryId.ToString() == lib && x.BookId.ToString() == bk);
             LibraryComment libraryComment = new LibraryComment() { LibraryBookId = libraryBook.Id, Comment = model.YourComment, Date = DateTime.Now, UserId = User.Identity.GetUserId() };
             db.LibraryComments.Add(libraryComment);
             db.SaveChanges();
-            return RedirectToAction("Book",new { lib = lib,bk = bk});
+            return RedirectToAction("Book", new { lib = lib, bk = bk });
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult AddReadingState(string state, string lib,string bk)
+        public ActionResult AddReadingState(string state, string lib, string bk)
         {
             string userId = User.Identity.GetUserId();
             UserReading userReading = db.UserReadings.FirstOrDefault(x => x.UserId == userId && x.BookId.ToString() == bk);
@@ -397,11 +418,13 @@ namespace HomeLibraryApp.Controllers
             if (state == "0")
             {
                 db.UserReadings.Remove(userReading);
-            }else if (state == "1")
+            }
+            else if (state == "1")
             {
                 userReading.StartDate = DateTime.Now;
                 userReading.EndDate = null;
-            }else if (state == "2")
+            }
+            else if (state == "2")
             {
                 userReading.StartDate = userReading.StartDate == null ? DateTime.Now : userReading.StartDate;
                 userReading.EndDate = DateTime.Now;
@@ -411,7 +434,7 @@ namespace HomeLibraryApp.Controllers
         }
 
 
-        private bool AddBookToLibrary(Book book, string id,string lenderFirstname,string lenderLastname)
+        private bool AddBookToLibrary(Book book, string id, string lenderFirstname, string lenderLastname)
         {
             string lender = (lenderFirstname + " " + lenderLastname).Trim();
             Library library;

@@ -1,12 +1,13 @@
 ﻿@model HomeLibraryApp.Models.LibrarySearchedBooks
+<!--Confirm modal-->
 <div id="search-book-confirm-modal" class="modal">
-    @using (Html.BeginForm("Add", "Library", new { lib = ViewBag.LibraryId, type = "existing" }, FormMethod.Post))
+    @using (Html.BeginForm("Add", "Library", new { lib = ViewBag.LibraryId, type = "existing" }, FormMethod.Post,new { id = "confirm-form" }))
     {
         <input type="hidden" name="LenderFirstname">
         <input type="hidden" name="LenderLastname">
         <div class="modal-content">
             <h4>Confirm</h4>
-            <p>Do you really want to add this book to your library?</p>
+            <p>Do you really want to add this book?</p>
             <input type="hidden" name="bookId" id="modalId">
             <div class="row">
                 <div class="input-field col s12">
@@ -42,6 +43,58 @@
         </div>
     }
 </div>
+<!--Select library modal-->
+<div id="search-book-select-library" class="modal">
+    <div class="modal-content">
+        <h4>Specify details</h4>
+        <p>Select a library you want to add this book to</p>
+        <input id="modal-details-id" type="hidden"/>
+        <div class="row">
+            <select id="library-select">
+                <optgroup label="Your library">
+                    <option value="@Model.Libraries.First().Id"> @Model.Libraries.First().Name</option>
+                </optgroup>
+                @if (Model.Libraries.Count() > 1)
+                {
+                    <optgroup label="Other">
+                        @foreach (HomeLibraryApp.Models.Library library in Model.Libraries)
+                        {
+                            <option value="@library.Id">@library.Name</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+        </div>
+        <p>Provide additional data if this book is borrowed</p>
+        <p>
+            <label id="borrowedLabel">
+                <input id="borrowedCheckbox" type="checkbox" class="filled-in" onchange="if ($(this).is(':checked')) {
+            $('#borrowedData').slideDown('fast');
+        } else {
+            $('#borrowedData').slideUp('fast');
+        }"/>
+                <span>Borrowed</span>
+            </label>
+        </p>
+        <div id="borrowedData">
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <input id="LenderFirstname" type="text" name="LenderFirstname">
+                    <label for="LenderFirstname">First name</label>
+                </div>
+                <div class="input-field col s12 m6">
+                    <input id="LenderLastname" type="text" name="LenderLastname">
+                    <label for="LenderLastname">Last name</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <button type="button" class="waves-effect waves-green btn-flat" onclick="searchAddBookNext()">Ok</button>
+    </div>
+</div>
+
 <div>
     @if (Model.Books.Count() > 0)
     {
@@ -65,7 +118,7 @@
                         <td>@book.AuthorFirstname</td>
                         <td>@book.AuthorLastname</td>
                         <td>@book.Publisher</td>
-                        <td><input type="submit" value="Add" class="btn btn-default btn-right" onclick="searchBookAddClick(@book.Id)" /></td>
+                        <td><input type="submit" value="Add" class="btn btn-default btn-right" onclick="searchBookAddClick(@book.Id,'@ViewBag.SourceView')" /></td>
                     </tr>
                 }
             </tbody>

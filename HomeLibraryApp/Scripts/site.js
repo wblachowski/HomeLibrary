@@ -16,10 +16,9 @@
         $("#goodreads-result").show();
     }
     if ($("search-book-input").val() !== "") {
-        searchForBooks(1,'search');
+        searchForBooks(1, 'search');
     }
-
-    $('#borrowedCheckbox').change(function () {
+    $('#borrowedCheckbox').change(function () {   
         if ($(this).is(":checked")) {
             $("#borrowedData").slideDown("fast");
         } else {
@@ -50,20 +49,28 @@ function onNewBookAddedComplete(result) {
 
 
 
-function searchBookAddClick(id) {
-    rowId = "bookRow" + id;
-    console.log(rowId);
-    rowData = $("#" + rowId + " td");
-    $("#modalId").val(id);
-    $("#modalTitle").val(rowData.eq(0).html());
-    $("#modalFirstname").val(rowData.eq(1).html());
-    $("#modalLastname").val(rowData.eq(2).html());
-    $("#modalDate").val($("#" + rowId).attr("data-date"));
-    $("#modalPublisher").val(rowData.eq(3).html());
+function searchBookAddClick(id, sourceView) {
+    if (sourceView == 'search') {
+        $('#search-book-select-library').modal();
+        $('#search-book-select-library').modal('open');
+        $('select').formSelect();
+        $('#modal-details-id').val(id);
 
-    M.updateTextFields();
-    $('#search-book-confirm-modal').modal();
-    $('#search-book-confirm-modal').modal('open');
+    } else {
+        rowId = "bookRow" + id;
+        console.log(rowId);
+        rowData = $("#" + rowId + " td");
+        $("#modalId").val(id);
+        $("#modalTitle").val(rowData.eq(0).html());
+        $("#modalFirstname").val(rowData.eq(1).html());
+        $("#modalLastname").val(rowData.eq(2).html());
+        $("#modalDate").val($("#" + rowId).attr("data-date"));
+        $("#modalPublisher").val(rowData.eq(3).html());
+
+        M.updateTextFields();
+        $('#search-book-confirm-modal').modal();
+        $('#search-book-confirm-modal').modal('open');
+    }
 }
 
 function scanGoodreads() {
@@ -133,4 +140,29 @@ function onClickSearchTopbar() {
     } else {
         window.location = url;
     }
+}
+
+function searchAddBookNext() {
+    var lib = $("#library-select").children().find("option:selected").attr("value");
+    $("#confirm-form").attr("action","/Library/Add?type=existing&lib="+lib+"&source=search")
+    if ($('#borrowedCheckbox').is(":checked")) {
+        $("[name='LenderFirstname']").val($("#LenderFirstname").val());
+        $("[name='LenderLastname']").val($("#LenderLastname").val());
+    }
+    id = $('#modal-details-id').val();
+    rowId = "bookRow" + id;
+    console.log(rowId);
+    rowData = $("#" + rowId + " td");
+    $("#modalId").val(id);
+    $("#modalTitle").val(rowData.eq(0).html());
+    $("#modalFirstname").val(rowData.eq(1).html());
+    $("#modalLastname").val(rowData.eq(2).html());
+    $("#modalDate").val($("#" + rowId).attr("data-date"));
+    $("#modalPublisher").val(rowData.eq(3).html());
+
+    M.updateTextFields();
+    $('#search-book-confirm-modal').modal();
+    $('#search-book-select-library').modal('destroy');
+    $('#search-book-confirm-modal').modal('open');
+
 }
