@@ -1,14 +1,12 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿@model HomeLibraryApp.Models.Home
 <div>
         @if (User.Identity.IsAuthenticated)
         {
-           @Html.Partial("_UserAuthenticatedIndex");
+           @Html.Partial("_UserAuthenticatedIndex",Model);
         }
         else
         {
-            @Html.Partial("_UserDefaultIndex");
+            @Html.Partial("_UserDefaultIndex",Model.RegisterViewModel);
         }
 
 </div>

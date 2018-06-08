@@ -14,7 +14,16 @@ namespace HomeLibraryApp.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            Home home = new Home();
+            if (User.Identity.IsAuthenticated)
+            {
+                home.Stats = getReadingStats();
+            }
+            else
+            {
+                home.RegisterViewModel = new RegisterViewModel();
+            }
+            return View(home);
         }
 
         public ActionResult About()
@@ -30,6 +39,15 @@ namespace HomeLibraryApp.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        private double getReadingStats()
+        {
+            string userId = User.Identity.GetUserId();
+            ApplicationUser user = db.Users.FirstOrDefault(us => us.Id.ToString() == userId);
+            double noOfBooks = db.UserReadings.Select(ur => ur.UserId == userId && ur.StartDate != null && ur.EndDate != null).Count();
+            double noOfMonths = Math.Ceiling((DateTime.Now - user.Created).TotalDays / 30.0);
+            return noOfBooks / noOfMonths;
         }
     }
 }
