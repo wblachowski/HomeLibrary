@@ -295,11 +295,17 @@ namespace HomeLibraryApp.Controllers
             try
             {
                 EmailService service = new EmailService();
+                string body = "<div style=\"text-align: center; margin: 30px; \">" +
+                            "<span style=\"color:#795548;font-family:Roboto;font-size: 3.1rem\"><span style=\"font-weight:500\">Home</span><span style=\"font-weight:300\">Library</span></span>" +
+                            "</div>" +
+                            "<div style=\"text-align: center;font-family:Roboto;margin-bottom:30px;\">" +
+                            "You have been invited to " + sender + "'s library! To confirm the invitation click <a href=\"" + callbackUrl + "\">here</a>"+
+                            "</div> ";
                 var message = new IdentityMessage
                 {
                     Destination = email,
                     Subject = "New library invitation",
-                    Body = "You have been invited to " + sender + "'s library! To confirm the invitation click <a href=\"" + callbackUrl + "\">here</a>"
+                    Body = body
                 };
                 await service.SendAsync(message);
             }

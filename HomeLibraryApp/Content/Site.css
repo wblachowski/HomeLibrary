@@ -29,6 +29,7 @@ main {
     padding-left: 15px;
     padding-right: 15px;
     padding-top:15px;
+    padding-bottom:15px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -250,4 +251,17 @@ textarea {
 #last-book-reading-time{
 
     padding-top:26px;
+}
+
+.new-comment-row{
+   width:100%;
+    margin-bottom:0px;
+}
+
+.new-comment-row .input-field{
+    margin-bottom:0px;
+}
+
+.new-comment-row textarea {
+        max-width: unset !important;
 }

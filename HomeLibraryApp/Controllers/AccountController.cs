@@ -25,7 +25,7 @@ namespace HomeLibraryApp.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -37,9 +37,9 @@ namespace HomeLibraryApp.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -83,7 +83,7 @@ namespace HomeLibraryApp.Controllers
             }
 
             // Require the user to have a confirmed email before they can log on.
-            
+
             bool isEmail = new EmailAddressAttribute().IsValid(model.EmailOrName);
 
             var user = isEmail ? await UserManager.FindByEmailAsync(model.EmailOrName) : await UserManager.FindByNameAsync(model.EmailOrName);
@@ -146,7 +146,7 @@ namespace HomeLibraryApp.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -177,7 +177,7 @@ namespace HomeLibraryApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Created=DateTime.Now };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Created = DateTime.Now };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -262,7 +262,7 @@ namespace HomeLibraryApp.Controllers
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
@@ -536,8 +536,13 @@ namespace HomeLibraryApp.Controllers
             string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
                new { userId = userID, code = code }, protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(userID, subject,
-               "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            string body = "<div style=\"text-align: center; margin: 30px; \">" +
+                        "<span style=\"color:#795548;font-family:Roboto;font-size: 3.1rem\"><span style=\"font-weight:500\">Home</span><span style=\"font-weight:300\">Library</span></span>" +
+                        "</div>" +
+                        "<div style=\"text-align: center;font-family:Roboto;margin-bottom:30px;\"> " +
+                        "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>" +
+                        "</div> ";
+            await UserManager.SendEmailAsync(userID, subject, body);
 
             return callbackUrl;
         }

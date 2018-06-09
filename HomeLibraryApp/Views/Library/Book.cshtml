@@ -3,7 +3,7 @@
     ViewBag.Title = "Book";
 }
 
-<h2>@Model.Book.Title</h2>
+<h4>@Model.Book.Title</h4>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
 @if (ViewBag.Lending == "ok" && ViewBag.Owner)
@@ -13,19 +13,20 @@
 else if (ViewBag.Lending == "out")
 {
     <h6>Lent to @ViewBag.BorrowingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
-}else if (ViewBag.Lending == "out-ext")
+}
+else if (ViewBag.Lending == "out-ext")
 {
-<h6>Lent to @ViewBag.BorrowingUserExternal on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
-        if (ViewBag.Owner)
-        {
-<button class="btn waves-effect waves-light modal-trigger" href="#modalReturnExternal">Mark as returned</button>
-        }
+    <h6>Lent to @ViewBag.BorrowingUserExternal on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
+    if (ViewBag.Owner)
+    {
+        <button class="btn waves-effect waves-light modal-trigger" href="#modalReturnExternal">Mark as returned</button>
+    }
 }
 else if (ViewBag.Lending == "in")
 {
     <h6>Borrowed from @ViewBag.LendingUser.UserName on @(((DateTime)Model.LibraryLending.StartDate).ToString("MMM dd, yyyy"))</h6>
-                if (ViewBag.Owner)
-                {
+    if (ViewBag.Owner)
+    {
         <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
     }
 }
@@ -37,43 +38,56 @@ else if (ViewBag.Lending == "in-ext")
         <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
     }
 }
-<h6>Reading state:</h6>
-@using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
-{
-    int state = 0;
-    if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate == null) { state = 1; }
-    if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate != null) { state = 2; }
+<div class="section">
+    <h5>Reading state</h5>
+    <div class="divider"></div>
+    <p>
+        @using (Html.BeginForm("AddReadingState", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+        {
+            int state = 0;
+            if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate == null) { state = 1; }
+            if (Model.UserReading != null && Model.UserReading.StartDate != null && Model.UserReading.EndDate != null) { state = 2; }
 
-    if (state == 0)
-    {
-        <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
-        <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
-    }
-    else if (state == 1)
-    {
-        <button class="btn waves-effect waves-light" name="state" value="0">Delete from being read</button>
-        <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
-    }
-    else if (state == 2)
-    {
-        <button class="btn waves-effect waves-light" name="state" value="0">Delete from read</button>
-        <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
-    }
-}
-<h6>Comments:</h6>
-@Html.Partial("_CommentsPartial", Model.Comments)
-<h6>Write a new comment:</h6>
-@using (Html.BeginForm("AddComment", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
-{<div class="row">
-        <div class="row">
-            <div class="input-field col s12">
+            if (state == 0)
+            {
+                <p>You haven't read this book yet</p>
+                <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
+                <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
+            }
+            else if (state == 1)
+            {
+                <p>You started reading this book on @(((DateTime)Model.UserReading.StartDate).ToString("MMM dd, yyyy"))</p>
+                <button class="btn waves-effect waves-light" name="state" value="0">Delete from being read</button>
+                <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
+            }
+            else if (state == 2)
+            {
+                <p>You were reading this book on @(((DateTime)Model.UserReading.StartDate).ToString("MMM dd, yyyy")) - @(((DateTime)Model.UserReading.EndDate).ToString("MMM dd, yyyy"))</p>
+                <button class="btn waves-effect waves-light" name="state" value="0">Delete from read</button>
+                <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
+            }
+        }
+    </p>
+</div>
+
+<div class="section">
+    <h5>Comments</h5>
+    <div class="divider"></div>
+    <p>
+        @Html.Partial("_CommentsPartial", Model.Comments)
+        <p>Write a new comment:</p>
+        @using (Html.BeginForm("AddComment", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+        {<div class="row new-comment-row">
+            <div class="input-field">
                 @Html.TextAreaFor(m => m.YourComment, new { @class = "materialize-textarea" })
                 @Html.LabelFor(m => m.YourComment)
             </div>
         </div>
-    </div>
-    <input type="submit" class="btn btn-default" value="Add" />
-}
+        <input type="submit" class="btn btn-default btn-right" value="Add" />
+
+        }
+    </p>
+</div>
 
 <!-- Lend modal -->
 <div id="modalLend" class="modal">
@@ -99,31 +113,31 @@ else if (ViewBag.Lending == "in-ext")
                     </div>
                 </div>
             </div>
-                <div class="modal-footer">
-                    <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
-                </div>
+            <div class="modal-footer">
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+            </div>
         }
     </div>
     <div id="external">
-@using (Html.BeginForm("LendBookExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
-{
-        <div class="modal-content">
-            <p>Personal info</p>
-            <div class="row">
-                <div class="input-field col s12 m6">
-                    <input id="firstname" type="text" name="firstname">
-                    <label for="firstname">First name</label>
-                </div>
-                <div class="input-field col s12 m6">
-                    <input id="lastname" type="text" name="lastname">
-                    <label for="lastname">Last name</label>
+        @using (Html.BeginForm("LendBookExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+        {
+            <div class="modal-content">
+                <p>Personal info</p>
+                <div class="row">
+                    <div class="input-field col s12 m6">
+                        <input id="firstname" type="text" name="firstname">
+                        <label for="firstname">First name</label>
+                    </div>
+                    <div class="input-field col s12 m6">
+                        <input id="lastname" type="text" name="lastname">
+                        <label for="lastname">Last name</label>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
-        </div>
-}
+            <div class="modal-footer">
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+            </div>
+        }
     </div>
 </div>
 
