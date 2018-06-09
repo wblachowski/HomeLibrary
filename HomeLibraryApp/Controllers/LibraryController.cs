@@ -436,8 +436,21 @@ namespace HomeLibraryApp.Controllers
             return RedirectToAction("Book", new { lib = lib, bk = bk });
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangeLibraryName(IndexViewModel model)
+        {
+            if (!String.IsNullOrWhiteSpace(model.UserLibrary.Name))
+            {
+                Library library = db.Libraries.FirstOrDefault(lb => lb.Id == model.UserLibrary.Id);
+                library.Name = model.UserLibrary.Name;
+                db.SaveChanges();
+            }
+            return Redirect(Request.UrlReferrer.ToString());
+        }
 
-        private bool AddBookToLibrary(Book book, string id, string lenderFirstname, string lenderLastname)
+
+            private bool AddBookToLibrary(Book book, string id, string lenderFirstname, string lenderLastname)
         {
             string lender = (lenderFirstname + " " + lenderLastname).Trim();
             Library library;

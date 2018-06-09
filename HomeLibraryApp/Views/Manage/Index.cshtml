@@ -1,18 +1,17 @@
 ﻿@model HomeLibraryApp.Models.IndexViewModel
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "Manage your account";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h4>@ViewBag.Title.</h4>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
+    <div class="section">
+        <h5>Password</h5>
+        <div class="divider"></div>
+        <p>
+
             @if (Model.HasPassword)
             {
                 @Html.ActionLink("Change your password", "ChangePassword")
@@ -21,7 +20,25 @@
             {
                 @Html.ActionLink("Create", "SetPassword")
             }
-            ]
-        </dd>
-    </dl>
+
+        </p>
+    </div>
+    <div class="section">
+        <h5>Library</h5>
+        <div class="divider"></div>
+        <div class="row"></div>
+        <p>
+            @using (Html.BeginForm("ChangeLibraryName", "Library",FormMethod.Post))
+            {@Html.HiddenFor(m => m.UserLibrary.Id);
+                <div class="row new-comment-row">
+                <div class="input-field">
+                    @Html.TextAreaFor(m => m.UserLibrary.Name, new { @class = "materialize-textarea" })
+                    @Html.LabelFor(m => m.UserLibrary.Name)
+                </div>
+            </div>
+            <input type="submit" class="btn btn-default btn-right" value="Save" />
+
+            }
+        </p>
+    </div>
 </div>

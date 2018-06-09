@@ -15,6 +15,7 @@ namespace HomeLibraryApp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -64,13 +65,15 @@ namespace HomeLibraryApp.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            Library library = db.Libraries.FirstOrDefault(lb => lb.UserId == userId);
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                UserLibrary=library
             };
             return View(model);
         }
