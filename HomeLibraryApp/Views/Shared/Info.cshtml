@@ -2,5 +2,11 @@
 @{
     ViewBag.Title = "Info";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">@ViewBag.Title</span>
+        <p>
+            @ViewBag.Message
+        </p>
+    </div>
+</div>

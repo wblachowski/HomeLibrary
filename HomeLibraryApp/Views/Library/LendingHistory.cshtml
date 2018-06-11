@@ -1,5 +1,7 @@
 ﻿@model HomeLibraryApp.Models.LibraryLendingHistory
-
+@{
+    ViewBag.Title = "Lending History";
+}
 <h4>@Model.Book.Title</h4>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>

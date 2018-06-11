@@ -4,14 +4,16 @@
     ViewBag.Title = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-@{
-    if (String.IsNullOrEmpty(ViewBag.errorMessage))
-    {
-        <h2 class="text-danger">An error occurred while processing your request.</h2>
-    }
-    else
-    {
-        <h2 class="text-danger">@ViewBag.errorMessage</h2>
-    }
-}
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Error</span>
+        if (String.IsNullOrEmpty(ViewBag.errorMessage))
+        {
+        <p class="text-danger">An error occurred while processing your request.</p>
+        }
+        else
+        {
+        <p class="text-danger">@ViewBag.errorMessage</p>
+        }
+    </div>
+</div>
