@@ -3,7 +3,9 @@
     ViewBag.Title = "Book";
 }
 
-<h4>@Model.Book.Title</h4>
+<h4>@Model.Book.Title   
+    <a href="#modalDelete" class="tooltipped modal-trigger" data-tooltip="Delete book from library"><i class="material-icons delete-icon">delete</i></a> 
+    </h4>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
 @if (ViewBag.Lending == "ok" && ViewBag.Owner)
@@ -165,6 +167,21 @@ else if (ViewBag.Lending == "in-ext")
         <div class="modal-content">
             <h4>Cofirm return</h4>
             <p>Are you sure that @ViewBag.BorrowingUserExternal has returned this book?</p>
+        </div>
+        <div class="modal-footer">
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
+            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
+        </div>
+    }
+</div>
+
+<!-- Delete modal -->
+<div id="modalDelete" class="modal">
+@using (Html.BeginForm("DeleteFromLibrary", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }, FormMethod.Post))
+{
+        <div class="modal-content">
+            <h4>Cofirm deletion</h4>
+            <p>Are you sure you want to remove this book from your library?</p>
         </div>
         <div class="modal-footer">
             <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />

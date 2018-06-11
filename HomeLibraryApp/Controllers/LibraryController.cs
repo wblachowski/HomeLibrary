@@ -132,6 +132,7 @@ namespace HomeLibraryApp.Controllers
         public ActionResult Book(LibraryBookDetails model, string lib, string bk)
         {
             if (String.IsNullOrEmpty(lib) || String.IsNullOrEmpty(bk)) return RedirectToAction("");
+            if (!HasAccessToLib(lib)) return RedirectToAction("");
 
             Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
@@ -194,6 +195,7 @@ namespace HomeLibraryApp.Controllers
         public ActionResult LendingHistory(string lib, string bk)
         {
             if (String.IsNullOrEmpty(lib) || String.IsNullOrEmpty(bk)) return RedirectToAction("");
+            if (!HasAccessToLib(lib)) return RedirectToAction("");
             Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
             List<LibraryLending> libraryLendings = db.LibraryLendings.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
@@ -526,6 +528,25 @@ namespace HomeLibraryApp.Controllers
 
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult DeleteFromLibrary(string lib, string bk)
+        {
+            LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(lb => lb.LibraryId.ToString() == lib && lb.BookId.ToString() == bk);
+            if (libraryBook == null)
+            {
+                return RedirectToAction("Book", new { lib = lib, bk = bk });
+            }
+            //delete comments
+            db.LibraryComments.RemoveRange(db.LibraryComments.Where(lc => lc.LibraryBookId == libraryBook.Id));
+            //delete lendings
+            db.LibraryLendings.RemoveRange(db.LibraryLendings.Where(ll => ll.LibraryBookId == libraryBook.Id || ll.CopyLibraryBookId == libraryBook.Id));
+            //delete libraryBook
+            db.LibraryBooks.Remove(libraryBook);
+            db.SaveChanges();
+            return RedirectToAction("", new { lib = lib});
+        }
+
         private IEnumerable<Library> GetUserLibraries()
         {
             List<Library> libraries = new List<Library>();
@@ -535,6 +556,20 @@ namespace HomeLibraryApp.Controllers
             List<LibraryUser> libraryUsers = db.LibraryUsers.Where(x => x.UserId == userID).ToList<LibraryUser>();
             foreach (LibraryUser libraryUser in libraryUsers) libraries.AddRange(db.Libraries.Where(x => x.Id == libraryUser.LibraryId));
             return libraries;
+        }
+
+        private bool HasAccessToLib(string lib)
+        {
+            string userId = User.Identity.GetUserId();
+            //your library
+            Library library = db.Libraries.FirstOrDefault(l => l.UserId == userId && l.Id.ToString() == lib);
+            if (library != null)
+            {
+                return true;
+            }
+            //library you have access to
+            LibraryUser libraryUser = db.LibraryUsers.FirstOrDefault(lu => lu.UserId == userId && lu.LibraryId.ToString() == lib);
+            return libraryUser != null;
         }
     }
 }
