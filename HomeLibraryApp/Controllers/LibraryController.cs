@@ -131,6 +131,8 @@ namespace HomeLibraryApp.Controllers
         [Authorize]
         public ActionResult Book(LibraryBookDetails model, string lib, string bk)
         {
+            if (String.IsNullOrEmpty(lib) || String.IsNullOrEmpty(bk)) return RedirectToAction("");
+
             Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
 
@@ -191,6 +193,7 @@ namespace HomeLibraryApp.Controllers
         [Authorize]
         public ActionResult LendingHistory(string lib, string bk)
         {
+            if (String.IsNullOrEmpty(lib) || String.IsNullOrEmpty(bk)) return RedirectToAction("");
             Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
             LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
             List<LibraryLending> libraryLendings = db.LibraryLendings.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
