@@ -34,8 +34,23 @@
                             <span>External</span>
                         }</td>
                         <td>@Model.LenderName.ElementAt(i)</td>
-                        <td>@(((DateTime)Model.Lendings.ElementAt(i).StartDate).ToString("MMM dd, yyyy"))</td>
-                        <td>@(((DateTime)Model.Lendings.ElementAt(i).EndDate).ToString("MMM dd, yyyy"))</td>
+                        <td>@if (Model.Lendings.ElementAt(i).StartDate != null)
+                        {
+                            <span>@(((DateTime)Model.Lendings.ElementAt(i).StartDate).ToString("MMM dd, yyyy"))</span>
+                        }
+                        else
+                        {
+                            <span>---</span>
+                        }
+                        </td>
+                        <td>@if (Model.Lendings.ElementAt(i).EndDate != null)
+                        {
+                            <span>@(((DateTime)Model.Lendings.ElementAt(i).EndDate).ToString("MMM dd, yyyy"))</span>
+                        }
+                        else
+                        {
+                            <span>Not returned</span>
+                        }</td>
                     </tr>
                 }
                 </tbody>
