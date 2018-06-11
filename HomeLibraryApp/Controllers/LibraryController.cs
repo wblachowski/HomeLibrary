@@ -189,6 +189,31 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
+        public ActionResult LendingHistory(string lib, string bk)
+        {
+            Book book = db.Books.FirstOrDefault(x => x.Id.ToString() == bk);
+            LibraryBook libraryBook = db.LibraryBooks.FirstOrDefault(x => x.BookId.ToString() == bk && x.LibraryId.ToString() == lib);
+            List<LibraryLending> libraryLendings = db.LibraryLendings.Where(x => x.LibraryBookId == libraryBook.Id).ToList();
+            List<string> Lenders = new List<string>();
+            foreach(LibraryLending lending in libraryLendings)
+            {
+                if (!String.IsNullOrEmpty(lending.ExternalBorrower))
+                {
+                    Lenders.Add(lending.ExternalBorrower);
+                }
+                else
+                {
+                    LibraryBook lb = db.LibraryBooks.FirstOrDefault(x => x.Id == lending.CopyLibraryBookId);
+                    Library library = db.Libraries.FirstOrDefault(x => x.Id == lb.LibraryId);
+                    ApplicationUser user = db.Users.FirstOrDefault(x => x.Id == library.UserId);
+                    Lenders.Add(user.UserName);
+                }
+            }
+            LibraryLendingHistory model = new LibraryLendingHistory() { Book = book, Lendings=libraryLendings, LenderName=Lenders };
+            return View(model);
+        }
+
+        [Authorize]
         public ActionResult Search(LibrarySearch model)
         {
             model.UserLibraries = GetUserLibraries();

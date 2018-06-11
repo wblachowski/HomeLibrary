@@ -234,6 +234,7 @@
     <Compile Include="Models\LibraryBooksWithStates.cs" />
     <Compile Include="Models\LibraryComment.cs" />
     <Compile Include="Models\LibraryLending.cs" />
+    <Compile Include="Models\LibraryLendingHistory.cs" />
     <Compile Include="Models\LibraryMain.cs" />
     <Compile Include="Models\LibrarySearch.cs" />
     <Compile Include="Models\LibrarySearchedBooks.cs" />
@@ -367,6 +368,7 @@
     <Content Include="Views\Shared\_SideNavPartial.cshtml" />
     <Content Include="Views\Library\Book.cshtml" />
     <Content Include="Views\Library\_CommentsPartial.cshtml" />
+    <Content Include="Views\Library\LendingHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

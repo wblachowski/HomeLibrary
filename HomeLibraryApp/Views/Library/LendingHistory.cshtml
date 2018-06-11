@@ -1,0 +1,46 @@
+﻿@model HomeLibraryApp.Models.LibraryLendingHistory
+
+<h4>@Model.Book.Title</h4>
+<h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
+<h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
+<div class="section">
+    <h5>Lending history</h5>
+    <div class="divider"></div>
+    <p>
+        @if (Model.Lendings.Count() == 0)
+        {
+            <span>This book hasn't been lent yet</span>
+        }
+        else
+        {<table class="highlight">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Borrower</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Lendings.Count(); i++)
+                {
+                    <tr>
+                        <td>@if (String.IsNullOrWhiteSpace(Model.Lendings.ElementAt(i).ExternalBorrower))
+                        {
+                            <span>Internal</span>
+                        }
+                        else
+                        {
+                            <span>External</span>
+                        }</td>
+                        <td>@Model.LenderName.ElementAt(i)</td>
+                        <td>@(((DateTime)Model.Lendings.ElementAt(i).StartDate).ToString("MMM dd, yyyy"))</td>
+                        <td>@(((DateTime)Model.Lendings.ElementAt(i).EndDate).ToString("MMM dd, yyyy"))</td>
+                    </tr>
+                }
+                </tbody>
+         </table>
+        }
+
+    </p>
+</div>

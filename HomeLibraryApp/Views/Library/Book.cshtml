@@ -38,6 +38,8 @@ else if (ViewBag.Lending == "in-ext")
         <button class="btn waves-effect waves-light modal-trigger" href="#modalReturn">Return</button>
     }
 }
+
+<button class="btn waves-effect waves-light " onclick="window.location='@("/Library/LendingHistory?lib="+Request.Params["lib"]+"&bk="+Request.Params["bk"])'">Show lending history</button>
 <div class="section">
     <h5>Reading state</h5>
     <div class="divider"></div>
@@ -83,7 +85,7 @@ else if (ViewBag.Lending == "in-ext")
                 @Html.LabelFor(m => m.YourComment)
             </div>
         </div>
-        <input type="submit" class="btn btn-default btn-right" value="Add" />
+        <input id="comment-btn" type="submit" class="btn btn-default btn-right" value="Add" />
 
         }
     </p>
