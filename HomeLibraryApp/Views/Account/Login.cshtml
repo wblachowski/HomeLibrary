@@ -11,30 +11,17 @@
             <span class="card-title">Sign in</span>
             <div class="row"></div>
             <div class="row"></div>
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <div class="row">
-                            <div class="input-field">
-                                @Html.TextBoxFor(m => m.EmailOrName)
-                                @Html.LabelFor(m => m.EmailOrName)
-                            </div>
-                        </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.EmailOrName)
+                    @Html.LabelFor(m => m.EmailOrName)
+                </div>
+            </div>
                         <div class="row">
                             <div class="input-field">
                                 @Html.PasswordFor(m => m.LoginPassword)
                                 @Html.LabelFor(m => m.LoginPassword)
-                            </div>
-                        </div>
-                            <div class="col-md-offset-2 col-md-10">
-                                <label>
-                                    <input type="checkbox" name="RememberMe" value="true" />
-                                    <span>Remember me</span>
-                                    <input type="hidden" name="RememberMe" value="false" />
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Log in" class="btn btn-default" />
-                                </div>
                             </div>
                             <p>
                                 @Html.ActionLink("Register as a new user", "Register")
@@ -42,6 +29,18 @@
                             <p>
                                 @Html.ActionLink("Forgot your password?", "ForgotPassword")
                             </p>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Log in" class="btn btn-default btn-login" />
+                                <label>
+                                    <input type="checkbox" name="RememberMe" value="true" />
+                                    <span>Remember me</span>
+                                    <input type="hidden" name="RememberMe" value="false" />
+                                </label>
+                            </div>
+                        </div>
+
         }
     </div>
 </div>
