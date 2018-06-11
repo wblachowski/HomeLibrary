@@ -73,12 +73,14 @@
                     sourceView: sourceView
                 }
             }
+            $('#search-book-results').hide();
             $('#search-book-container .preloader-wrapper').show();
             $.ajax({
                 url: '@Url.Action("GetSearchedBooks","Library")',
                 data: data,
                 success: function (result) {
                     $('#search-book-results').html(result);
+                    $('#search-book-results').show();
                     $('#search-book-container .preloader-wrapper').hide();
                 }
             });
