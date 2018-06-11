@@ -53,9 +53,12 @@ function addFormSubmit(source) {
     source.form.submit();
 }
 
+function onInvitationStart() {
+    M.toast({ html: "Sending invitation..." });
+}
+
 function onInvitationComplete(result) {
-    msg = result ? "The invitation has been sent" : "There was a problem while sending the invitation";
-    console.log(msg);
+    msg = result.responseText=='True' ? "The invitation has been sent" : "There was a problem while sending the invitation";
     M.toast({ html: msg });
 }
 

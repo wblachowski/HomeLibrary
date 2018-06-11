@@ -111,6 +111,7 @@
 <div id="modalMember" class="modal">
     @using (Ajax.BeginForm("Invite", "Library", new AjaxOptions
     {
+        OnBegin="onInvitationStart",
         HttpMethod = "Post",
         OnComplete = "onInvitationComplete"
     }))
