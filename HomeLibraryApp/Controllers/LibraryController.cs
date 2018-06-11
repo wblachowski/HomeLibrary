@@ -217,8 +217,9 @@ namespace HomeLibraryApp.Controllers
         }
 
         [Authorize]
-        public ActionResult Search(LibrarySearch model)
+        public ActionResult Search(LibrarySearch model,string r)
         {
+            ViewBag.Error = r;
             model.UserLibraries = GetUserLibraries();
             return View(model);
         }
@@ -255,7 +256,7 @@ namespace HomeLibraryApp.Controllers
                 model.UserLibraries = GetUserLibraries();
                 if (source == "search")
                 {
-                    return RedirectToAction("Search");
+                    return RedirectToAction("Search",new {r="1"});
                 }
                 else
                 {

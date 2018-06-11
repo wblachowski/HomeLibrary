@@ -12,5 +12,7 @@ namespace HomeLibraryApp.Models
 
         [Display(Name = "Search")]
         public string q { get; set; }
+
+        public string ErrorMsg { get;set; }
     }
 }
