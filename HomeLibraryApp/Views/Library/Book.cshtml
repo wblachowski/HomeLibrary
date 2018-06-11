@@ -3,9 +3,13 @@
     ViewBag.Title = "Book";
 }
 
-<h4>@Model.Book.Title   
-    <a href="#modalDelete" class="tooltipped modal-trigger" data-tooltip="Delete book from library"><i class="material-icons delete-icon">delete</i></a> 
-    </h4>
+<h4>
+    @Model.Book.Title
+@if (ViewBag.Owner)
+{
+    <a href="#modalDelete" class="tooltipped modal-trigger" data-tooltip="Delete book from library"><i class="material-icons delete-icon">delete</i></a>
+}
+</h4>
 <h6>by @Model.Book.AuthorFirstname @Model.Book.AuthorLastname</h6>
 <h6>Published @(((DateTime)Model.Book.PublicationDate).ToString("MMM dd, yyyy")) by @Model.Book.Publisher</h6>
 @if (ViewBag.Lending == "ok" && ViewBag.Owner)
@@ -54,7 +58,7 @@ else if (ViewBag.Lending == "in-ext")
 
             if (state == 0)
             {
-                <p>You haven't read this book yet</p>
+            <p>You haven't read this book yet</p>
                 <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
                 <button class="btn waves-effect waves-light" name="state" value="2">Mark as read</button>
             }
@@ -71,121 +75,121 @@ else if (ViewBag.Lending == "in-ext")
                 <button class="btn waves-effect waves-light" name="state" value="1">Mark as being read</button>
             }
         }
-    </p>
-</div>
+        </p>
+    </div>
 
-<div class="section">
-    <h5>Comments</h5>
-    <div class="divider"></div>
-    <p>
-        @Html.Partial("_CommentsPartial", Model.Comments)
+    <div class="section">
+        <h5>Comments</h5>
+        <div class="divider"></div>
+        <p>
+            @Html.Partial("_CommentsPartial", Model.Comments)
         <p>Write a new comment:</p>
         @using (Html.BeginForm("AddComment", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
         {<div class="row new-comment-row">
-            <div class="input-field">
-                @Html.TextAreaFor(m => m.YourComment, new { @class = "materialize-textarea" })
-                @Html.LabelFor(m => m.YourComment)
-            </div>
+        <div class="input-field">
+            @Html.TextAreaFor(m => m.YourComment, new { @class = "materialize-textarea" })
+            @Html.LabelFor(m => m.YourComment)
         </div>
+    </div>
         <input id="comment-btn" type="submit" class="btn btn-default btn-right" value="Add" />
 
         }
-    </p>
-</div>
-
-<!-- Lend modal -->
-<div id="modalLend" class="modal">
-    <div class="modal-content">
-        <h4>Lend to a user</h4>
-    </div>
-    <div class="col s12">
-        <ul class="tabs">
-            <li class="tab col s4"><a class="active" href="#internal">HomeLibrary user</a></li>
-            <li class="tab col s4"><a class="" href="#external">Other</a></li>
-        </ul>
+        </p>
     </div>
 
-    <div id="internal">
-        @using (Html.BeginForm("LendBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+    <!-- Lend modal -->
+    <div id="modalLend" class="modal">
+        <div class="modal-content">
+            <h4>Lend to a user</h4>
+        </div>
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s4"><a class="active" href="#internal">HomeLibrary user</a></li>
+                <li class="tab col s4"><a class="" href="#external">Other</a></li>
+            </ul>
+        </div>
+
+        <div id="internal">
+            @using (Html.BeginForm("LendBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
             {
-            <div class="modal-content">
-                <p>Enter username or email address of the person you want to lend this book to</p>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="userOrEmail" type="text" name="userOrEmail">
-                        <label for="userOrEmail">Username or email</label>
+                <div class="modal-content">
+                    <p>Enter username or email address of the person you want to lend this book to</p>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="userOrEmail" type="text" name="userOrEmail">
+                            <label for="userOrEmail">Username or email</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
-            </div>
-        }
+                <div class="modal-footer">
+                    <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+                </div>
+            }
+        </div>
+        <div id="external">
+            @using (Html.BeginForm("LendBookExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+            {
+                <div class="modal-content">
+                    <p>Personal info</p>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input id="firstname" type="text" name="firstname">
+                            <label for="firstname">First name</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="lastname" type="text" name="lastname">
+                            <label for="lastname">Last name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+                </div>
+            }
+        </div>
     </div>
-    <div id="external">
-        @using (Html.BeginForm("LendBookExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+
+    <!-- Return modal -->
+    <div id="modalReturn" class="modal">
+        @using (Html.BeginForm("ReturnBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
         {
             <div class="modal-content">
-                <p>Personal info</p>
-                <div class="row">
-                    <div class="input-field col s12 m6">
-                        <input id="firstname" type="text" name="firstname">
-                        <label for="firstname">First name</label>
-                    </div>
-                    <div class="input-field col s12 m6">
-                        <input id="lastname" type="text" name="lastname">
-                        <label for="lastname">Last name</label>
-                    </div>
-                </div>
+                <h4>Cofirm return</h4>
+                <p>Are you sure you want to return this book to its owner? This action cannot be reversed.</p>
             </div>
             <div class="modal-footer">
-                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Lend" />
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
             </div>
         }
     </div>
-</div>
 
-<!-- Return modal -->
-<div id="modalReturn" class="modal">
-    @using (Html.BeginForm("ReturnBook", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
-    {
-        <div class="modal-content">
-            <h4>Cofirm return</h4>
-            <p>Are you sure you want to return this book to its owner? This action cannot be reversed.</p>
-        </div>
-        <div class="modal-footer">
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
-        </div>
-    }
-</div>
+    <!-- External mark as returned modal -->
+    <div id="modalReturnExternal" class="modal">
+        @using (Html.BeginForm("ReturnBookByExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
+        {
+            <div class="modal-content">
+                <h4>Cofirm return</h4>
+                <p>Are you sure that @ViewBag.BorrowingUserExternal has returned this book?</p>
+            </div>
+            <div class="modal-footer">
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
+            </div>
+        }
+    </div>
 
-<!-- External mark as returned modal -->
-<div id="modalReturnExternal" class="modal">
-    @using (Html.BeginForm("ReturnBookByExternal", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }))
-    {
-        <div class="modal-content">
-            <h4>Cofirm return</h4>
-            <p>Are you sure that @ViewBag.BorrowingUserExternal has returned this book?</p>
-        </div>
-        <div class="modal-footer">
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
-        </div>
-    }
-</div>
-
-<!-- Delete modal -->
-<div id="modalDelete" class="modal">
-@using (Html.BeginForm("DeleteFromLibrary", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }, FormMethod.Post))
-{
-        <div class="modal-content">
-            <h4>Cofirm deletion</h4>
-            <p>Are you sure you want to remove this book from your library?</p>
-        </div>
-        <div class="modal-footer">
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
-            <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
-        </div>
-    }
-</div>
+    <!-- Delete modal -->
+    <div id="modalDelete" class="modal">
+        @using (Html.BeginForm("DeleteFromLibrary", "Library", new { lib = Request.Params["lib"], bk = Request.Params["bk"] }, FormMethod.Post))
+        {
+            <div class="modal-content">
+                <h4>Cofirm deletion</h4>
+                <p>Are you sure you want to remove this book from your library?</p>
+            </div>
+            <div class="modal-footer">
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="button" value="No" />
+                <input class="modal-action modal-close waves-effect waves-green btn-flat" type="submit" value="Yes" />
+            </div>
+        }
+    </div>

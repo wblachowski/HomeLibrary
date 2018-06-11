@@ -283,6 +283,8 @@ textarea {
     font-size:28px !important;
     margin-bottom:-2px !important;
     color:black;
+    position:relative;
+    bottom:-4px;
 }
 
 .delete-icon:hover{
